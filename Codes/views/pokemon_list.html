@@ -134,20 +134,6 @@
             color: #2a75bb;
         }
         
-        .special-forms-warning {
-            background: rgba(255,152,0,0.2);
-            padding: 10px;
-            border-radius: 10px;
-            margin: 10px 0;
-            text-align: center;
-            color: white;
-            font-size: 14px;
-        }
-        
-        body.dark-mode .special-forms-warning {
-            background: rgba(255,152,0,0.3);
-        }
-        
         .type-filters {
             display: flex;
             flex-wrap: wrap;
@@ -259,26 +245,6 @@
             text-shadow: 0 0 3px orange;
         }
         
-        .api-badge {
-            display: inline-block;
-            background: #2a75bb;
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-top: 8px;
-        }
-        
-        .special-badge {
-            display: inline-block;
-            background: #ff9800;
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-top: 8px;
-        }
-        
         .gen-badge {
             display: inline-block;
             background: #78c850;
@@ -335,17 +301,6 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
 <div class="container">
     <h1>🌟 Pokémon List 🌟</h1>
     
@@ -353,7 +308,7 @@
         <a href="/" class="back-link">← Home</a>
         
         <div class="search-suggestions">
-            <input type="text" id="searchInput" placeholder="🔍 Search Pokémon... (e.g., 'mega', 'gmax', 'ash')">
+            <input type="text" id="searchInput" placeholder="🔍 Search Pokémon...">
             <div id="suggestions" class="suggestions-box"></div>
         </div>
         
@@ -362,13 +317,7 @@
             <a href="/team" class="nav-btn">⭐ My Team</a>
             <a href="/compare" class="nav-btn">📊 Compare</a>
             <a href="/type-chart" class="nav-btn">⚔️ Type Chart</a>
-            <a href="/gallery" class="nav-btn">🎨 Gallery</a>
-            <a href="/top-10" class="nav-btn">🏆 Top 10</a>
         </div>
-    </div>
-    
-    <div class="special-forms-warning">
-        💡 <strong>Tip:</strong> Special forms (Mega, Gmax, Regional, Ash) can be accessed by searching! Try "mega-charizard", "gmax-gengar", or "greninja-ash"
     </div>
     
     <div class="type-filters" id="typeFilters">
@@ -384,8 +333,6 @@
 
 <script>
     let allPokemon = [];
-    let specialForms = [];
-    let currentType = 'all';
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     
     const typeColors = {
@@ -410,134 +357,78 @@
         filterContainer.appendChild(btn);
     });
     
-    // Bekannte spezielle Formen für schnellen Zugriff
-    const knownSpecialForms = [
-        { id: 10034, name: "Mega Charizard X", searchName: "charizard-mega-x", displayName: "Mega Charizard X" },
-        { id: 10035, name: "Mega Charizard Y", searchName: "charizard-mega-y", displayName: "Mega Charizard Y" },
-        { id: 10036, name: "Mega Mewtwo X", searchName: "mewtwo-mega-x", displayName: "Mega Mewtwo X" },
-        { id: 10037, name: "Mega Mewtwo Y", searchName: "mewtwo-mega-y", displayName: "Mega Mewtwo Y" },
-        { id: 10038, name: "Mega Gengar", searchName: "gengar-mega", displayName: "Mega Gengar" },
-        { id: 10003, name: "Ash-Greninja", searchName: "greninja-ash", displayName: "Ash-Greninja" },
-        { id: 10039, name: "Mega Gyarados", searchName: "gyarados-mega", displayName: "Mega Gyarados" },
-        { id: 10040, name: "Mega Aerodactyl", searchName: "aerodactyl-mega", displayName: "Mega Aerodactyl" },
-        { id: 10041, name: "Mega Ampharos", searchName: "ampharos-mega", displayName: "Mega Ampharos" },
-        { id: 10042, name: "Mega Steelix", searchName: "steelix-mega", displayName: "Mega Steelix" },
-        { id: 10043, name: "Mega Scizor", searchName: "scizor-mega", displayName: "Mega Scizor" },
-        { id: 10044, name: "Mega Heracross", searchName: "heracross-mega", displayName: "Mega Heracross" },
-        { id: 10045, name: "Mega Houndoom", searchName: "houndoom-mega", displayName: "Mega Houndoom" },
-        { id: 10046, name: "Mega Tyranitar", searchName: "tyranitar-mega", displayName: "Mega Tyranitar" },
-        { id: 10047, name: "Mega Blaziken", searchName: "blaziken-mega", displayName: "Mega Blaziken" },
-        { id: 10048, name: "Mega Gardevoir", searchName: "gardevoir-mega", displayName: "Mega Gardevoir" },
-        { id: 10049, name: "Mega Sableye", searchName: "sableye-mega", displayName: "Mega Sableye" },
-        { id: 10050, name: "Mega Mawile", searchName: "mawile-mega", displayName: "Mega Mawile" },
-        { id: 10051, name: "Mega Aggron", searchName: "aggron-mega", displayName: "Mega Aggron" },
-        { id: 10052, name: "Mega Medicham", searchName: "medicham-mega", displayName: "Mega Medicham" },
-        { id: 10053, name: "Mega Manectric", searchName: "manectric-mega", displayName: "Mega Manectric" },
-        { id: 10054, name: "Mega Sharpedo", searchName: "sharpedo-mega", displayName: "Mega Sharpedo" },
-        { id: 10055, name: "Mega Camerupt", searchName: "camerupt-mega", displayName: "Mega Camerupt" },
-        { id: 10056, name: "Mega Altaria", searchName: "altaria-mega", displayName: "Mega Altaria" },
-        { id: 10057, name: "Mega Banette", searchName: "banette-mega", displayName: "Mega Banette" },
-        { id: 10058, name: "Mega Absol", searchName: "absol-mega", displayName: "Mega Absol" },
-        { id: 10059, name: "Mega Glalie", searchName: "glalie-mega", displayName: "Mega Glalie" },
-        { id: 10060, name: "Mega Salamence", searchName: "salamence-mega", displayName: "Mega Salamence" },
-        { id: 10061, name: "Mega Metagross", searchName: "metagross-mega", displayName: "Mega Metagross" },
-        { id: 10062, name: "Mega Latias", searchName: "latias-mega", displayName: "Mega Latias" },
-        { id: 10063, name: "Mega Latios", searchName: "latios-mega", displayName: "Mega Latios" },
-        { id: 10064, name: "Mega Rayquaza", searchName: "rayquaza-mega", displayName: "Mega Rayquaza" },
-        { id: 10065, name: "Mega Lopunny", searchName: "lopunny-mega", displayName: "Mega Lopunny" },
-        { id: 10066, name: "Mega Garchomp", searchName: "garchomp-mega", displayName: "Mega Garchomp" },
-        { id: 10067, name: "Mega Lucario", searchName: "lucario-mega", displayName: "Mega Lucario" },
-        { id: 10068, name: "Mega Abomasnow", searchName: "abomasnow-mega", displayName: "Mega Abomasnow" },
-        { id: 10069, name: "Mega Gallade", searchName: "gallade-mega", displayName: "Mega Gallade" },
-        { id: 10070, name: "Mega Audino", searchName: "audino-mega", displayName: "Mega Audino" },
-        { id: 10071, name: "Mega Diancie", searchName: "diancie-mega", displayName: "Mega Diancie" }
-    ];
-    
     async function loadPokemon() {
         const container = document.getElementById('pokemonGrid');
         container.innerHTML = '<div class="loading"><div class="loader"></div>Loading Pokémon...</div>';
         
         try {
-            const response = await fetch('/pokemon-data');
-            if (!response.ok) throw new Error('Network response was not ok');
+            const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
             const data = await response.json();
-            allPokemon = data.pokemon || [];
             
-            specialForms = knownSpecialForms.map(form => ({
-                id: form.id,
-                name: form.name,
-                searchName: form.searchName,
-                displayName: form.displayName,
-                isApi: true,
-                isSpecial: true
-            }));
+            allPokemon = [];
+            for (let item of data.results) {
+                const id = parseInt(item.url.split('/').slice(-2)[0]);
+                if (id <= 721) {
+                    let gen = 1;
+                    if (id <= 151) gen = 1;
+                    else if (id <= 251) gen = 2;
+                    else if (id <= 386) gen = 3;
+                    else if (id <= 493) gen = 4;
+                    else if (id <= 649) gen = 5;
+                    else gen = 6;
+                    
+                    allPokemon.push({
+                        id: id,
+                        name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+                        gen: gen
+                    });
+                }
+            }
+            allPokemon.sort((a, b) => a.id - b.id);
             
             updateStats();
             renderPokemon();
             
         } catch (error) {
-            console.error('Error loading Pokémon:', error);
-            container.innerHTML = '<div class="loading">❌ Error loading Pokémon. Please refresh the page.</div>';
+            console.error('Error:', error);
+            container.innerHTML = '<div class="loading">❌ Error loading Pokémon. Please refresh.</div>';
         }
     }
     
     function updateStats() {
-        const total = allPokemon.length + specialForms.length;
-        document.getElementById('statsInfo').innerHTML = `📊 Showing ${total} Pokémon | ⭐ ${favorites.length}/6 in your team | Special forms: ${specialForms.length}`;
+        document.getElementById('statsInfo').innerHTML = `📊 ${allPokemon.length} Pokémon | ⭐ ${favorites.length}/6 in team`;
     }
     
     function renderPokemon() {
         const container = document.getElementById('pokemonGrid');
-        let filtered = [...allPokemon, ...specialForms];
+        let filtered = [...allPokemon];
         
         const searchQuery = document.getElementById('searchInput').value.toLowerCase();
         if (searchQuery.length >= 2) {
-            filtered = filtered.filter(p => 
-                p.name.toLowerCase().includes(searchQuery) || 
-                (p.searchName && p.searchName.toLowerCase().includes(searchQuery))
-            );
-        }
-        
-        if (currentType !== 'all') {
-            // Typ-Filter funktioniert nur für normale Pokémon (keine speziellen Formen)
-            filtered = filtered.filter(p => !p.isSpecial);
+            filtered = filtered.filter(p => p.name.toLowerCase().includes(searchQuery));
         }
         
         if (filtered.length === 0) {
-            container.innerHTML = '<div class="loading">⚠️ No Pokémon match your search</div>';
+            container.innerHTML = '<div class="loading">⚠️ No Pokémon found</div>';
             return;
         }
         
-        container.innerHTML = filtered.map(p => {
-            const isSpecial = p.isSpecial || (p.id > 10000);
-            const searchId = p.searchName ? p.id : p.id;
-            const displayName = p.name;
-            
-            return `
-                <div class="pokemon-card" onclick="location.href='/pokemon/${searchId}'">
-                    <button class="favorite-btn ${favorites.includes(searchId) ? 'favorited' : ''}" 
-                            onclick="event.stopPropagation(); toggleFavorite(${searchId})">
-                        ${favorites.includes(searchId) ? '★' : '☆'}
-                    </button>
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${searchId}.png" 
-                         alt="${displayName}"
-                         onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
-                    <h3>${displayName}</h3>
-                    <div class="pokemon-number">#${String(p.id).padStart(5, '0')}</div>
-                    ${isSpecial ? '<div class="special-badge">⭐ Special Form</div>' : (p.isApi ? '<div class="api-badge">Gen 7+</div>' : '<div class="gen-badge">Gen 1-6</div>')}
-                </div>
-            `;
-        }).join('');
+        container.innerHTML = filtered.map(p => `
+            <div class="pokemon-card" onclick="location.href='/pokemon/${p.id}'">
+                <button class="favorite-btn ${favorites.includes(p.id) ? 'favorited' : ''}" 
+                        onclick="event.stopPropagation(); toggleFavorite(${p.id})">
+                    ${favorites.includes(p.id) ? '★' : '☆'}
+                </button>
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png" 
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
+                <h3>${p.name}</h3>
+                <div class="pokemon-number">#${String(p.id).padStart(3, '0')}</div>
+                <div class="gen-badge">Gen ${p.gen}</div>
+            </div>
+        `).join('');
     }
     
     function filterByType(type) {
-        currentType = type;
-        document.querySelectorAll('.type-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-type') === type) {
-                btn.classList.add('active');
-            }
-        });
         renderPokemon();
     }
     
@@ -564,7 +455,6 @@
         document.body.classList.add('dark-mode');
     }
     
-    // Suchvorschläge
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase();
         if (query.length < 2) {
@@ -573,19 +463,13 @@
             return;
         }
         
-        const matches = [...allPokemon, ...specialForms].filter(p => 
-            p.name.toLowerCase().includes(query) || 
-            (p.searchName && p.searchName.toLowerCase().includes(query))
-        ).slice(0, 10);
-        
+        const matches = allPokemon.filter(p => p.name.toLowerCase().includes(query)).slice(0, 10);
         const suggestions = document.getElementById('suggestions');
         if (matches.length > 0) {
             suggestions.style.display = 'block';
-            suggestions.innerHTML = matches.map(p => {
-                const searchId = p.searchName ? p.id : p.id;
-                const specialTag = p.isSpecial ? ' ⭐ Special Form' : (p.isApi ? ' 🌐 Gen 7+' : ' 📗 Gen 1-6');
-                return `<div onclick="location.href='/pokemon/${searchId}'">${p.name} (#${String(p.id).padStart(5, '0')})${specialTag}</div>`;
-            }).join('');
+            suggestions.innerHTML = matches.map(p => 
+                `<div onclick="location.href='/pokemon/${p.id}'">${p.name} (#${String(p.id).padStart(3, '0')})</div>`
+            ).join('');
         } else {
             suggestions.style.display = 'none';
             renderPokemon();
@@ -599,30 +483,6 @@
     });
     
     loadPokemon();
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️ Light Mode';
-        } else {
-            btn.innerHTML = '🌙 Dark Mode';
-        }
-    }
-    
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
