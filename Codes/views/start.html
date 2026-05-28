@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2a75bb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PokéDB">
+    <link rel="apple-touch-icon" href="/static/icon-192.png">
+    <title>Pokémon Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        /* Pokéball Hintergrund Muster */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header mit Logo */
+        .header {
+            text-align: center;
+            margin: 20px 0 10px 0;
+        }
+        
+        .logo-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px;
+            padding: 20px;
+            display: inline-block;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .logo-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .logo {
+            max-width: 250px;
+            height: auto;
+            filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.2));
+        }
+        
+        .wiki-text {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        
+        .wiki-text a {
+            color: #2a75bb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .wiki-text a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Control Buttons (Dark Mode + Language) */
+        .control-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .control-btn {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .language-select {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        /* Warnungs-Popup */
+        .warning-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            text-align: center;
+            max-width: 400px;
+            display: none;
+        }
+        
+        body.dark-mode .warning-popup {
+            background: #1a1a2e;
+            color: white;
+        }
+        
+        .warning-popup h3 {
+            color: #ff9800;
+            margin-bottom: 15px;
+        }
+        
+        .warning-popup button {
+            padding: 10px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .warning-popup .confirm {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .warning-popup .cancel {
+            background: #f44336;
+            color: white;
+        }
+        
+        .warning-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        /* API Status */
+        .api-status {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 100;
+        }
+        
+        .api-status.online {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .api-status.offline {
+            background: #f44336;
+            color: white;
+        }
+        
+        .api-status.checking {
+            background: #ff9800;
+            color: white;
+        }
+        
+        /* Willkommens-Text */
+        .welcome {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode .welcome {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .welcome h2 {
+            color: #2a75bb;
+            margin-bottom: 10px;
+        }
+        
+        body.dark-mode .welcome h2 {
+            color: #ffcb05;
+        }
+        
+        .welcome p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        body.dark-mode .welcome p {
+            color: #ccc;
+        }
+        
+        /* Language Info Box */
+        .language-info {
+            background: rgba(255,152,0,0.2);
+            border-radius: 15px;
+            padding: 10px;
+            margin: 10px auto;
+            max-width: 500px;
+            text-align: center;
+            font-size: 12px;
+            color: #ff9800;
+        }
+        
+        /* Search Box */
+        .search-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 60px;
+            padding: 5px;
+            margin: 30px auto;
+            max-width: 550px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        
+        .search-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 0;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 15px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 60px 0 0 60px;
+            outline: none;
+            background: transparent;
+            font-family: inherit;
+        }
+        
+        .search-box button {
+            padding: 15px 35px;
+            font-size: 16px;
+            background: #ffcb05;
+            border: none;
+            border-radius: 0 60px 60px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .search-box button:hover {
+            background: #f5b700;
+            transform: scale(1.05);
+        }
+        
+        /* Main Navigation Buttons */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .nav-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-3px);
+        }
+        
+        /* Secondary Navigation */
+        .secondary-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .secondary-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+        
+        .secondary-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-2px);
+        }
+        
+        /* Stats Counter */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.9);
+            padding: 15px 25px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode .stat-card {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .stat-number {
+            color: #ffcb05;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        body.dark-mode .stat-label {
+            color: #ccc;
+        }
+        
+        /* Featured Pokémon Box */
+        .featured-box {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        body.dark-mode .featured-box {
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .featured-title {
+            text-align: center;
+            color: #2a75bb;
+            margin-bottom: 20px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        body.dark-mode .featured-title {
+            color: #ffcb05;
+        }
+        
+        .pokemon-showcase {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .pokemon-card {
+            flex: 1;
+            min-width: 220px;
+            background: linear-gradient(135deg, #ffcb05, #f5b700);
+            border: 3px solid #2a75bb;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pokemon-card::before {
+            content: "★";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            color: gold;
+            opacity: 0.5;
+        }
+        
+        .pokemon-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .pokemon-card img {
+            width: 140px;
+            height: 140px;
+            transition: transform 0.3s;
+        }
+        
+        .pokemon-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .pokemon-card a {
+            text-decoration: none;
+            color: #2a75bb;
+            font-weight: bold;
+            font-size: 22px;
+            display: block;
+            margin-top: 15px;
+        }
+        
+        .pokemon-number {
+            color: #fff;
+            background: #2a75bb;
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        /* Regions Quick Access */
+        .regions-quick {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .region-quick-card {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffcb05, #f5b700);
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+        
+        .region-quick-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .region-quick-card a {
+            text-decoration: none;
+            color: #2a75bb;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .view-all-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .view-all-link a {
+            color: #2a75bb;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        body.dark-mode .view-all-link a {
+            color: #ffcb05;
+        }
+        
+        /* Random Pokémon Box */
+        .random-box {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body.dark-mode .random-box {
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .random-box::after {
+            content: "🎲";
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 40px;
+            opacity: 0.1;
+        }
+        
+        .random-title {
+            color: #2a75bb;
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        body.dark-mode .random-title {
+            color: #ffcb05;
+        }
+        
+        .random-pokemon {
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 25px;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #f9f9f9, #e8e8e8);
+            min-width: 250px;
+        }
+        
+        body.dark-mode .random-pokemon {
+            background: linear-gradient(135deg, #333, #222);
+            color: white;
+        }
+        
+        .random-pokemon:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #ffcb05, #f5b700);
+        }
+        
+        .random-pokemon img {
+            width: 160px;
+            height: 160px;
+        }
+        
+        .random-pokemon h3 {
+            color: #2a75bb;
+            margin-top: 15px;
+            font-size: 24px;
+        }
+        
+        .random-pokemon p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        body.dark-mode .random-pokemon p {
+            color: #ccc;
+        }
+        
+        .random-loading {
+            font-size: 18px;
+            color: #666;
+            padding: 50px;
+        }
+        
+        /* Daily & Weekly Box */
+        .daily-weekly-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .daily-weekly-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+        }
+        
+        .footer-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+        }
+        
+        .footer-text a {
+            color: #ffcb05;
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pokemon-card, .random-pokemon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffcb05;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .pokemon-showcase {
+                flex-direction: column;
+            }
+            .pokemon-card {
+                width: 100%;
+            }
+            .random-pokemon img {
+                width: 100px;
+                height: 100px;
+            }
+            .stat-card {
+                padding: 10px 20px;
+            }
+            .stat-number {
+                font-size: 24px;
+            }
+            .regions-quick {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .control-buttons {
+                top: 10px;
+                right: 10px;
+            }
+            .control-btn, .language-select {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .main-nav {
+                margin-top: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="showLanguageWarning(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<!-- Warning Popup -->
+<div class="warning-overlay" id="warningOverlay"></div>
+<div class="warning-popup" id="warningPopup">
+    <h3>⚠️ Language Change Warning ⚠️</h3>
+    <p id="warningMessage">The Pokémon API primarily provides data in English. Pokémon names, types, abilities, and Pokédex entries may remain in English even after changing the language.</p>
+    <p style="margin-top: 10px; font-size: 12px;">Only the website interface (buttons, labels, navigation) will be translated.</p>
+    <button class="cancel" onclick="hideWarning()">Cancel</button>
+    <button class="confirm" onclick="confirmLanguageChange()">Continue</button>
+</div>
+
+<div id="apiStatus" class="api-status checking">🔄 Checking API...</div>
+
+<div class="container">
+    <!-- Header mit Logo -->
+    <div class="header">
+        <div class="logo-container">
+            <img src="/static/logo.png" alt="Pokémon" class="logo" 
+                 onerror="this.src='https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png'">
+            <div class="wiki-text">
+                📖 <a href="https://en.wikipedia.org/wiki/Pokémon" target="_blank">Wikipedia</a> • The Free Encyclopedia
+            </div>
+        </div>
+    </div>
+    
+    <!-- Language Info Box -->
+    <div class="language-info" id="languageInfo">
+        🌐 Interface language can be changed. Pokémon data (names, types, abilities) will remain in English as provided by the API.
+    </div>
+    
+    <!-- Willkommens-Text -->
+    <div class="welcome">
+        <h2 id="welcomeTitle">✨ Welcome to the Pokémon Database ✨</h2>
+        <p id="welcomeText">Explore information about all Pokémon from Generation 1 to 9, including stats, evolutions, and Pokédex entries!</p>
+    </div>
+    
+    <!-- Main Navigation -->
+    <div class="main-nav">
+        <a href="/pokemon" class="nav-btn" id="navAllPokemon">📋 All Pokémon</a>
+        <a href="/regions" class="nav-btn" id="navRegions">🗺️ Regions</a>
+        <a href="/team" class="nav-btn" id="navMyTeam">⭐ My Team</a>
+        <a href="/compare" class="nav-btn" id="navCompare">📊 Simple Compare</a>
+        <a href="/advanced-compare" class="nav-btn" id="navAdvancedCompare">📈 Advanced Compare</a>
+        <a href="/type-chart" class="nav-btn" id="navTypeChart">⚔️ Type Chart</a>
+        <a href="/profile" class="nav-btn" id="navProfile">👤 Profile</a>
+        <a href="/quiz" class="nav-btn" id="navQuiz">🎮 Quiz</a>
+    </div>
+    
+    <!-- Secondary Navigation -->
+    <div class="secondary-nav">
+        <a href="/gallery" class="secondary-btn" id="navGallery">🎨 Sprite Gallery</a>
+        <a href="/top-10" class="secondary-btn" id="navTop10">🏆 Top 10</a>
+        <a href="/generation-stats" class="secondary-btn" id="navGenStats">📈 Gen Stats</a>
+        <a href="/weather" class="secondary-btn" id="navWeather">🌤️ Weather</a>
+        <a href="/share-team" class="secondary-btn">📤 Share Team</a>
+    </div>
+    
+    <!-- Stats Counter -->
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number">1000+</div>
+            <div class="stat-label" id="statPokemon">Pokémon</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">9</div>
+            <div class="stat-label" id="statGenerations">Generations</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">18</div>
+            <div class="stat-label" id="statTypes">Types</div>
+        </div>
+    </div>
+    
+    <!-- Search Box -->
+    <div class="search-container">
+        <div class="search-box">
+            <form action="/search" method="get" style="display: flex; width: 100%;">
+                <input type="text" name="q" id="searchInput" placeholder="🔍 Search Pokémon by name or ID..." required>
+                <button type="submit" id="searchBtn">Search</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Featured Pokémon -->
+    <div class="featured-box">
+        <div class="featured-title">
+            <span>⭐</span> <span id="featuredTitle">Featured Pokémon</span> <span>⭐</span>
+        </div>
+        <div class="pokemon-showcase">
+            <div class="pokemon-card" onclick="location.href='/pokemon/28'">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/28.png" 
+                     alt="Sandslash"
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/28.png'">
+                <a href="/pokemon/28">Sandslash</a>
+                <div class="pokemon-number">#028</div>
+            </div>
+            
+            <div class="pokemon-card" onclick="location.href='/pokemon/644'">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/644.png" 
+                     alt="Zekrom"
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/644.png'">
+                <a href="/pokemon/644">Zekrom</a>
+                <div class="pokemon-number">#644</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Regionen Quick Access -->
+    <div class="featured-box">
+        <div class="featured-title">
+            <span>🗺️</span> <span id="exploreRegionsTitle">Explore Regions</span> <span>🗺️</span>
+        </div>
+        <div class="regions-quick">
+            <div class="region-quick-card"><a href="/region/1">🏔️ Kanto</a></div>
+            <div class="region-quick-card"><a href="/region/2">🏯 Johto</a></div>
+            <div class="region-quick-card"><a href="/region/3">🌋 Hoenn</a></div>
+            <div class="region-quick-card"><a href="/region/4">❄️ Sinnoh</a></div>
+            <div class="region-quick-card"><a href="/region/5">🏙️ Unova</a></div>
+            <div class="region-quick-card"><a href="/region/6">🗼 Kalos</a></div>
+            <div class="region-quick-card"><a href="/region/7">🌴 Alola</a></div>
+            <div class="region-quick-card"><a href="/region/8">🏰 Galar</a></div>
+            <div class="region-quick-card"><a href="/region/9">🏖️ Paldea</a></div>
+        </div>
+        <div class="view-all-link">
+            <a href="/regions" id="viewAllRegions">View All Regions →</a>
+        </div>
+    </div>
+    
+    <!-- Random Pokémon Box -->
+    <div class="random-box" id="randomBox">
+        <div class="random-title">
+            <span>🎲</span> <span id="randomTitle">Random Pokémon</span> <span>🎲</span>
+        </div>
+        <div id="randomPokemonContent" class="random-loading">
+            <div class="loader"></div>
+        </div>
+    </div>
+    
+    <!-- Daily & Weekly Pokémon -->
+    <div class="daily-weekly-container">
+        <div class="featured-box" id="dailyPokemonBox">
+            <div class="featured-title">
+                <span>📅</span> <span id="dailyTitle">Pokémon of the Day</span> <span>📅</span>
+            </div>
+            <div id="dailyPokemonContent">
+                <div class="loader"></div>
+            </div>
+        </div>
+        
+        <div class="featured-box" id="weeklyPokemonBox">
+            <div class="featured-title">
+                <span>⭐</span> <span id="weeklyTitle">Pokémon of the Week</span> <span>⭐</span>
+            </div>
+            <div id="weeklyPokemonContent">
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-text">
+            Pokémon © 1995-2024 Nintendo, Game Freak, and Creatures Inc.<br>
+            Data provided by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a><br>
+            <i>Made by Reinaldo and Petr</i>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== DARK MODE ==========
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    // ========== LANGUAGE SUPPORT WITH WARNING ==========
+    let pendingLanguage = null;
+    
+    function showLanguageWarning(lang) {
+        pendingLanguage = lang;
+        document.getElementById('warningOverlay').style.display = 'block';
+        document.getElementById('warningPopup').style.display = 'block';
+    }
+    
+    function hideWarning() {
+        document.getElementById('warningOverlay').style.display = 'none';
+        document.getElementById('warningPopup').style.display = 'none';
+        pendingLanguage = null;
+        // Reset dropdown to current language
+        document.getElementById('languageSelect').value = currentLang;
+    }
+    
+    function confirmLanguageChange() {
+        if (pendingLanguage) {
+            changeLanguage(pendingLanguage);
+        }
+        hideWarning();
+    }
+    
+    let currentLang = localStorage.getItem('language') || 'en';
+    
+    const translations = {
+        en: {
+            welcomeTitle: "✨ Welcome to the Pokémon Database ✨",
+            welcomeText: "Explore information about all Pokémon from Generation 1 to 9, including stats, evolutions, and Pokédex entries!",
+            navAllPokemon: "📋 All Pokémon",
+            navRegions: "🗺️ Regions",
+            navMyTeam: "⭐ My Team",
+            navCompare: "📊 Simple Compare",
+            navAdvancedCompare: "📈 Advanced Compare",
+            navTypeChart: "⚔️ Type Chart",
+            navProfile: "👤 Profile",
+            navQuiz: "🎮 Quiz",
+            navGallery: "🎨 Sprite Gallery",
+            navTop10: "🏆 Top 10",
+            navGenStats: "📈 Gen Stats",
+            navWeather: "🌤️ Weather",
+            statPokemon: "Pokémon",
+            statGenerations: "Generations",
+            statTypes: "Types",
+            searchPlaceholder: "🔍 Search Pokémon by name or ID...",
+            searchBtn: "Search",
+            featuredTitle: "Featured Pokémon",
+            exploreRegionsTitle: "Explore Regions",
+            viewAllRegions: "View All Regions →",
+            randomTitle: "Random Pokémon",
+            dailyTitle: "Pokémon of the Day",
+            weeklyTitle: "Pokémon of the Week",
+            languageInfo: "🌐 Interface language can be changed. Pokémon data (names, types, abilities) will remain in English as provided by the API."
+        },
+        de: {
+            welcomeTitle: "✨ Willkommen in der Pokémon-Datenbank ✨",
+            welcomeText: "Entdecke Informationen über alle Pokémon von Generation 1 bis 9, einschließlich Stats, Entwicklungen und Pokédex-Einträgen!",
+            navAllPokemon: "📋 Alle Pokémon",
+            navRegions: "🗺️ Regionen",
+            navMyTeam: "⭐ Mein Team",
+            navCompare: "📊 Einfacher Vergleich",
+            navAdvancedCompare: "📈 Erweiterter Vergleich",
+            navTypeChart: "⚔️ Typen-Tabelle",
+            navProfile: "👤 Profil",
+            navQuiz: "🎮 Quiz",
+            navGallery: "🎨 Sprite-Galerie",
+            navTop10: "🏆 Top 10",
+            navGenStats: "📈 Gen Statistiken",
+            navWeather: "🌤️ Wetter",
+            statPokemon: "Pokémon",
+            statGenerations: "Generationen",
+            statTypes: "Typen",
+            searchPlaceholder: "🔍 Pokémon nach Name oder ID suchen...",
+            searchBtn: "Suchen",
+            featuredTitle: "Vorgestellte Pokémon",
+            exploreRegionsTitle: "Regionen entdecken",
+            viewAllRegions: "Alle Regionen ansehen →",
+            randomTitle: "Zufälliges Pokémon",
+            dailyTitle: "Pokémon des Tages",
+            weeklyTitle: "Pokémon der Woche",
+            languageInfo: "🌐 Die Oberflächensprache kann geändert werden. Pokémon-Daten (Namen, Typen, Fähigkeiten) bleiben auf Englisch, wie von der API bereitgestellt."
+        },
+        fr: {
+            welcomeTitle: "✨ Bienvenue dans la Base de Données Pokémon ✨",
+            welcomeText: "Explorez les informations sur tous les Pokémon de la Génération 1 à 9, y compris les stats, les évolutions et les entrées du Pokédex!",
+            navAllPokemon: "📋 Tous les Pokémon",
+            navRegions: "🗺️ Régions",
+            navMyTeam: "⭐ Mon Équipe",
+            navCompare: "📊 Comparaison Simple",
+            navAdvancedCompare: "📈 Comparaison Avancée",
+            navTypeChart: "⚔️ Tableau des Types",
+            navProfile: "👤 Profil",
+            navQuiz: "🎮 Quiz",
+            navGallery: "🎨 Galerie de Sprites",
+            navTop10: "🏆 Top 10",
+            navGenStats: "📈 Statistiques par Génération",
+            navWeather: "🌤️ Météo",
+            statPokemon: "Pokémon",
+            statGenerations: "Générations",
+            statTypes: "Types",
+            searchPlaceholder: "🔍 Chercher un Pokémon par nom ou ID...",
+            searchBtn: "Chercher",
+            featuredTitle: "Pokémon Vedettes",
+            exploreRegionsTitle: "Explorer les Régions",
+            viewAllRegions: "Voir toutes les Régions →",
+            randomTitle: "Pokémon Aléatoire",
+            dailyTitle: "Pokémon du Jour",
+            weeklyTitle: "Pokémon de la Semaine",
+            languageInfo: "🌐 La langue de l'interface peut être modifiée. Les données Pokémon (noms, types, capacités) resteront en anglais comme fournies par l'API."
+        },
+        es: {
+            welcomeTitle: "✨ ¡Bienvenido a la Base de Datos Pokémon! ✨",
+            welcomeText: "¡Explora información sobre todos los Pokémon de la Generación 1 a 9, incluyendo estadísticas, evoluciones y entradas de la Pokédex!",
+            navAllPokemon: "📋 Todos los Pokémon",
+            navRegions: "🗺️ Regiones",
+            navMyTeam: "⭐ Mi Equipo",
+            navCompare: "📊 Comparación Simple",
+            navAdvancedCompare: "📈 Comparación Avanzada",
+            navTypeChart: "⚔️ Tabla de Tipos",
+            navProfile: "👤 Perfil",
+            navQuiz: "🎮 Cuestionario",
+            navGallery: "🎨 Galería de Sprites",
+            navTop10: "🏆 Top 10",
+            navGenStats: "📈 Estadísticas por Generación",
+            navWeather: "🌤️ Clima",
+            statPokemon: "Pokémon",
+            statGenerations: "Generaciones",
+            statTypes: "Tipos",
+            searchPlaceholder: "🔍 Buscar Pokémon por nombre o ID...",
+            searchBtn: "Buscar",
+            featuredTitle: "Pokémon Destacados",
+            exploreRegionsTitle: "Explorar Regiones",
+            viewAllRegions: "Ver todas las Regiones →",
+            randomTitle: "Pokémon Aleatorio",
+            dailyTitle: "Pokémon del Día",
+            weeklyTitle: "Pokémon de la Semana",
+            languageInfo: "🌐 El idioma de la interfaz se puede cambiar. Los datos de Pokémon (nombres, tipos, habilidades) permanecerán en inglés según lo proporcionado por la API."
+        },
+        ja: {
+            welcomeTitle: "✨ ポケモンデータベースへようこそ ✨",
+            welcomeText: "第1世代から第9世代までの全ポケモンの情報（統計、進化、図鑑エントリ）を探索できます！",
+            navAllPokemon: "📋 すべてのポケモン",
+            navRegions: "🗺️ 地域",
+            navMyTeam: "⭐ マイチーム",
+            navCompare: "📊 シンプル比較",
+            navAdvancedCompare: "📈 詳細比較",
+            navTypeChart: "⚔️ タイプ表",
+            navProfile: "👤 プロフィール",
+            navQuiz: "🎮 クイズ",
+            navGallery: "🎨 スプライトギャラリー",
+            navTop10: "🏆 トップ10",
+            navGenStats: "📈 世代統計",
+            navWeather: "🌤️ 天気",
+            statPokemon: "ポケモン",
+            statGenerations: "世代",
+            statTypes: "タイプ",
+            searchPlaceholder: "🔍 名前またはIDでポケモンを検索...",
+            searchBtn: "検索",
+            featuredTitle: "注目のポケモン",
+            exploreRegionsTitle: "地域を探索",
+            viewAllRegions: "すべての地域を見る →",
+            randomTitle: "ランダムポケモン",
+            dailyTitle: "今日のポケモン",
+            weeklyTitle: "今週のポケモン",
+            languageInfo: "🌐 インターフェースの言語は変更できます。ポケモンデータ（名前、タイプ、能力）はAPIから提供される英語のままです。"
+        },
+        zh: {
+            welcomeTitle: "✨ 欢迎来到宝可梦数据库 ✨",
+            welcomeText: "探索第1代到第9代所有宝可梦的信息，包括属性、进化和图鉴条目！",
+            navAllPokemon: "📋 所有宝可梦",
+            navRegions: "🗺️ 地区",
+            navMyTeam: "⭐ 我的队伍",
+            navCompare: "📊 简单比较",
+            navAdvancedCompare: "📈 高级比较",
+            navTypeChart: "⚔️ 属性表",
+            navProfile: "👤 个人资料",
+            navQuiz: "🎮 问答游戏",
+            navGallery: "🎨 精灵画廊",
+            navTop10: "🏆 前十名",
+            navGenStats: "📈 世代统计",
+            navWeather: "🌤️ 天气",
+            statPokemon: "宝可梦",
+            statGenerations: "世代",
+            statTypes: "属性",
+            searchPlaceholder: "🔍 按名称或ID搜索宝可梦...",
+            searchBtn: "搜索",
+            featuredTitle: "精选宝可梦",
+            exploreRegionsTitle: "探索地区",
+            viewAllRegions: "查看所有地区 →",
+            randomTitle: "随机宝可梦",
+            dailyTitle: "每日宝可梦",
+            weeklyTitle: "每周宝可梦",
+            languageInfo: "🌐 界面语言可以更改。宝可梦数据（名称、属性、能力）将保持API提供的英文版本。"
+        }
+    };
+    
+    function changeLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('language', lang);
+        document.getElementById('languageSelect').value = lang;
+        applyTranslations();
+    }
+    
+    function applyTranslations() {
+        const t = translations[currentLang];
+        if (!t) return;
+        
+        document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
+        document.getElementById('welcomeText').textContent = t.welcomeText;
+        document.getElementById('navAllPokemon').textContent = t.navAllPokemon;
+        document.getElementById('navRegions').textContent = t.navRegions;
+        document.getElementById('navMyTeam').textContent = t.navMyTeam;
+        document.getElementById('navCompare').textContent = t.navCompare;
+        document.getElementById('navAdvancedCompare').textContent = t.navAdvancedCompare;
+        document.getElementById('navTypeChart').textContent = t.navTypeChart;
+        document.getElementById('navProfile').textContent = t.navProfile;
+        document.getElementById('navQuiz').textContent = t.navQuiz;
+        document.getElementById('navGallery').textContent = t.navGallery;
+        document.getElementById('navTop10').textContent = t.navTop10;
+        document.getElementById('navGenStats').textContent = t.navGenStats;
+        document.getElementById('navWeather').textContent = t.navWeather;
+        document.getElementById('statPokemon').textContent = t.statPokemon;
+        document.getElementById('statGenerations').textContent = t.statGenerations;
+        document.getElementById('statTypes').textContent = t.statTypes;
+        document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+        document.getElementById('searchBtn').textContent = t.searchBtn;
+        document.getElementById('featuredTitle').textContent = t.featuredTitle;
+        document.getElementById('exploreRegionsTitle').textContent = t.exploreRegionsTitle;
+        document.getElementById('viewAllRegions').textContent = t.viewAllRegions;
+        document.getElementById('randomTitle').textContent = t.randomTitle;
+        document.getElementById('dailyTitle').textContent = t.dailyTitle;
+        document.getElementById('weeklyTitle').textContent = t.weeklyTitle;
+        document.getElementById('languageInfo').textContent = t.languageInfo;
+    }
+    
+    // Sprache beim Laden anwenden
+    document.getElementById('languageSelect').value = currentLang;
+    applyTranslations();
+    
+    // ========== API STATUS ==========
+    async function checkAPIStatus() {
+        const statusDiv = document.getElementById('apiStatus');
+        try {
+            const response = await fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
+            if (response.ok) {
+                statusDiv.className = 'api-status online';
+                statusDiv.innerHTML = '✅ API Online';
+            } else {
+                statusDiv.className = 'api-status offline';
+                statusDiv.innerHTML = '❌ API Offline';
+            }
+        } catch (error) {
+            statusDiv.className = 'api-status offline';
+            statusDiv.innerHTML = '❌ API Offline';
+        }
+    }
+    
+    // ========== RANDOM POKEMON ==========
+    function getRandomPokemonId() {
+        return Math.floor(Math.random() * 1025) + 1;
+    }
+    
+    async function loadRandomPokemon() {
+        const randomId = getRandomPokemonId();
+        const container = document.getElementById('randomPokemonContent');
+        
+        container.style.opacity = '0';
+        
+        setTimeout(async () => {
+            try {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomId}`);
+                if (response.ok) {
+                    const pokemon = await response.json();
+                    const pokemonName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+                    
+                    container.innerHTML = `
+                        <div class="random-pokemon fade-in" onclick="location.href='/pokemon/${randomId}'">
+                            <img src="${pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default}" 
+                                 alt="${pokemonName}"
+                                 onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${randomId}.png'">
+                            <h3>${pokemonName}</h3>
+                            <p>#${String(randomId).padStart(3, '0')}</p>
+                            <p style="font-size:12px; margin-top:8px;">✨ Click for details → ✨</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('Pokémon not found');
+                }
+            } catch (error) {
+                console.error('Error loading random Pokémon:', error);
+                container.innerHTML = `
+                    <div class="random-pokemon" onclick="location.href='/pokemon/${randomId}'">
+                        <div style="font-size: 64px;">🎲</div>
+                        <h3>Random Pokémon</h3>
+                        <p>#${String(randomId).padStart(3, '0')}</p>
+                        <p style="font-size:12px;">Click to discover →</p>
+                    </div>
+                `;
+            }
+            
+            container.style.opacity = '1';
+        }, 300);
+    }
+    
+    // ========== DAILY POKEMON ==========
+    function getDailyPokemonId() {
+        const today = new Date();
+        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+        return (dayOfYear % 1025) + 1;
+    }
+    
+    async function loadDailyPokemon() {
+        const id = getDailyPokemonId();
+        const container = document.getElementById('dailyPokemonContent');
+        try {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+            const pokemon = await response.json();
+            const pokemonName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+            container.innerHTML = `
+                <div class="random-pokemon" onclick="location.href='/pokemon/${id}'" style="padding: 15px;">
+                    <img src="${pokemon.sprites.other['official-artwork'].front_default}" style="width: 100px;">
+                    <h3>${pokemonName}</h3>
+                    <p>#${String(id).padStart(3, '0')}</p>
+                    <small>✨ Changes every day! ✨</small>
+                </div>
+            `;
+        } catch(e) { container.innerHTML = '<p>Loading...</p>'; }
+    }
+    
+    // ========== WEEKLY POKEMON ==========
+    function getWeeklyPokemonId() {
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = now - start;
+        const oneWeek = 1000 * 60 * 60 * 24 * 7;
+        const weekNumber = Math.floor(diff / oneWeek);
+        return (weekNumber % 1025) + 1;
+    }
+    
+    async function loadWeeklyPokemon() {
+        const id = getWeeklyPokemonId();
+        const container = document.getElementById('weeklyPokemonContent');
+        try {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+            const pokemon = await response.json();
+            const pokemonName = pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
+            container.innerHTML = `
+                <div class="random-pokemon" onclick="location.href='/pokemon/${id}'" style="padding: 15px;">
+                    <img src="${pokemon.sprites.other['official-artwork'].front_default}" style="width: 100px;">
+                    <h3>${pokemonName}</h3>
+                    <p>#${String(id).padStart(3, '0')}</p>
+                    <small>🌟 Changes every week! 🌟</small>
+                </div>
+            `;
+        } catch(e) { container.innerHTML = '<p>Loading...</p>'; }
+    }
+    
+    // Timer starten
+    let randomInterval = setInterval(loadRandomPokemon, 8000);
+    loadRandomPokemon();
+    checkAPIStatus();
+    loadDailyPokemon();
+    loadWeeklyPokemon();
+    
+    window.addEventListener('beforeunload', () => {
+        if (randomInterval) clearInterval(randomInterval);
+    });
+</script>
+<script>
+    // Service Worker für PWA
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/static/sw.js')
+                .then(registration => {
+                    console.log('Service Worker registered successfully:', registration.scope);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        });
+    }
+    
+    // Installation Prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Optional: Zeige Install-Button
+        const installBtn = document.createElement('button');
+        installBtn.textContent = '📱 Install App';
+        installBtn.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ffcb05;
+            color: #2a75bb;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        `;
+        installBtn.onclick = () => {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(choice => {
+                if (choice.outcome === 'accepted') {
+                    console.log('User accepted the install prompt');
+                }
+                deferredPrompt = null;
+                installBtn.remove();
+            });
+        };
+        document.body.appendChild(installBtn);
+    });
+</script>
+</body>
+</html>
+
+<!-- In einer Tabelle, ein Binery Blop, so kann man theoretisch ein Bild auf der Datenbank hinzufügen -->
+<!-- Here is a <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"> Link</a> -->

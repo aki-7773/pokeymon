@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pokémon Weather & Time</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            transition: all 0.5s ease;
+            min-height: 100vh;
+        }
+        
+        /* Tageszeit-basierte Hintergründe */
+        body.morning {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+        
+        body.afternoon {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+        }
+        
+        body.evening {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+        }
+        
+        body.night {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        }
+        
+        /* Wetter-basierte Effekte */
+        body.rainy::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 2px, transparent 2px, transparent 6px);
+            pointer-events: none;
+            z-index: 1;
+            animation: rain 0.5s linear infinite;
+        }
+        
+        body.snowy::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, white 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 1;
+            animation: snow 3s linear infinite;
+        }
+        
+        body.foggy::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(200,200,200,0.3);
+            backdrop-filter: blur(3px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        @keyframes rain {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 10px; }
+        }
+        
+        @keyframes snow {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 42px;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .weather-controls {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        body.dark-mode .weather-controls {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .time-selector, .weather-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .time-btn, .weather-btn {
+            padding: 10px 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .time-btn:hover, .weather-btn:hover, .time-btn.active, .weather-btn.active {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: scale(1.05);
+        }
+        
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .pokemon-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        body.dark-mode .pokemon-card {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .pokemon-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .pokemon-card img {
+            width: 120px;
+            height: 120px;
+        }
+        
+        .pokemon-card h3 {
+            color: #2a75bb;
+            margin: 10px 0;
+        }
+        
+        body.dark-mode .pokemon-card h3 {
+            color: #ffcb05;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            color: white;
+            font-size: 12px;
+            margin: 3px;
+        }
+        
+        .weather-badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-top: 8px;
+        }
+        
+        .current-info {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            color: white;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffcb05;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<div class="container">
+    <h1>🌤️ Pokémon Weather & Time 🌙</h1>
+    
+    <div class="nav-buttons">
+        <a href="/" class="nav-btn">← Home</a>
+        <a href="/pokemon" class="nav-btn">📋 All Pokémon</a>
+        <a href="/quiz" class="nav-btn">🎮 Quiz</a>
+    </div>
+    
+    <div class="weather-controls">
+        <h3 style="text-align: center; margin-bottom: 15px;">⏰ Time of Day</h3>
+        <div class="time-selector">
+            <button class="time-btn" data-time="morning">🌅 Morning</button>
+            <button class="time-btn active" data-time="afternoon">☀️ Afternoon</button>
+            <button class="time-btn" data-time="evening">🌆 Evening</button>
+            <button class="time-btn" data-time="night">🌙 Night</button>
+        </div>
+        
+        <h3 style="text-align: center; margin: 20px 0 15px;">🌦️ Weather</h3>
+        <div class="weather-selector">
+            <button class="weather-btn active" data-weather="clear">☀️ Clear</button>
+            <button class="weather-btn" data-weather="rainy">🌧️ Rainy</button>
+            <button class="weather-btn" data-weather="snowy">❄️ Snowy</button>
+            <button class="weather-btn" data-weather="foggy">🌫️ Foggy</button>
+        </div>
+    </div>
+    
+    <div class="current-info" id="currentInfo"></div>
+    
+    <div id="pokemonGrid" class="pokemon-grid">
+        <div class="loader"></div>
+    </div>
+</div>
+
+<script>
+    let allPokemon = [];
+    let currentTime = 'afternoon';
+    let currentWeather = 'clear';
+    
+    const typeColors = {
+        normal: "#A8A878", fire: "#F08030", water: "#6890F0",
+        electric: "#F8D030", grass: "#78C850", ice: "#98D8D8",
+        fighting: "#C03028", poison: "#A040A0", ground: "#E0C068",
+        flying: "#A890F0", psychic: "#F85888", bug: "#A8B820",
+        rock: "#B8A038", ghost: "#705898", dragon: "#7038F8",
+        dark: "#705848", steel: "#B8B8D0", fairy: "#EE99AC"
+    };
+    
+    // Typ-Wetter-Zuordnung
+    const weatherTypes = {
+        sunny: ['fire', 'grass', 'ground'],
+        rainy: ['water', 'electric', 'ice'],
+        snowy: ['ice', 'steel', 'fairy'],
+        foggy: ['ghost', 'dark', 'psychic'],
+        clear: ['normal', 'flying', 'dragon']
+    };
+    
+    async function loadPokemon() {
+        try {
+            const response = await fetch('/pokemon-data');
+            const data = await response.json();
+            allPokemon = data.pokemon || [];
+            
+            // Typen für die ersten 100 Pokémon laden (für Wetter-Zuordnung)
+            for (let i = 0; i < Math.min(allPokemon.length, 100); i++) {
+                const p = allPokemon[i];
+                try {
+                    const apiRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${p.id}`);
+                    const apiData = await apiRes.json();
+                    p.types = apiData.types.map(t => t.type.name);
+                } catch(e) {
+                    p.types = [];
+                }
+            }
+            
+            updateDisplay();
+        } catch (error) {
+            console.error('Error loading Pokémon:', error);
+        }
+    }
+    
+    function updateTimeOfDay(time) {
+        currentTime = time;
+        document.body.className = '';
+        document.body.classList.add(time);
+        
+        // Zeit-basierte Textfarbe anpassen
+        if (time === 'night') {
+            document.body.style.color = '#ddd';
+        } else {
+            document.body.style.color = '';
+        }
+    }
+    
+    function updateWeather(weather) {
+        currentWeather = weather;
+        // Entferne alte Wetter-Klassen
+        document.body.classList.remove('rainy', 'snowy', 'foggy');
+        if (weather !== 'clear') {
+            document.body.classList.add(weather);
+        }
+    }
+    
+    function getPokemonByWeather() {
+        let weatherType = currentWeather;
+        if (weatherType === 'clear' && currentTime === 'morning') weatherType = 'sunny';
+        
+        const relevantTypes = weatherTypes[weatherType] || weatherTypes.clear;
+        
+        return allPokemon.filter(p => {
+            if (!p.types) return false;
+            return p.types.some(t => relevantTypes.includes(t));
+        }).slice(0, 24);
+    }
+    
+    function updateDisplay() {
+        const container = document.getElementById('pokemonGrid');
+        const filtered = getPokemonByWeather();
+        
+        const weatherNames = { clear: 'Clear', rainy: 'Rainy', snowy: 'Snowy', foggy: 'Foggy' };
+        const timeNames = { morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening', night: 'Night' };
+        
+        document.getElementById('currentInfo').innerHTML = `
+            🌟 Currently: ${timeNames[currentTime]} | ${weatherNames[currentWeather]} 🌟<br>
+            ✨ These Pokémon love this weather! ✨
+        `;
+        
+        if (filtered.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: white;">No Pokémon found for this weather...</p>';
+            return;
+        }
+        
+        container.innerHTML = filtered.map(p => `
+            <div class="pokemon-card" onclick="location.href='/pokemon/${p.id}'">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png" 
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
+                <h3>${p.name}</h3>
+                <div class="pokemon-number">#${String(p.id).padStart(3, '0')}</div>
+                <div>
+                    ${p.types ? p.types.map(t => `<span class="type-badge" style="background: ${typeColors[t]}">${t.toUpperCase()}</span>`).join('') : ''}
+                </div>
+                <div class="weather-badge">${weatherNames[currentWeather]} weather</div>
+            </div>
+        `).join('');
+    }
+    
+    // Event Listener für Zeit-Buttons
+    document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateTimeOfDay(btn.dataset.time);
+            updateDisplay();
+        });
+    });
+    
+    // Event Listener für Wetter-Buttons
+    document.querySelectorAll('.weather-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.weather-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateWeather(btn.dataset.weather);
+            updateDisplay();
+        });
+    });
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    // Automatische Tageszeit basierend auf Systemzeit
+    function setTimeFromSystem() {
+        const hour = new Date().getHours();
+        let timeOfDay = 'afternoon';
+        if (hour < 6) timeOfDay = 'night';
+        else if (hour < 12) timeOfDay = 'morning';
+        else if (hour < 18) timeOfDay = 'afternoon';
+        else timeOfDay = 'evening';
+        
+        updateTimeOfDay(timeOfDay);
+        const btn = document.querySelector(`.time-btn[data-time="${timeOfDay}"]`);
+        if (btn) {
+            document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+    }
+    
+    setTimeFromSystem();
+    loadPokemon();
+</script>
+<script src="/static/lang.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+</script>
+</body>
+</html>

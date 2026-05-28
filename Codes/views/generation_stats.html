@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generation Stats</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 42px;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .stats-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        body.dark-mode .stats-container {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .gen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .gen-card {
+            background: linear-gradient(135deg, #ffcb05, #f5b700);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .gen-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        body.dark-mode .gen-card {
+            background: linear-gradient(135deg, #2a75bb, #1e5a9e);
+        }
+        
+        .gen-card h2 {
+            color: #2a75bb;
+            margin-bottom: 15px;
+        }
+        
+        body.dark-mode .gen-card h2 {
+            color: #ffcb05;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .stat-bar {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            height: 20px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .stat-fill {
+            background: #2a75bb;
+            height: 100%;
+            color: white;
+            line-height: 20px;
+            padding-left: 5px;
+            font-size: 11px;
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffcb05;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+        }
+        
+        body.dark-mode .chart-container {
+            background: rgba(0,0,0,0.8);
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<div class="container">
+    <h1>📊 Generation Statistics 📊</h1>
+    
+    <div class="nav-buttons">
+        <a href="/" class="nav-btn">← Home</a>
+        <a href="/gallery" class="nav-btn">🎨 Gallery</a>
+        <a href="/top-10" class="nav-btn">🏆 Top 10</a>
+    </div>
+    
+    <div class="stats-container">
+        <h2 style="text-align: center;">📈 Pokémon Count per Generation</h2>
+        <canvas id="pokemonCountChart" width="800" height="400"></canvas>
+    </div>
+    
+    <div class="stats-container">
+        <h2 style="text-align: center;">⭐ Generation Details</h2>
+        <div id="genStatsContainer" class="gen-grid">
+            <div class="loader"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let chart;
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    const generationData = {
+        1: { name: "Kanto", range: [1, 151], color: "#ff6b6b", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 },
+        2: { name: "Johto", range: [152, 251], color: "#4ecdc4", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 },
+        3: { name: "Hoenn", range: [252, 386], color: "#45b7d1", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 },
+        4: { name: "Sinnoh", range: [387, 493], color: "#96ceb4", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 },
+        5: { name: "Unova", range: [494, 649], color: "#ffeaa7", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 },
+        6: { name: "Kalos", range: [650, 721], color: "#dfe6e9", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 },
+        7: { name: "Alola", range: [722, 809], color: "#fab1a0", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 },
+        8: { name: "Galar", range: [810, 905], color: "#a29bfe", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 },
+        9: { name: "Paldea", range: [906, 1025], color: "#fd79a8", pokemon: [], avgHp: 0, avgAttack: 0, avgDefense: 0, avgSpeed: 0 }
+    };
+    
+    async function loadGenerationStats() {
+        const container = document.getElementById('genStatsContainer');
+        container.innerHTML = '<div class="loader"></div>';
+        
+        for (let gen = 1; gen <= 9; gen++) {
+            const genInfo = generationData[gen];
+            const [start, end] = genInfo.range;
+            
+            let totalHp = 0, totalAttack = 0, totalDefense = 0, totalSpeed = 0;
+            let count = 0;
+            
+            for (let id = start; id <= Math.min(end, 1025); id++) {
+                try {
+                    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+                    const pokemon = await response.json();
+                    
+                    totalHp += pokemon.stats[0].base_stat;
+                    totalAttack += pokemon.stats[1].base_stat;
+                    totalDefense += pokemon.stats[2].base_stat;
+                    totalSpeed += pokemon.stats[5].base_stat;
+                    count++;
+                    
+                    genInfo.pokemon.push(pokemon);
+                } catch(e) {
+                    console.log(`Could not load Pokémon ${id}`);
+                }
+            }
+            
+            genInfo.avgHp = (totalHp / count).toFixed(1);
+            genInfo.avgAttack = (totalAttack / count).toFixed(1);
+            genInfo.avgDefense = (totalDefense / count).toFixed(1);
+            genInfo.avgSpeed = (totalSpeed / count).toFixed(1);
+            genInfo.count = count;
+        }
+        
+        renderGenStats();
+        renderChart();
+    }
+    
+    function renderGenStats() {
+        const container = document.getElementById('genStatsContainer');
+        
+        container.innerHTML = Object.entries(generationData).map(([gen, data]) => `
+            <div class="gen-card" onclick="location.href='/region/${gen}'">
+                <h2>${data.name}</h2>
+                <div class="stat-row">
+                    <span>📊 Pokémon Count:</span>
+                    <span><strong>${data.count}</strong></span>
+                </div>
+                <div class="stat-row">
+                    <span>❤️ Avg HP:</span>
+                    <span><strong>${data.avgHp}</strong></span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: ${data.avgHp / 2.55}%">${data.avgHp}</div>
+                </div>
+                <div class="stat-row">
+                    <span>⚔️ Avg Attack:</span>
+                    <span><strong>${data.avgAttack}</strong></span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: ${data.avgAttack / 2.55}%">${data.avgAttack}</div>
+                </div>
+                <div class="stat-row">
+                    <span>🛡️ Avg Defense:</span>
+                    <span><strong>${data.avgDefense}</strong></span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: ${data.avgDefense / 2.55}%">${data.avgDefense}</div>
+                </div>
+                <div class="stat-row">
+                    <span>⚡ Avg Speed:</span>
+                    <span><strong>${data.avgSpeed}</strong></span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: ${data.avgSpeed / 2.55}%">${data.avgSpeed}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function renderChart() {
+        const ctx = document.getElementById('pokemonCountChart').getContext('2d');
+        const labels = Object.values(generationData).map(d => d.name);
+        const counts = Object.values(generationData).map(d => d.count);
+        
+        if (chart) chart.destroy();
+        
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of Pokémon',
+                    data: counts,
+                    backgroundColor: Object.values(generationData).map(d => d.color),
+                    borderColor: '#2a75bb',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Pokémon Count by Generation' }
+                },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Number of Pokémon' } },
+                    x: { title: { display: true, text: 'Generation' } }
+                }
+            }
+        });
+    }
+    
+    loadGenerationStats();
+</script>
+<script src="/static/lang.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+</script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 36px;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .search-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 60px;
+            padding: 5px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 0;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 15px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 60px 0 0 60px;
+            outline: none;
+            background: transparent;
+            font-family: inherit;
+        }
+        
+        .search-box button {
+            padding: 15px 35px;
+            font-size: 16px;
+            background: #ffcb05;
+            border: none;
+            border-radius: 0 60px 60px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .search-box button:hover {
+            background: #f5b700;
+        }
+        
+        .results-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        body.dark-mode .results-container {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .result-item:hover {
+            background: rgba(255,203,5,0.2);
+            transform: translateX(10px);
+        }
+        
+        .result-item img {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .result-info {
+            flex: 1;
+        }
+        
+        .result-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .result-name {
+            color: #ffcb05;
+        }
+        
+        .result-id {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .badge-db {
+            background: #78c850;
+            color: white;
+        }
+        
+        .badge-api {
+            background: #2a75bb;
+            color: white;
+        }
+        
+        .badge-special {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .suggestions {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .suggestions h3 {
+            color: #2a75bb;
+            margin-bottom: 10px;
+        }
+        
+        body.dark-mode .suggestions h3 {
+            color: #ffcb05;
+        }
+        
+        .suggestion-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .suggestion-btn {
+            padding: 8px 16px;
+            background: #ffcb05;
+            color: #2a75bb;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .suggestion-btn:hover {
+            transform: scale(1.05);
+            background: #f5b700;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        @media (max-width: 768px) {
+            .result-item {
+                flex-wrap: wrap;
+                text-align: center;
+                justify-content: center;
+            }
+            .badge {
+                display: inline-block;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<div class="container">
+    <h1>🔍 Search Results</h1>
+    
+    <div class="search-section">
+        <div class="search-box">
+            <form action="/search" method="get" style="display: flex; width: 100%;">
+                <input type="text" name="q" placeholder="Search Pokémon by name or ID..." value="{{query}}" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="results-container">
+        <h2 style="margin-bottom: 20px;">Results for "{{query}}"</h2>
+        
+        % if results or api_results:
+            % for p in results:
+            <div class="result-item" onclick="location.href='/pokemon/{{p['id']}}'">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{p['id']}}.png" 
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{p['id']}}.png'">
+                <div class="result-info">
+                    <div class="result-name">{{p["identifier"].capitalize()}}</div>
+                    <div class="result-id">#{{str(p['id']).zfill(3)}}</div>
+                </div>
+                <span class="badge badge-db">Gen 1-6</span>
+            </div>
+            % end
+            
+            % for p in api_results:
+            <div class="result-item" onclick="location.href='/pokemon/{{p['id']}}'">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{p['id']}}.png" 
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{p['id']}}.png'">
+                <div class="result-info">
+                    <div class="result-name">{{p["identifier"].capitalize()}}</div>
+                    <div class="result-id">#{{str(p['id']).zfill(5 if p['id'] > 10000 else 3)}}</div>
+                </div>
+                <span class="badge {{'badge-special' if p['id'] > 10000 else 'badge-api'}}">
+                    {{'Special Form' if p['id'] > 10000 else 'Gen 7+'}}
+                </span>
+            </div>
+            % end
+        % else:
+            <div class="no-results">
+                <p>❌ No Pokémon found for "{{query}}"</p>
+                <div class="suggestions">
+                    <h3>💡 Suggestions</h3>
+                    <p>Try searching for:</p>
+                    <div class="suggestion-buttons">
+                        <a href="/search?q=pikachu" class="suggestion-btn">Pikachu</a>
+                        <a href="/search?q=charizard" class="suggestion-btn">Charizard</a>
+                        <a href="/search?q=mewtwo" class="suggestion-btn">Mewtwo</a>
+                        <a href="/search?q=greninja" class="suggestion-btn">Greninja</a>
+                        <a href="/search?q=lucario" class="suggestion-btn">Lucario</a>
+                        <a href="/search?q=gengar" class="suggestion-btn">Gengar</a>
+                    </div>
+                    <div class="suggestion-buttons" style="margin-top: 10px;">
+                        <a href="/search?q=mega" class="suggestion-btn">Mega Evolutions</a>
+                        <a href="/search?q=gmax" class="suggestion-btn">Gigantamax</a>
+                        <a href="/search?q=alola" class="suggestion-btn">Alolan Forms</a>
+                    </div>
+                </div>
+            </div>
+        % end
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="/" class="back-link">← Back to Home</a>
+        <a href="/pokemon" class="back-link">📋 All Pokémon</a>
+    </div>
+</div>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+</script>
+<script src="/static/lang.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+</script>
+</body>
+</html>

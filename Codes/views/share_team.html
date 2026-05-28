@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Share Pokémon Team</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 42px;
+            margin: 20px 0;
+        }
+        
+        .share-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .team-code {
+            background: #2a75bb;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            font-family: monospace;
+            font-size: 18px;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        
+        .copy-btn {
+            padding: 10px 20px;
+            background: #ffcb05;
+            color: #2a75bb;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px;
+        }
+        
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .share-btn {
+            padding: 12px 25px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .share-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin: 10px;
+        }
+        
+        .team-preview {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .preview-card {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+        
+        .preview-card img {
+            width: 80px;
+            height: 80px;
+        }
+        
+        input {
+            padding: 12px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            width: 300px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📤 Share Your Pokémon Team 📤</h1>
+    
+    <div class="nav-buttons" style="text-align: center;">
+        <a href="/" class="nav-btn">← Home</a>
+        <a href="/team" class="nav-btn">⭐ My Team</a>
+    </div>
+    
+    <div class="share-card">
+        <h2>📋 Create Shareable Team Code</h2>
+        <p>Your current favorite Pokémon will be used to create a shareable code.</p>
+        
+        <div id="teamPreview" class="team-preview"></div>
+        
+        <button class="copy-btn" onclick="generateShareCode()">Generate Share Code</button>
+        
+        <div id="shareResult" style="display: none;">
+            <h3>✨ Your Team Code ✨</h3>
+            <div class="team-code" id="teamCode"></div>
+            <div class="share-buttons">
+                <button class="share-btn" onclick="copyToClipboard()">📋 Copy Code</button>
+                <button class="share-btn" onclick="shareViaWhatsApp()">💬 WhatsApp</button>
+                <button class="share-btn" onclick="shareViaTwitter()">🐦 Twitter</button>
+                <button class="share-btn" onclick="shareViaFacebook()">📘 Facebook</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="share-card">
+        <h2>🔓 Import Team from Code</h2>
+        <p>Enter a team code to load someone else's team.</p>
+        <input type="text" id="importCode" placeholder="Paste team code here...">
+        <button class="copy-btn" onclick="importTeam()">Import Team</button>
+        <div id="importResult"></div>
+    </div>
+</div>
+
+<script>
+    let currentTeamCode = null;
+    
+    async function loadTeamPreview() {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        const container = document.getElementById('teamPreview');
+        
+        if (favorites.length === 0) {
+            container.innerHTML = '<p>No Pokémon in your team yet. Add some favorites first!</p>';
+            return;
+        }
+        
+        const previews = await Promise.all(favorites.map(async (id) => {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+            const pokemon = await response.json();
+            return `
+                <div class="preview-card">
+                    <img src="${pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default}" 
+                         onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png'">
+                    <br>
+                    <small>#${String(id).padStart(3, '0')}</small>
+                </div>
+            `;
+        }));
+        
+        container.innerHTML = previews.join('');
+    }
+    
+    function generateShareCode() {
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+        if (favorites.length === 0) {
+            alert('Please add Pokémon to your team first!');
+            return;
+        }
+        
+        // Team Code Format: VERSION|TEAM_NAME|POKEMON_IDS|TIMESTAMP
+        const teamName = prompt('Enter a name for your team:', 'My Awesome Team');
+        if (!teamName) return;
+        
+        const timestamp = Date.now();
+        const codeData = {
+            v: 1,
+            name: teamName,
+            pokemon: favorites,
+            ts: timestamp,
+            author: localStorage.getItem('profileName') || 'Anonymous Trainer'
+        };
+        
+        currentTeamCode = btoa(JSON.stringify(codeData));
+        document.getElementById('teamCode').textContent = currentTeamCode;
+        document.getElementById('shareResult').style.display = 'block';
+    }
+    
+    function copyToClipboard() {
+        navigator.clipboard.writeText(currentTeamCode);
+        alert('Team code copied to clipboard!');
+    }
+    
+    function shareViaWhatsApp() {
+        const url = `${window.location.origin}/share-team?code=${encodeURIComponent(currentTeamCode)}`;
+        const text = `Check out my Pokémon team! ${url}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+    
+    function shareViaTwitter() {
+        const url = `${window.location.origin}/share-team?code=${encodeURIComponent(currentTeamCode)}`;
+        const text = `My Pokémon team! ${url}`;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+    }
+    
+    function shareViaFacebook() {
+        const url = `${window.location.origin}/share-team?code=${encodeURIComponent(currentTeamCode)}`;
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+    }
+    
+    async function importTeam() {
+        const code = document.getElementById('importCode').value.trim();
+        if (!code) {
+            alert('Please enter a team code!');
+            return;
+        }
+        
+        try {
+            const decoded = JSON.parse(atob(code));
+            if (decoded.v !== 1) {
+                throw new Error('Unsupported version');
+            }
+            
+            const resultDiv = document.getElementById('importResult');
+            resultDiv.innerHTML = `
+                <div style="margin-top: 20px; padding: 15px; background: rgba(76,175,80,0.2); border-radius: 15px;">
+                    <h3>✨ Team: ${decoded.name} ✨</h3>
+                    <p>👤 Trainer: ${decoded.author}</p>
+                    <p>📅 Created: ${new Date(decoded.ts).toLocaleDateString()}</p>
+                    <div class="team-preview" id="importedPreview"></div>
+                    <button class="copy-btn" onclick="saveImportedTeam(${JSON.stringify(decoded.pokemon).replace(/"/g, '&quot;')})">Save to My Team</button>
+                </div>
+            `;
+            
+            // Vorschau des importierten Teams
+            const previewContainer = document.getElementById('importedPreview');
+            const previews = await Promise.all(decoded.pokemon.map(async (id) => {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+                const pokemon = await response.json();
+                return `
+                    <div class="preview-card">
+                        <img src="${pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default}">
+                        <br>
+                        <small>#${String(id).padStart(3, '0')}</small>
+                    </div>
+                `;
+            }));
+            previewContainer.innerHTML = previews.join('');
+            
+        } catch (error) {
+            document.getElementById('importResult').innerHTML = `
+                <div style="margin-top: 20px; padding: 15px; background: rgba(244,67,54,0.2); border-radius: 15px; color: #f44336;">
+                    ❌ Invalid team code!
+                </div>
+            `;
+        }
+    }
+    
+    function saveImportedTeam(pokemonArray) {
+        if (pokemonArray.length > 6) {
+            alert('Team has more than 6 Pokémon! Only the first 6 will be saved.');
+            pokemonArray = pokemonArray.slice(0, 6);
+        }
+        localStorage.setItem('favorites', JSON.stringify(pokemonArray));
+        alert('Team saved successfully! Go to "My Team" to view it.');
+        location.href = '/team';
+    }
+    
+    loadTeamPreview();
+</script>
+</body>
+</html>

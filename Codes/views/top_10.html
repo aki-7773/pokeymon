@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Top 10 Pokémon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 42px;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn:hover, .tab-btn.active {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .top-list {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        body.dark-mode .top-list {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .pokemon-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .pokemon-row:hover {
+            background: rgba(255,203,5,0.2);
+            transform: translateX(10px);
+        }
+        
+        .rank {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2a75bb;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        body.dark-mode .rank {
+            color: #ffcb05;
+        }
+        
+        .pokemon-img {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .pokemon-info {
+            flex: 1;
+        }
+        
+        .pokemon-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .pokemon-name {
+            color: #ffcb05;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f44336;
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffcb05;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        @media (max-width: 768px) {
+            .pokemon-row {
+                flex-wrap: wrap;
+            }
+            .stat-value {
+                text-align: left;
+                margin-left: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<div class="container">
+    <h1>🏆 Top 10 Pokémon 🏆</h1>
+    
+    <div class="nav-buttons">
+        <a href="/" class="nav-btn">← Home</a>
+        <a href="/gallery" class="nav-btn">🎨 Gallery</a>
+        <a href="/generation-stats" class="nav-btn">📊 Gen Stats</a>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="loadTopList('hp')">❤️ Highest HP</button>
+        <button class="tab-btn" onclick="loadTopList('attack')">⚔️ Highest Attack</button>
+        <button class="tab-btn" onclick="loadTopList('defense')">🛡️ Highest Defense</button>
+        <button class="tab-btn" onclick="loadTopList('speed')">⚡ Fastest</button>
+        <button class="tab-btn" onclick="loadTopList('total')">⭐ Highest Total</button>
+    </div>
+    
+    <div id="topListContainer" class="top-list">
+        <div class="loader"></div>
+        <p style="text-align: center;">Loading top Pokémon...</p>
+    </div>
+</div>
+
+<script>
+    let allPokemonStats = [];
+    let isLoading = false;
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    async function loadAllPokemonStats() {
+        if (allPokemonStats.length > 0) return allPokemonStats;
+        
+        // Lade nur die ersten 200 für die Top-Listen (Performance)
+        const promises = [];
+        for (let i = 1; i <= 200; i++) {
+            promises.push(fetch(`https://pokeapi.co/api/v2/pokemon/${i}`).then(r => r.json()).catch(() => null));
+        }
+        
+        const results = await Promise.all(promises);
+        allPokemonStats = results.filter(p => p).map(p => ({
+            id: p.id,
+            name: p.name.charAt(0).toUpperCase() + p.name.slice(1),
+            hp: p.stats[0].base_stat,
+            attack: p.stats[1].base_stat,
+            defense: p.stats[2].base_stat,
+            spAttack: p.stats[3].base_stat,
+            spDefense: p.stats[4].base_stat,
+            speed: p.stats[5].base_stat,
+            total: p.stats.reduce((sum, s) => sum + s.base_stat, 0),
+            image: p.sprites.other['official-artwork'].front_default || p.sprites.front_default
+        }));
+        
+        return allPokemonStats;
+    }
+    
+    async function loadTopList(stat) {
+        if (isLoading) return;
+        isLoading = true;
+        
+        // Aktive Tab hervorheben
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.textContent.includes(stat.toUpperCase()) || 
+                (stat === 'hp' && btn.textContent.includes('HP')) ||
+                (stat === 'total' && btn.textContent.includes('Total'))) {
+                btn.classList.add('active');
+            }
+        });
+        
+        const container = document.getElementById('topListContainer');
+        container.innerHTML = '<div class="loader"></div><p style="text-align: center;">Loading top 10...</p>';
+        
+        const pokemon = await loadAllPokemonStats();
+        
+        let sorted = [];
+        let statName = '';
+        let statLabel = '';
+        
+        switch(stat) {
+            case 'hp':
+                sorted = pokemon.sort((a, b) => b.hp - a.hp).slice(0, 10);
+                statName = 'hp';
+                statLabel = 'HP';
+                break;
+            case 'attack':
+                sorted = pokemon.sort((a, b) => b.attack - a.attack).slice(0, 10);
+                statName = 'attack';
+                statLabel = 'Attack';
+                break;
+            case 'defense':
+                sorted = pokemon.sort((a, b) => b.defense - a.defense).slice(0, 10);
+                statName = 'defense';
+                statLabel = 'Defense';
+                break;
+            case 'speed':
+                sorted = pokemon.sort((a, b) => b.speed - a.speed).slice(0, 10);
+                statName = 'speed';
+                statLabel = 'Speed';
+                break;
+            case 'total':
+                sorted = pokemon.sort((a, b) => b.total - a.total).slice(0, 10);
+                statName = 'total';
+                statLabel = 'Total Stats';
+                break;
+        }
+        
+        const medals = ['🥇', '🥈', '🥉', '4', '5', '6', '7', '8', '9', '10'];
+        
+        container.innerHTML = `
+            <h2 style="text-align: center; margin-bottom: 20px;">🏆 Top 10 by ${statLabel} 🏆</h2>
+            ${sorted.map((p, index) => `
+                <div class="pokemon-row" onclick="location.href='/pokemon/${p.id}'">
+                    <div class="rank">${medals[index]} ${index + 1}</div>
+                    <img class="pokemon-img" src="${p.image}" alt="${p.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
+                    <div class="pokemon-info">
+                        <div class="pokemon-name">${p.name}</div>
+                        <div>#${String(p.id).padStart(3, '0')}</div>
+                    </div>
+                    <div class="stat-value">${p[statName]} ${stat === 'total' ? 'pts' : ''}</div>
+                </div>
+            `).join('')}
+        `;
+        
+        isLoading = false;
+    }
+    
+    // Initial laden
+    loadTopList('hp');
+</script>
+<script src="/static/lang.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+</script>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pokémon Quiz - Test Your Knowledge!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 42px;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .quiz-type-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .quiz-btn {
+            padding: 12px 25px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .quiz-btn:hover, .quiz-btn.active {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: scale(1.05);
+        }
+        
+        .quiz-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        body.dark-mode .quiz-container {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .question {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .question {
+            color: #ffcb05;
+        }
+        
+        .pokemon-image {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #ffcb05, #f5b700);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pokemon-image img {
+            max-width: 180px;
+            max-height: 180px;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .option-btn {
+            padding: 15px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .option-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: scale(1.02);
+        }
+        
+        .option-btn.correct {
+            background: #4caf50;
+            animation: pulse 0.5s;
+        }
+        
+        .option-btn.wrong {
+            background: #f44336;
+            animation: shake 0.5s;
+        }
+        
+        .option-btn.disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 18px;
+        }
+        
+        .feedback.correct {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+        
+        .feedback.wrong {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+        
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .score {
+            color: #ffcb05;
+        }
+        
+        .next-btn, .restart-btn {
+            padding: 12px 30px;
+            background: #ffcb05;
+            color: #2a75bb;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        
+        .next-btn:hover, .restart-btn:hover {
+            transform: scale(1.05);
+            background: #f5b700;
+        }
+        
+        .highscore {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        @media (max-width: 768px) {
+            .options {
+                grid-template-columns: 1fr;
+            }
+            .question {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<div class="container">
+    <h1>🎮 Pokémon Trainer Quiz 🎮</h1>
+    
+    <div class="nav-buttons">
+        <a href="/" class="nav-btn">← Home</a>
+        <a href="/pokemon" class="nav-btn">📋 All Pokémon</a>
+    </div>
+    
+    <div class="quiz-type-selector">
+        <button class="quiz-btn active" data-type="name">❓ Name that Pokémon</button>
+        <button class="quiz-btn" data-type="type">🌈 Type Effectiveness</button>
+        <button class="quiz-btn" data-type="stats">📊 Stats Challenge</button>
+    </div>
+    
+    <div class="quiz-container" id="quizContainer">
+        <div class="score" id="score">Score: 0</div>
+        <div id="quizContent">
+            <div class="question">Select a quiz type to begin!</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentQuizType = 'name';
+    let currentQuestion = null;
+    let score = 0;
+    let questionCount = 0;
+    let answered = false;
+    let highScores = JSON.parse(localStorage.getItem('quizHighScores') || '{"name":0,"type":0,"stats":0}');
+    
+    // Typ-Effektivitäts-Daten
+    const typeEffectiveness = {
+        fire: { strong: ['grass', 'ice', 'bug', 'steel'], weak: ['water', 'rock', 'fire', 'dragon'] },
+        water: { strong: ['fire', 'ground', 'rock'], weak: ['water', 'grass', 'dragon'] },
+        grass: { strong: ['water', 'ground', 'rock'], weak: ['fire', 'grass', 'poison', 'flying', 'bug', 'dragon', 'steel'] },
+        electric: { strong: ['water', 'flying'], weak: ['electric', 'grass', 'dragon', 'ground'] },
+        psychic: { strong: ['fighting', 'poison'], weak: ['psychic', 'steel', 'dark'] },
+        fighting: { strong: ['normal', 'ice', 'rock', 'dark', 'steel'], weak: ['poison', 'flying', 'psychic', 'bug', 'fairy'] },
+        dark: { strong: ['psychic', 'ghost'], weak: ['fighting', 'dark', 'fairy'] },
+        dragon: { strong: ['dragon'], weak: ['steel', 'fairy'] },
+        ice: { strong: ['grass', 'ground', 'flying', 'dragon'], weak: ['fire', 'water', 'ice', 'steel'] },
+        ground: { strong: ['fire', 'electric', 'poison', 'rock', 'steel'], weak: ['grass', 'bug'] }
+    };
+    
+    // Pokémon-Liste für Fragen (vorausgewählte Pokémon für konsistente Fragen)
+    const quizPokemon = [
+        { id: 25, name: "Pikachu", types: ["electric"] },
+        { id: 6, name: "Charizard", types: ["fire", "flying"] },
+        { id: 9, name: "Blastoise", types: ["water"] },
+        { id: 94, name: "Gengar", types: ["ghost", "poison"] },
+        { id: 150, name: "Mewtwo", types: ["psychic"] },
+        { id: 149, name: "Dragonite", types: ["dragon", "flying"] },
+        { id: 130, name: "Gyarados", types: ["water", "flying"] },
+        { id: 131, name: "Lapras", types: ["water", "ice"] },
+        { id: 133, name: "Eevee", types: ["normal"] },
+        { id: 143, name: "Snorlax", types: ["normal"] },
+        { id: 151, name: "Mew", types: ["psychic"] },
+        { id: 7, name: "Squirtle", types: ["water"] },
+        { id: 4, name: "Charmander", types: ["fire"] },
+        { id: 1, name: "Bulbasaur", types: ["grass", "poison"] },
+        { id: 39, name: "Jigglypuff", types: ["normal", "fairy"] }
+    ];
+    
+    async function loadQuestion() {
+        const container = document.getElementById('quizContent');
+        answered = false;
+        
+        if (currentQuizType === 'name') {
+            await loadNameQuestion();
+        } else if (currentQuizType === 'type') {
+            loadTypeQuestion();
+        } else if (currentQuizType === 'stats') {
+            await loadStatsQuestion();
+        }
+    }
+    
+    async function loadNameQuestion() {
+        const randomIndex = Math.floor(Math.random() * quizPokemon.length);
+        const pokemon = quizPokemon[randomIndex];
+        
+        // Lade das Bild
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}`);
+        const data = await response.json();
+        const imageUrl = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
+        
+        // Generiere falsche Antworten
+        const otherPokemon = quizPokemon.filter(p => p.id !== pokemon.id);
+        const shuffled = [...otherPokemon].sort(() => 0.5 - Math.random());
+        const wrongAnswers = shuffled.slice(0, 3).map(p => p.name);
+        
+        const options = [pokemon.name, ...wrongAnswers];
+        for (let i = options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+        }
+        
+        currentQuestion = {
+            type: 'name',
+            correct: pokemon.name,
+            image: imageUrl,
+            options: options,
+            pokemonId: pokemon.id
+        };
+        
+        renderQuestion();
+    }
+    
+    function loadTypeQuestion() {
+        const types = Object.keys(typeEffectiveness);
+        const randomType = types[Math.floor(Math.random() * types.length)];
+        const isStrong = Math.random() > 0.5;
+        
+        let correctType, questionText;
+        
+        if (isStrong) {
+            const strongTypes = typeEffectiveness[randomType].strong;
+            correctType = strongTypes[Math.floor(Math.random() * strongTypes.length)];
+            questionText = `${randomType.toUpperCase()} type attacks are SUPER EFFECTIVE against which type?`;
+        } else {
+            const weakTypes = typeEffectiveness[randomType].weak;
+            correctType = weakTypes[Math.floor(Math.random() * weakTypes.length)];
+            questionText = `${randomType.toUpperCase()} type attacks are NOT VERY EFFECTIVE against which type?`;
+        }
+        
+        // Generiere falsche Antworten
+        const otherTypes = types.filter(t => t !== correctType);
+        const wrongAnswers = otherTypes.sort(() => 0.5 - Math.random()).slice(0, 3);
+        const options = [correctType, ...wrongAnswers];
+        for (let i = options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+        }
+        
+        currentQuestion = {
+            type: 'type',
+            correct: correctType,
+            question: questionText,
+            options: options,
+            attackType: randomType,
+            isStrong: isStrong
+        };
+        
+        renderQuestion();
+    }
+    
+    async function loadStatsQuestion() {
+        const randomIndex = Math.floor(Math.random() * quizPokemon.length);
+        const pokemon = quizPokemon[randomIndex];
+        
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}`);
+        const data = await response.json();
+        
+        const stats = {
+            hp: data.stats[0].base_stat,
+            attack: data.stats[1].base_stat,
+            defense: data.stats[2].base_stat,
+            speed: data.stats[5].base_stat
+        };
+        
+        const statNames = { hp: 'HP', attack: 'Attack', defense: 'Defense', speed: 'Speed' };
+        const statKeys = ['hp', 'attack', 'defense', 'speed'];
+        const randomStat = statKeys[Math.floor(Math.random() * statKeys.length)];
+        const correctValue = stats[randomStat];
+        
+        // Generiere falsche Antworten (nahe am richtigen Wert)
+        let wrongValues = [
+            Math.max(1, correctValue - Math.floor(Math.random() * 30) - 10),
+            correctValue + Math.floor(Math.random() * 30) + 10,
+            Math.max(1, correctValue - Math.floor(Math.random() * 50) - 20)
+        ];
+        wrongValues = [...new Set(wrongValues)].slice(0, 3);
+        while (wrongValues.length < 3) {
+            wrongValues.push(correctValue + 20);
+        }
+        
+        const options = [correctValue, ...wrongValues];
+        for (let i = options.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
+        }
+        
+        currentQuestion = {
+            type: 'stats',
+            correct: correctValue,
+            question: `What is ${pokemon.name}'s ${statNames[randomStat]} stat?`,
+            options: options,
+            pokemonName: pokemon.name,
+            statName: statNames[randomStat]
+        };
+        
+        renderQuestion();
+    }
+    
+    function renderQuestion() {
+        const container = document.getElementById('quizContent');
+        
+        let html = `<div class="score" id="score">Score: ${score}</div>`;
+        
+        if (currentQuestion.type === 'name') {
+            html += `
+                <div class="question">Who's that Pokémon?</div>
+                <div class="pokemon-image">
+                    <img src="${currentQuestion.image}" alt="???" style="filter: brightness(0) contrast(0);">
+                </div>
+                <div class="options" id="options">
+                    ${currentQuestion.options.map(opt => `
+                        <button class="option-btn" onclick="checkAnswer('${opt}')">${opt}</button>
+                    `).join('')}
+                </div>
+            `;
+        } else if (currentQuestion.type === 'type') {
+            html += `
+                <div class="question">${currentQuestion.question}</div>
+                <div class="options" id="options">
+                    ${currentQuestion.options.map(opt => `
+                        <button class="option-btn" onclick="checkAnswer('${opt}')">${opt.toUpperCase()}</button>
+                    `).join('')}
+                </div>
+            `;
+        } else if (currentQuestion.type === 'stats') {
+            html += `
+                <div class="question">${currentQuestion.question}</div>
+                <div class="options" id="options">
+                    ${currentQuestion.options.map(opt => `
+                        <button class="option-btn" onclick="checkAnswer(${opt})">${opt}</button>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        html += `<div id="feedback"></div>`;
+        container.innerHTML = html;
+    }
+    
+    function checkAnswer(selected) {
+        if (answered) return;
+        answered = true;
+        
+        const isCorrect = selected == currentQuestion.correct;
+        
+        if (isCorrect) {
+            score += 10;
+            showFeedback(true, `Correct! +10 points`);
+        } else {
+            showFeedback(false, `Wrong! The correct answer is ${currentQuestion.correct}`);
+        }
+        
+        questionCount++;
+        updateScore();
+        
+        // Buttons deaktivieren
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(btn => {
+            btn.classList.add('disabled');
+            if (btn.textContent == currentQuestion.correct || btn.textContent == currentQuestion.correct.toString()) {
+                btn.classList.add('correct');
+            } else if (btn.textContent == selected && !isCorrect) {
+                btn.classList.add('wrong');
+            }
+        });
+        
+        // Nächste Frage nach 2 Sekunden
+        setTimeout(() => {
+            if (questionCount < 10) {
+                loadQuestion();
+            } else {
+                endQuiz();
+            }
+        }, 2000);
+    }
+    
+    function showFeedback(isCorrect, message) {
+        const feedbackDiv = document.getElementById('feedback');
+        feedbackDiv.innerHTML = `<div class="feedback ${isCorrect ? 'correct' : 'wrong'}">${message}</div>`;
+    }
+    
+    function updateScore() {
+        const scoreDiv = document.getElementById('score');
+        if (scoreDiv) scoreDiv.innerHTML = `Score: ${score}`;
+    }
+    
+    function endQuiz() {
+        const container = document.getElementById('quizContent');
+        const isHighScore = score > highScores[currentQuizType];
+        
+        if (isHighScore) {
+            highScores[currentQuizType] = score;
+            localStorage.setItem('quizHighScores', JSON.stringify(highScores));
+        }
+        
+        container.innerHTML = `
+            <div class="score">Final Score: ${score} / 100</div>
+            <div class="feedback correct" style="font-size: 20px;">
+                🎉 Quiz Complete! 🎉<br>
+                You answered ${score/10} out of 10 questions correctly!
+                ${isHighScore ? '<br>🏆 NEW HIGH SCORE! 🏆' : `<br>High Score: ${highScores[currentQuizType]}`}
+            </div>
+            <button class="restart-btn" onclick="restartQuiz()">🔄 Play Again</button>
+        `;
+    }
+    
+    function restartQuiz() {
+        score = 0;
+        questionCount = 0;
+        answered = false;
+        loadQuestion();
+    }
+    
+    // Quiz-Typ wechseln
+    document.querySelectorAll('.quiz-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.quiz-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentQuizType = btn.dataset.type;
+            score = 0;
+            questionCount = 0;
+            answered = false;
+            loadQuestion();
+        });
+    });
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    // Quiz starten
+    loadQuestion();
+</script>
+<script src="/static/lang.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+</script>
+</body>
+</html>

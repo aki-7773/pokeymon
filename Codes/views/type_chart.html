@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Type Effectiveness Chart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 42px;
+            margin: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        
+        .chart-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 20px;
+            overflow-x: auto;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode .chart-container {
+            background: rgba(0,0,0,0.8);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        body.dark-mode th, body.dark-mode td {
+            border-color: #444;
+        }
+        
+        th {
+            background: #2a75bb;
+            color: white;
+        }
+        
+        body.dark-mode th {
+            background: #1e5a9e;
+        }
+        
+        td {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        td:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .effective {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .not-effective {
+            background: #f44336;
+            color: white;
+        }
+        
+        .immune {
+            background: #9e9e9e;
+            color: white;
+        }
+        
+        .normal-effective {
+            background: #ffeb3b;
+            color: #333;
+        }
+        
+        body.dark-mode .normal-effective {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .info-panel {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode .info-panel {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+        }
+        
+        .back-link:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .dark-mode-toggle:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        @media (max-width: 768px) {
+            th, td {
+                padding: 5px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<div class="container">
+    <h1>⚔️ Type Effectiveness Chart ⚔️</h1>
+    
+    <div class="nav-buttons">
+        <a href="/" class="nav-btn">← Back to Home</a>
+        <a href="/pokemon" class="nav-btn">📋 All Pokémon</a>
+    </div>
+    
+    <div class="chart-container">
+        <table id="typeChart">
+            <thead>
+                <tr>
+                    <th>Attack Type →<br>↓ Defense Type</th>
+                </tr>
+            </thead>
+            <tbody id="chartBody"></tbody>
+        </table>
+    </div>
+    
+    <div class="info-panel" id="infoPanel">
+        <p>✨ Click on any cell to see detailed type matchup information ✨</p>
+    </div>
+</div>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        
+        const btn = document.querySelector('.dark-mode-toggle');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+        
+        // Chart neu rendern mit Dark Mode
+        renderChart();
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
+    }
+    
+    const types = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy"];
+    
+    const typeColors = {
+        normal: "#A8A878", fire: "#F08030", water: "#6890F0",
+        electric: "#F8D030", grass: "#78C850", ice: "#98D8D8",
+        fighting: "#C03028", poison: "#A040A0", ground: "#E0C068",
+        flying: "#A890F0", psychic: "#F85888", bug: "#A8B820",
+        rock: "#B8A038", ghost: "#705898", dragon: "#7038F8",
+        dark: "#705848", steel: "#B8B8D0", fairy: "#EE99AC"
+    };
+    
+    const effectiveness = {
+        normal: {rock: 0.5, ghost: 0, steel: 0.5},
+        fire: {fire: 0.5, water: 0.5, grass: 2, ice: 2, bug: 2, rock: 0.5, dragon: 0.5, steel: 2},
+        water: {fire: 2, water: 0.5, grass: 0.5, ground: 2, rock: 2, dragon: 0.5},
+        electric: {water: 2, electric: 0.5, grass: 0.5, ground: 0, flying: 2, dragon: 0.5},
+        grass: {fire: 0.5, water: 2, grass: 0.5, poison: 0.5, ground: 2, flying: 0.5, bug: 0.5, rock: 2, dragon: 0.5, steel: 0.5},
+        ice: {fire: 0.5, water: 0.5, grass: 2, ice: 0.5, ground: 2, flying: 2, dragon: 2, steel: 0.5},
+        fighting: {normal: 2, ice: 2, poison: 0.5, flying: 0.5, psychic: 0.5, bug: 0.5, rock: 2, ghost: 0, dark: 2, steel: 2, fairy: 0.5},
+        poison: {grass: 2, poison: 0.5, ground: 0.5, rock: 0.5, ghost: 0.5, steel: 0, fairy: 2},
+        ground: {fire: 2, electric: 2, grass: 0.5, poison: 2, rock: 2, bug: 0.5, steel: 2},
+        flying: {grass: 2, electric: 0.5, fighting: 2, bug: 2, rock: 0.5, steel: 0.5},
+        psychic: {fighting: 2, poison: 2, psychic: 0.5, dark: 0, steel: 0.5},
+        bug: {fire: 0.5, grass: 2, fighting: 0.5, poison: 0.5, flying: 0.5, psychic: 2, ghost: 0.5, dark: 2, steel: 0.5, fairy: 0.5},
+        rock: {fire: 2, ice: 2, fighting: 0.5, ground: 0.5, flying: 2, bug: 2, steel: 0.5},
+        ghost: {normal: 0, psychic: 2, ghost: 2, dark: 0.5},
+        dragon: {dragon: 2, steel: 0.5, fairy: 0},
+        dark: {fighting: 0.5, psychic: 2, ghost: 2, dark: 0.5, fairy: 0.5},
+        steel: {fire: 0.5, water: 0.5, electric: 0.5, ice: 2, rock: 2, steel: 0.5, fairy: 2},
+        fairy: {fire: 0.5, fighting: 2, poison: 0.5, dragon: 2, dark: 2, steel: 0.5}
+    };
+    
+    function getEffectiveness(attackType, defenseType) {
+        if (effectiveness[attackType] && effectiveness[attackType][defenseType] !== undefined) {
+            return effectiveness[attackType][defenseType];
+        }
+        return 1;
+    }
+    
+    function getEffectivenessClass(value) {
+        if (value === 0) return 'immune';
+        if (value === 0.5) return 'not-effective';
+        if (value === 2) return 'effective';
+        return 'normal-effective';
+    }
+    
+    function getEffectivenessSymbol(value) {
+        if (value === 0) return '0✗';
+        if (value === 0.5) return '½✗';
+        if (value === 2) return '2✓';
+        return '1✗';
+    }
+    
+    function renderChart() {
+        const tbody = document.getElementById('chartBody');
+        
+        let html = '<tr><th>Defense ↓</th>';
+        for (let attackType of types) {
+            html += `<th style="background: ${typeColors[attackType]}">${attackType.charAt(0).toUpperCase() + attackType.slice(1)}</th>`;
+        }
+        html += '</tr>';
+        
+        for (let defenseType of types) {
+            html += `<tr>`;
+            html += `<th style="background: ${typeColors[defenseType]}">${defenseType.charAt(0).toUpperCase() + defenseType.slice(1)}</th>`;
+            
+            for (let attackType of types) {
+                const value = getEffectiveness(attackType, defenseType);
+                const className = getEffectivenessClass(value);
+                const symbol = getEffectivenessSymbol(value);
+                
+                html += `<td class="${className}" onclick="showInfo('${attackType}', '${defenseType}', ${value})">
+                            ${symbol}
+                         </td>`;
+            }
+            html += `</tr>`;
+        }
+        
+        tbody.innerHTML = html;
+    }
+    
+    function showInfo(attackType, defenseType, value) {
+        const panel = document.getElementById('infoPanel');
+        let effectText = '';
+        
+        if (value === 0) effectText = 'NO EFFECT';
+        else if (value === 0.5) effectText = 'NOT VERY EFFECTIVE (½x)';
+        else if (value === 2) effectText = 'SUPER EFFECTIVE (2x)';
+        else effectText = 'NORMALLY EFFECTIVE (1x)';
+        
+        panel.innerHTML = `
+            <p>✨ ${attackType.charAt(0).toUpperCase() + attackType.slice(1)} attacks are <strong>${effectText}</strong> against ${defenseType.charAt(0).toUpperCase() + defenseType.slice(1)} type Pokémon. ✨</p>
+            <small>Click on any cell to see details</small>
+        `;
+    }
+    
+    renderChart();
+</script>
+<script src="/static/lang.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+</script>
+</body>
+</html>

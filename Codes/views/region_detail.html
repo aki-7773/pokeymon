@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{region["name"]}} Region - Pokémon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .region-header {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        body.dark-mode .region-header {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .region-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .region-header h1 {
+            color: #2a75bb;
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        body.dark-mode .region-header h1 {
+            color: #ffcb05;
+        }
+        
+        .region-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #ffcb05, #f5b700);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        
+        body.dark-mode .info-card {
+            background: linear-gradient(135deg, #2a75bb, #1e5a9e);
+        }
+        
+        .info-card h3 {
+            color: #2a75bb;
+            margin-bottom: 8px;
+        }
+        
+        body.dark-mode .info-card h3 {
+            color: #ffcb05;
+        }
+        
+        .info-card p {
+            color: #333;
+        }
+        
+        body.dark-mode .info-card p {
+            color: white;
+        }
+        
+        .description {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        
+        body.dark-mode .description {
+            background: rgba(0,0,0,0.7);
+            color: #ddd;
+        }
+        
+        .pokemon-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        body.dark-mode .pokemon-section {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .pokemon-section h2 {
+            color: #2a75bb;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        body.dark-mode .pokemon-section h2 {
+            color: #ffcb05;
+        }
+        
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .pokemon-mini {
+            background: linear-gradient(135deg, #ffcb05, #f5b700);
+            border-radius: 15px;
+            padding: 10px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        body.dark-mode .pokemon-mini {
+            background: linear-gradient(135deg, #2a75bb, #1e5a9e);
+        }
+        
+        .pokemon-mini:hover {
+            transform: scale(1.05);
+        }
+        
+        .pokemon-mini a {
+            text-decoration: none;
+            color: #2a75bb;
+            font-weight: bold;
+        }
+        
+        body.dark-mode .pokemon-mini a {
+            color: #ffcb05;
+        }
+        
+        .back-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .back-links a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: rgba(0,0,0,0.3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+        }
+        
+        .back-links a:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .dark-mode-toggle:hover {
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .pokemon-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<div class="container">
+    <div class="region-header">
+        <div class="region-icon">
+            % if region_id == 1:
+                🏔️
+            % elif region_id == 2:
+                🏯
+            % elif region_id == 3:
+                🌋
+            % elif region_id == 4:
+                ❄️
+            % elif region_id == 5:
+                🏙️
+            % elif region_id == 6:
+                🗼
+            % elif region_id == 7:
+                🌴
+            % elif region_id == 8:
+                🏰
+            % else:
+                🏖️
+            % end
+        </div>
+        <h1>{{region["name"]}} Region</h1>
+        
+        <div class="region-info">
+            <div class="info-card">
+                <h3>🌟 Generation</h3>
+                <p>{{region["generation"]}}</p>
+            </div>
+            <div class="info-card">
+                <h3>🎮 Main Games</h3>
+                <p>{{region["games"]}}</p>
+            </div>
+            <div class="info-card">
+                <h3>🍃 Starter Pokémon</h3>
+                <p>{{region["starter"]}}</p>
+            </div>
+            <div class="info-card">
+                <h3>📊 Pokédex Count</h3>
+                <p>{{region["pokemon_count"]}} Pokémon</p>
+            </div>
+            <div class="info-card">
+                <h3>✨ Legendaries</h3>
+                <p>{{region["legendary"]}}</p>
+            </div>
+        </div>
+        
+        <div class="description">
+            <p>📖 {{region["description"]}}</p>
+        </div>
+    </div>
+    
+    <div class="pokemon-section">
+        <h2>🌟 Featured Pokémon from {{region["name"]}} 🌟</h2>
+        <div class="pokemon-grid">
+            % for p in pokemon_list[:20]:
+            <div class="pokemon-mini">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{p['id']}}.png" 
+                     style="width: 80px; height: 80px;"
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{p['id']}}.png'">
+                <br>
+                <a href="/pokemon/{{p['id']}}">{{p["name"].capitalize()}}</a>
+                <br>
+                <small>#{{str(p['id']).zfill(3)}}</small>
+            </div>
+            % end
+        </div>
+    </div>
+    
+    <div class="back-links">
+        <a href="/regions">← All Regions</a>
+        <a href="/">🏠 Home</a>
+    </div>
+</div>
+
+<script src="/static/lang.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+</script>
+</body>
+</html>

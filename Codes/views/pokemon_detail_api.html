@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{api["name"].capitalize()}} - Pokémon API</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f5f5f5;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: #1a1a2e;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode .container {
+            background: rgba(0,0,0,0.9);
+            color: white;
+        }
+        
+        .nav-prev, .nav-next {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2a75bb;
+            color: white;
+            width: 50px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        .nav-prev { left: 20px; }
+        .nav-next { right: 20px; }
+        
+        .nav-prev:hover, .nav-next:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+            font-weight: bold;
+        }
+        
+        img {
+            width: 200px;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .info {
+            text-align: left;
+            margin: 20px;
+        }
+        
+        .evolution-tree {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 15px;
+        }
+        
+        body.dark-mode .evolution-tree {
+            background: #333;
+        }
+        
+        .evolution-tree h3 {
+            margin-bottom: 15px;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .evolution-tree h3 {
+            color: #ffcb05;
+        }
+        
+        .evolution-chain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .evolution-node {
+            text-align: center;
+        }
+        
+        .evolution-node img {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .evolution-node a {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            text-decoration: none;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .evolution-node a {
+            color: #ffcb05;
+        }
+        
+        .evolution-arrow {
+            font-size: 24px;
+            color: #2a75bb;
+        }
+        
+        .form-badge {
+            display: inline-block;
+            background: #ff9800;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-top: 5px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ffcb05;
+            color: #2a75bb;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        h1 {
+            color: #2a75bb;
+        }
+        
+        body.dark-mode h1 {
+            color: #ffcb05;
+        }
+        
+        .dex-entry {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        body.dark-mode .dex-entry {
+            background: #333;
+            color: #eee;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ability-item {
+            background: #e0e0e0;
+            color: #333;
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+        }
+        
+        body.dark-mode .ability-item {
+            background: #555;
+            color: #eee;
+        }
+        
+        .cry-button {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffcb05;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-prev, .nav-next {
+                width: 40px;
+                height: 60px;
+                font-size: 30px;
+            }
+            .nav-prev { left: 5px; }
+            .nav-next { right: 5px; }
+            .evolution-chain { gap: 10px; }
+            .evolution-node img { width: 50px; height: 50px; }
+        }
+    </style>
+</head>
+<body>
+<div class="control-buttons">
+    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
+<a href="/pokemon/{{api['id'] - 1 if api['id'] > 1 else 1025}}" class="nav-prev">&#10094;</a>
+<a href="/pokemon/{{api['id'] + 1 if api['id'] < 1025 else 1}}" class="nav-next">&#10095;</a>
+
+<div class="container">
+    <h1>{{api["name"].capitalize()}}</h1>
+    <button class="cry-button" onclick="playCry({{api['id']}})">🔊 Play Cry</button>
+    
+    <img src="{{api['sprites']['other']['official-artwork']['front_default']}}" alt="{{api['name']}}">
+    
+    <div class="info">
+        <p><strong>ID:</strong> #{{api["id"]}}</p>
+        <p><strong>Height:</strong> {{api["height"] / 10}} m</p>
+        <p><strong>Weight:</strong> {{api["weight"] / 10}} kg</p>
+        <p><strong>Base Experience:</strong> {{api["base_experience"]}}</p>
+        
+        <p><strong>Types:</strong></p>
+        <ul>
+        % for t in api["types"]:
+            <li class="type-badge" style="background: {{get_type_color(t['type']['name'])}}">
+                {{t["type"]["name"].capitalize()}}
+            </li>
+        % end
+        </ul>
+        
+        <p><strong>Abilities:</strong></p>
+        <ul>
+        % for a in api["abilities"]:
+            <li class="ability-item">
+                {{a["ability"]["name"].replace("-", " ").capitalize()}}
+                % if a["is_hidden"]:
+                    (Hidden)
+                % end
+            </li>
+        % end
+        </ul>
+        
+        <p><strong>Region:</strong> 
+            <a href="/region/{{region_id}}" style="color: #2a75bb; text-decoration: none; font-weight: bold;">
+                {{region_name}} →
+            </a>
+        </p>
+        
+        <div class="dex-entry">
+            <strong>Pokédex Entry:</strong><br>
+            % if api_dex_entry:
+                "{{api_dex_entry}}"
+            % else:
+                No entry found.
+            % end
+        </div>
+    </div>
+    
+    <div class="evolution-tree">
+        <h3>🌳 Evolution Tree</h3>
+        <div id="evolutionTree"><div class="loader"></div></div>
+    </div>
+    
+    <div class="button-group">
+        <a href="/pokemon" class="back-link">← Back to list</a>
+        <a href="/print?id={{api['id']}}" class="back-link" target="_blank">🖨️ Print / PDF</a>
+    </div>
+</div>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.querySelector('.dark-mode-toggle');
+        btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
+    }
+    
+    async function playCry(pokemonId) {
+        try {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+            const data = await response.json();
+            const cryUrl = data.cries?.latest || data.cries?.legacy;
+            if (cryUrl) {
+                const audio = new Audio(cryUrl);
+                audio.volume = 0.3;
+                audio.play();
+            }
+        } catch(e) { console.log('Cry error:', e); }
+    }
+    
+    // Mapping für spezielle Formen zur Basis-Form
+    const specialFormMapping = {
+        // Mega Formen
+        'charizard-mega-x': 'charizard', 'charizard-mega-y': 'charizard',
+        'mewtwo-mega-x': 'mewtwo', 'mewtwo-mega-y': 'mewtwo',
+        'venusaur-mega': 'venusaur', 'blastoise-mega': 'blastoise',
+        'gengar-mega': 'gengar', 'gyarados-mega': 'gyarados',
+        'aerodactyl-mega': 'aerodactyl', 'ampharos-mega': 'ampharos',
+        'steelix-mega': 'steelix', 'scizor-mega': 'scizor',
+        'heracross-mega': 'heracross', 'houndoom-mega': 'houndoom',
+        'tyranitar-mega': 'tyranitar', 'sceptile-mega': 'sceptile',
+        'blaziken-mega': 'blaziken', 'swampert-mega': 'swampert',
+        'gardevoir-mega': 'gardevoir', 'sableye-mega': 'sableye',
+        'mawile-mega': 'mawile', 'aggron-mega': 'aggron',
+        'medicham-mega': 'medicham', 'manectric-mega': 'manectric',
+        'sharpedo-mega': 'sharpedo', 'camurupt-mega': 'camerupt',
+        'altaria-mega': 'altaria', 'banette-mega': 'banette',
+        'absol-mega': 'absol', 'glalie-mega': 'glalie',
+        'salamence-mega': 'salamence', 'metagross-mega': 'metagross',
+        'latias-mega': 'latias', 'latios-mega': 'latios',
+        'rayquaza-mega': 'rayquaza', 'lopunny-mega': 'lopunny',
+        'garchomp-mega': 'garchomp', 'lucario-mega': 'lucario',
+        'abomasnow-mega': 'abomasnow', 'gallade-mega': 'gallade',
+        'audino-mega': 'audino', 'diancie-mega': 'diancie',
+        
+        // Ash-Greninja
+        'greninja-ash': 'greninja',
+        
+        // Gigantamax Formen
+        'gmax-venusaur': 'venusaur', 'gmax-blastoise': 'blastoise',
+        'gmax-charizard': 'charizard', 'gmax-gengar': 'gengar',
+        'gmax-machamp': 'machamp', 'gmax-lapras': 'lapras',
+        'gmax-snorlax': 'snorlax', 'gmax-kingler': 'kingler',
+        'gmax-corviknight': 'corviknight', 'gmax-orbettle': 'orbettle',
+        'gmax-drednaw': 'drednaw', 'gmax-coalossal': 'coalossal',
+        'gmax-flapple': 'flapple', 'gmax-appletun': 'appletun',
+        'gmax-toxtricity': 'toxtricity', 'gmax-centiskorch': 'centiskorch',
+        'gmax-hatterene': 'hatterene', 'gmax-grimmsnarl': 'grimmsnarl',
+        'gmax-alcremie': 'alcremie', 'gmax-copperajah': 'copperajah',
+        'gmax-duraludon': 'duraludon', 'gmax-rillaboom': 'rillaboom',
+        'gmax-cinderace': 'cinderace', 'gmax-inteleon': 'inteleon',
+        'gmax-melmetal': 'melmetal', 'gmax-urshifu': 'urshifu',
+        
+        // Regionale Formen
+        'alolan-rattata': 'rattata', 'alolan-raticate': 'raticate',
+        'alolan-raichu': 'raichu', 'alolan-sandshrew': 'sandshrew',
+        'alolan-sandslash': 'sandslash', 'alolan-vulpix': 'vulpix',
+        'alolan-ninetales': 'ninetales', 'alolan-diglett': 'diglett',
+        'alolan-dugtrio': 'dugtrio', 'alolan-meowth': 'meowth',
+        'alolan-persian': 'persian', 'alolan-geodude': 'geodude',
+        'alolan-graveler': 'graveler', 'alolan-golem': 'golem',
+        'alolan-grimer': 'grimer', 'alolan-muk': 'muk',
+        'alolan-exeggutor': 'exeggutor', 'alolan-marowak': 'marowak',
+        
+        'galarian-meowth': 'meowth', 'galarian-perrserker': 'perrserker',
+        'galarian-ponyta': 'ponyta', 'galarian-rapidash': 'rapidash',
+        'galarian-slowpoke': 'slowpoke', 'galarian-slowbro': 'slowbro',
+        'galarian-farfetchd': 'farfetchd', 'galarian-sirfetchd': 'sirfetchd',
+        'galarian-weezing': 'weezing', 'galarian-mr-mime': 'mr-mime',
+        'galarian-corsola': 'corsola', 'galarian-zigzagoon': 'zigzagoon',
+        'galarian-linoone': 'linoone', 'galarian-darumaka': 'darumaka',
+        'galarian-darmanitan': 'darmanitan', 'galarian-yamask': 'yamask',
+        'galarian-stunfisk': 'stunfisk', 'galarian-arctozolt': 'arctozolt'
+    };
+    
+    // Liste aller speziellen Form-IDs für direkten Fallback
+    const specialFormIds = [10003, 10004, 10005, 10006, 10007, 10008, 10009, 10010, 
+                            10011, 10012, 10013, 10014, 10015, 10016, 10017, 10018,
+                            10019, 10020, 10021, 10022, 10023, 10024, 10025, 10026,
+                            10027, 10028, 10029, 10030, 10031, 10032, 10033, 10034,
+                            10035, 10036, 10037, 10038, 10039, 10040, 10041, 10042,
+                            10043, 10044, 10045, 10046, 10047, 10048];
+    
+    function getBasePokemonFromSpecial(specialName, specialId) {
+        // 1. Direktes Mapping
+        if (specialFormMapping[specialName.toLowerCase()]) {
+            return specialFormMapping[specialName.toLowerCase()];
+        }
+        
+        // 2. Entferne häufige Suffixe
+        let baseName = specialName.toLowerCase();
+        const suffixes = ['-mega', '-mega-x', '-mega-y', '-gmax', '-alola', '-galar', 
+                          '-hisui', '-paldea', '-ash', '-totem', '-partner', '-starter'];
+        for (let suffix of suffixes) {
+            if (baseName.endsWith(suffix)) {
+                baseName = baseName.replace(suffix, '');
+                break;
+            }
+        }
+        
+        // 3. Entferne "mega " am Anfang
+        if (baseName.startsWith('mega ')) {
+            baseName = baseName.replace('mega ', '');
+        }
+        
+        // 4. Für IDs 10000-10255
+        if (specialId >= 10000 && specialId <= 10255) {
+            if (specialName.includes('greninja') || specialId === 10003) return 'greninja';
+            if (specialName.includes('charizard')) return 'charizard';
+            if (specialName.includes('mewtwo')) return 'mewtwo';
+            if (specialName.includes('venusaur')) return 'venusaur';
+            if (specialName.includes('blastoise')) return 'blastoise';
+            if (specialName.includes('gengar')) return 'gengar';
+        }
+        
+        return baseName;
+    }
+    
+    async function getPokemonIdByName(name) {
+        try {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+            if (response.ok) {
+                const data = await response.json();
+                return data.id;
+            }
+        } catch(e) {}
+        return null;
+    }
+    
+    async function loadEvolutionTree(pokemonId, pokemonName) {
+        const container = document.getElementById('evolutionTree');
+        container.innerHTML = '<div class="loader"></div>';
+        
+        let basePokemonName = pokemonName.toLowerCase();
+        let isSpecial = (pokemonId > 10000 || specialFormIds.includes(pokemonId));
+        
+        // Finde Basis-Pokémon für spezielle Formen
+        if (isSpecial) {
+            basePokemonName = getBasePokemonFromSpecial(pokemonName, pokemonId);
+        }
+        
+        // Versuche Species-Daten für das Basis-Pokémon zu laden
+        let speciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${basePokemonName}`;
+        let speciesResponse = await fetch(speciesUrl);
+        
+        if (!speciesResponse.ok && basePokemonName !== pokemonName.toLowerCase()) {
+            speciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`;
+            speciesResponse = await fetch(speciesUrl);
+        }
+        
+        if (!speciesResponse.ok) {
+            // Fallback: Zeige Basis-Pokémon an
+            const baseId = await getPokemonIdByName(basePokemonName);
+            container.innerHTML = `
+                <div style="text-align: center;">
+                    <div class="evolution-chain">
+                        <div class="evolution-node">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${baseId || '0'}.png" 
+                                 onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
+                            <a href="/pokemon/${basePokemonName}">${basePokemonName.charAt(0).toUpperCase() + basePokemonName.slice(1)}</a>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background: rgba(255,152,0,0.2); border-radius: 10px;">
+                        <span class="form-badge">Special Form</span>
+                        <p style="margin-top: 8px;">✨ This is a special form of <strong>${basePokemonName.charAt(0).toUpperCase() + basePokemonName.slice(1)}</strong> ✨</p>
+                        <p style="margin-top: 5px; font-size: 11px;">Click the name above to view the full evolution tree</p>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        const speciesData = await speciesResponse.json();
+        const chainRes = await fetch(speciesData.evolution_chain.url);
+        const chainData = await chainRes.json();
+        
+        let evolutionChain = [];
+        let current = chainData.chain;
+        
+        function collectEvolutions(chain, list) {
+            list.push(chain.species.name);
+            if (chain.evolves_to && chain.evolves_to.length > 0) {
+                for (let evo of chain.evolves_to) {
+                    collectEvolutions(evo, list);
+                }
+            }
+        }
+        
+        collectEvolutions(current, evolutionChain);
+        evolutionChain = [...new Set(evolutionChain)];
+        
+        async function getDetails(name) {
+            try {
+                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+                const data = await res.json();
+                return { id: data.id, name: data.name };
+            } catch(e) { return null; }
+        }
+        
+        let html = '<div class="evolution-chain">';
+        for (let i = 0; i < evolutionChain.length; i++) {
+            const details = await getDetails(evolutionChain[i]);
+            if (details) {
+                const displayName = details.name.charAt(0).toUpperCase() + details.name.slice(1);
+                html += `
+                    <div class="evolution-node">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${details.id}.png" 
+                             onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${details.id}.png'">
+                        <a href="/pokemon/${details.id}">${displayName}</a>
+                    </div>
+                `;
+                if (i < evolutionChain.length - 1) html += '<div class="evolution-arrow">→</div>';
+            }
+        }
+        html += '</div>';
+        
+        if (isSpecial) {
+            html += `<div style="text-align: center; margin-top: 15px;">
+                        <span class="form-badge">Special Form: ${pokemonName.replace(/-/g, ' ').toUpperCase()}</span>
+                    </div>`;
+        }
+        
+        container.innerHTML = html;
+    }
+    
+    loadEvolutionTree({{api['id']}}, "{{api['name']}}");
+</script>
+<script src="/static/lang.js"></script>
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    
+    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+</script>
+</body>
+</html>
