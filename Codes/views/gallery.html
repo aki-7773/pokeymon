@@ -151,6 +151,10 @@
             color: #666;
         }
         
+        body.dark-mode .sprite-card p {
+            color: #ccc;
+        }
+        
         .shiny-badge {
             display: inline-block;
             background: #ff9800;
@@ -224,25 +228,15 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 
 <div class="container">
     <h1>🎨 Pokémon Sprite Gallery 🎨</h1>
     
     <div class="nav-buttons">
-        <a href="/" class="nav-btn">← Home</a>
-        <a href="/pokemon" class="nav-btn">📋 All Pokémon</a>
-        <a href="/quiz" class="nav-btn">🎮 Quiz</a>
+        <a href="start.html" class="nav-btn">← Home</a>
+        <a href="pokemon_list.html" class="nav-btn">📋 All Pokémon</a>
+        <a href="quiz.html" class="nav-btn">🎮 Quiz</a>
     </div>
     
     <div class="search-section">
@@ -267,10 +261,17 @@
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.querySelector('.dark-mode-toggle');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
     }
     
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
     }
     
     function toggleShinyMode() {
@@ -326,17 +327,14 @@
         const sprites = pokemon.sprites;
         const spriteList = [];
         
-        // Offizielle Artwork (nicht shiny)
         if (sprites.other?.['official-artwork']?.front_default && !shinyMode) {
             spriteList.push({ name: 'Official Artwork', url: sprites.other['official-artwork'].front_default, type: 'artwork' });
         }
         
-        // Shiny Artwork
         if (sprites.other?.['official-artwork']?.front_shiny && shinyMode) {
             spriteList.push({ name: 'Shiny Artwork', url: sprites.other['official-artwork'].front_shiny, type: 'shiny' });
         }
         
-        // Normale Sprites
         if (shinyMode) {
             if (sprites.front_shiny) spriteList.push({ name: 'Front Shiny', url: sprites.front_shiny, type: 'shiny' });
             if (sprites.back_shiny) spriteList.push({ name: 'Back Shiny', url: sprites.back_shiny, type: 'shiny' });
@@ -345,7 +343,6 @@
             if (sprites.back_default) spriteList.push({ name: 'Back Default', url: sprites.back_default, type: 'normal' });
         }
         
-        // Female Sprites
         if (shinyMode) {
             if (sprites.front_shiny_female) spriteList.push({ name: 'Front Shiny Female', url: sprites.front_shiny_female, type: 'shiny' });
             if (sprites.back_shiny_female) spriteList.push({ name: 'Back Shiny Female', url: sprites.back_shiny_female, type: 'shiny' });
@@ -354,12 +351,10 @@
             if (sprites.back_female) spriteList.push({ name: 'Back Female', url: sprites.back_female, type: 'female' });
         }
         
-        // Dream World
         if (sprites.other?.dream_world?.front_default && !shinyMode) {
             spriteList.push({ name: 'Dream World', url: sprites.other.dream_world.front_default, type: 'art' });
         }
         
-        // Home Sprites
         if (shinyMode) {
             if (sprites.other?.home?.front_shiny) spriteList.push({ name: 'Home Shiny (3D)', url: sprites.other.home.front_shiny, type: '3d' });
         } else {
@@ -376,13 +371,13 @@
                 ${spriteList.map(sprite => `
                     <div class="sprite-card">
                         <h3>${sprite.name}</h3>
-                        <img src="${sprite.url}" alt="${sprite.name}">
+                        <img src="${sprite.url}" alt="${sprite.name}" onerror="this.style.display='none'">
                         <p>${sprite.type}${shinyMode ? ' ✨' : ''}</p>
                     </div>
                 `).join('')}
             </div>
             <div style="text-align: center; margin-top: 20px;">
-                <a href="/pokemon/${pokemon.id}" class="nav-btn">View Full Details →</a>
+                <a href="pokemon_detail.html?id=${pokemon.id}" class="nav-btn">View Full Details →</a>
             </div>
         `;
         
@@ -409,30 +404,6 @@
             loadPokemonGallery();
         }
     });
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️ Light Mode';
-        } else {
-            btn.innerHTML = '🌙 Dark Mode';
-        }
-    }
-    
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
