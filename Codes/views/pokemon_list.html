@@ -305,7 +305,7 @@
     <h1>🌟 Pokémon List 🌟</h1>
     
     <div class="top-bar">
-        <a href="/" class="back-link">← Home</a>
+        <a href="start.html" class="back-link">← Home</a>
         
         <div class="search-suggestions">
             <input type="text" id="searchInput" placeholder="🔍 Search Pokémon...">
@@ -314,9 +314,9 @@
         
         <div class="nav-buttons">
             <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-            <a href="/team" class="nav-btn">⭐ My Team</a>
-            <a href="/compare" class="nav-btn">📊 Compare</a>
-            <a href="/type-chart" class="nav-btn">⚔️ Type Chart</a>
+            <a href="team.html" class="nav-btn">⭐ My Team</a>
+            <a href="compare.html" class="nav-btn">📊 Compare</a>
+            <a href="type_chart.html" class="nav-btn">⚔️ Type Chart</a>
         </div>
     </div>
     
@@ -414,7 +414,7 @@
         }
         
         container.innerHTML = filtered.map(p => `
-            <div class="pokemon-card" onclick="location.href='/pokemon/${p.id}'">
+            <div class="pokemon-card" onclick="location.href='pokemon_detail.html?id=${p.id}'">
                 <button class="favorite-btn ${favorites.includes(p.id) ? 'favorited' : ''}" 
                         onclick="event.stopPropagation(); toggleFavorite(${p.id})">
                     ${favorites.includes(p.id) ? '★' : '☆'}
@@ -468,7 +468,7 @@
         if (matches.length > 0) {
             suggestions.style.display = 'block';
             suggestions.innerHTML = matches.map(p => 
-                `<div onclick="location.href='/pokemon/${p.id}'">${p.name} (#${String(p.id).padStart(3, '0')})</div>`
+                `<div onclick="location.href='pokemon_detail.html?id=${p.id}'">${p.name} (#${String(p.id).padStart(3, '0')})</div>`
             ).join('');
         } else {
             suggestions.style.display = 'none';
