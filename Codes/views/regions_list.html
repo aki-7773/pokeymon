@@ -178,65 +178,105 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 
 <div class="container">
     <h1>🗺️ Pokémon Regions 🗺️</h1>
     
     <div class="nav-buttons">
-        <a href="/" class="nav-btn">← Back to Home</a>
-        <a href="/pokemon" class="nav-btn">📋 All Pokémon</a>
+        <a href="start.html" class="nav-btn">← Back to Home</a>
+        <a href="pokemon_list.html" class="nav-btn">📋 All Pokémon</a>
     </div>
     
     <div class="regions-grid">
-        % for id, region in regions.items():
         <div class="region-card">
-            <div class="region-image">
-                % if id == 1:
-                    🏔️
-                % elif id == 2:
-                    🏯
-                % elif id == 3:
-                    🌋
-                % elif id == 4:
-                    ❄️
-                % elif id == 5:
-                    🏙️
-                % elif id == 6:
-                    🗼
-                % elif id == 7:
-                    🌴
-                % elif id == 8:
-                    🏰
-                % else:
-                    🏖️
-                % end
-            </div>
-            <h2>{{region["name"]}}</h2>
-            <p>📖 Generation {{region["generation"]}}</p>
-            <p>🌟 Starter: {{region["starter"]}}</p>
-            <p>🎮 Games: {{region["games"]}}</p>
-            <a href="/region/{{id}}">Explore {{region["name"]}} →</a>
+            <div class="region-image">🏔️</div>
+            <h2>Kanto</h2>
+            <p>📖 Generation 1</p>
+            <p>🌟 Starter: Bulbasaur, Charmander, Squirtle</p>
+            <p>🎮 Games: Red/Blue/Yellow</p>
+            <a href="region_detail.html?id=1">Explore Kanto →</a>
         </div>
-        % end
+        
+        <div class="region-card">
+            <div class="region-image">🏯</div>
+            <h2>Johto</h2>
+            <p>📖 Generation 2</p>
+            <p>🌟 Starter: Chikorita, Cyndaquil, Totodile</p>
+            <p>🎮 Games: Gold/Silver/Crystal</p>
+            <a href="region_detail.html?id=2">Explore Johto →</a>
+        </div>
+        
+        <div class="region-card">
+            <div class="region-image">🌋</div>
+            <h2>Hoenn</h2>
+            <p>📖 Generation 3</p>
+            <p>🌟 Starter: Treecko, Torchic, Mudkip</p>
+            <p>🎮 Games: Ruby/Sapphire/Emerald</p>
+            <a href="region_detail.html?id=3">Explore Hoenn →</a>
+        </div>
+        
+        <div class="region-card">
+            <div class="region-image">❄️</div>
+            <h2>Sinnoh</h2>
+            <p>📖 Generation 4</p>
+            <p>🌟 Starter: Turtwig, Chimchar, Piplup</p>
+            <p>🎮 Games: Diamond/Pearl/Platinum</p>
+            <a href="region_detail.html?id=4">Explore Sinnoh →</a>
+        </div>
+        
+        <div class="region-card">
+            <div class="region-image">🏙️</div>
+            <h2>Unova</h2>
+            <p>📖 Generation 5</p>
+            <p>🌟 Starter: Snivy, Tepig, Oshawott</p>
+            <p>🎮 Games: Black/White</p>
+            <a href="region_detail.html?id=5">Explore Unova →</a>
+        </div>
+        
+        <div class="region-card">
+            <div class="region-image">🗼</div>
+            <h2>Kalos</h2>
+            <p>📖 Generation 6</p>
+            <p>🌟 Starter: Chespin, Fennekin, Froakie</p>
+            <p>🎮 Games: X/Y</p>
+            <a href="region_detail.html?id=6">Explore Kalos →</a>
+        </div>
+        
+        <div class="region-card">
+            <div class="region-image">🌴</div>
+            <h2>Alola</h2>
+            <p>📖 Generation 7</p>
+            <p>🌟 Starter: Rowlet, Litten, Popplio</p>
+            <p>🎮 Games: Sun/Moon</p>
+            <a href="region_detail.html?id=7">Explore Alola →</a>
+        </div>
+        
+        <div class="region-card">
+            <div class="region-image">🏰</div>
+            <h2>Galar</h2>
+            <p>📖 Generation 8</p>
+            <p>🌟 Starter: Grookey, Scorbunny, Sobble</p>
+            <p>🎮 Games: Sword/Shield</p>
+            <a href="region_detail.html?id=8">Explore Galar →</a>
+        </div>
+        
+        <div class="region-card">
+            <div class="region-image">🏖️</div>
+            <h2>Paldea</h2>
+            <p>📖 Generation 9</p>
+            <p>🌟 Starter: Sprigatito, Fuecoco, Quaxly</p>
+            <p>🎮 Games: Scarlet/Violet</p>
+            <a href="region_detail.html?id=9">Explore Paldea →</a>
+        </div>
     </div>
 </div>
-<script src="/static/lang.js"></script>
+
 <script>
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
+        const btn = document.querySelector('.dark-mode-toggle');
         if (document.body.classList.contains('dark-mode')) {
             btn.innerHTML = '☀️ Light Mode';
         } else {
@@ -244,16 +284,10 @@
         }
     }
     
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
     }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
