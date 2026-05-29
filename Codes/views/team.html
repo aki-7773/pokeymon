@@ -53,6 +53,11 @@
             justify-content: center;
         }
         
+        body.dark-mode .team-slot {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
         .team-slot img {
             width: 120px;
             height: 120px;
@@ -61,6 +66,10 @@
         .team-slot h3 {
             color: #2a75bb;
             margin: 10px 0;
+        }
+        
+        body.dark-mode .team-slot h3 {
+            color: #ffcb05;
         }
         
         .empty-slot {
@@ -104,6 +113,9 @@
         }
         
         .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
             background: #2a75bb;
             color: white;
             border: none;
@@ -111,28 +123,24 @@
             border-radius: 25px;
             cursor: pointer;
         }
+        
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
 <div class="container">
     <h1>⭐ My Pokémon Team ⭐</h1>
     
     <div style="text-align: center; margin-bottom: 20px;">
-        <a href="/" class="back-link">← Back to Home</a>
-        <a href="/pokemon" class="back-link">📋 All Pokémon</a>
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-        <button class="share-btn" onclick="shareTeam()">📤 Share Team</button>
+        <a href="start.html" class="back-link">← Back to Home</a>
+        <a href="pokemon_list.html" class="back-link">📋 All Pokémon</a>
+        <a href="share_team.html" class="share-btn">📤 Share Team</a>
     </div>
     
     <div class="team-grid" id="teamGrid">
@@ -144,12 +152,21 @@
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     let pokemonData = {};
     
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
     async function loadTeam() {
         const grid = document.getElementById('teamGrid');
         
         if (favorites.length === 0) {
             grid.innerHTML = `
-                <div class="team-slot empty-slot" onclick="location.href='/pokemon'">
+                <div class="team-slot empty-slot" onclick="location.href='pokemon_list.html'">
                     <div style="font-size: 48px;">➕</div>
                     <p>Add Pokémon to your team</p>
                     <p style="font-size: 12px;">Click to browse Pokémon</p>
@@ -168,11 +185,12 @@
                         <h3>${pokemon.name}</h3>
                         <p>#${String(pokemon.id).padStart(3, '0')}</p>
                         <button class="remove-btn" onclick="removeFromTeam(${pokemon.id})">Remove</button>
+                        <button class="remove-btn" onclick="location.href='pokemon_detail.html?id=${pokemon.id}'" style="background:#2a75bb; margin-top:5px;">View</button>
                     </div>
                 `);
             } else {
                 slots.push(`
-                    <div class="team-slot empty-slot" onclick="location.href='/pokemon'">
+                    <div class="team-slot empty-slot" onclick="location.href='pokemon_list.html'">
                         <div style="font-size: 48px;">➕</div>
                         <p>Empty Slot</p>
                         <p style="font-size: 12px;">Click to add Pokémon</p>
@@ -193,8 +211,7 @@
         const pokemon = {
             id: data.id,
             name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
-            image: data.sprites.other['official-artwork'].front_default || data.sprites.front_default,
-            types: data.types.map(t => t.type.name)
+            image: data.sprites.other['official-artwork'].front_default || data.sprites.front_default
         };
         
         pokemonData[id] = pokemon;
@@ -207,58 +224,7 @@
         loadTeam();
     }
     
-    function shareTeam() {
-        if (favorites.length === 0) {
-            alert("Your team is empty! Add some Pokémon first.");
-            return;
-        }
-        
-        const teamNames = favorites.map(async (id, index) => {
-            const pokemon = await fetchPokemonData(id);
-            return `${index + 1}. ${pokemon.name}`;
-        });
-        
-        Promise.all(teamNames).then(names => {
-            const text = `My Pokémon Team:\n${names.join('\n')}\n\nCheck out my team on Pokémon Website!`;
-            navigator.clipboard.writeText(text);
-            alert("Team copied to clipboard! You can now share it.");
-        });
-    }
-    
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-    
     loadTeam();
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️ Light Mode';
-        } else {
-            btn.innerHTML = '🌙 Dark Mode';
-        }
-    }
-    
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
