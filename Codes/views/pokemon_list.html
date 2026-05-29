@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pokémon List</title>
+    <title>Search Results - Pokémon</title>
     <style>
         * {
             margin: 0;
@@ -21,7 +21,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -29,22 +29,182 @@
         h1 {
             text-align: center;
             color: white;
-            font-size: 42px;
+            font-size: 36px;
             margin: 20px 0;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
         }
         
-        .top-bar {
+        .search-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 60px;
+            padding: 5px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        body.dark-mode .search-section {
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .search-box {
             display: flex;
-            justify-content: space-between;
+            gap: 0;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 15px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 60px 0 0 60px;
+            outline: none;
+            background: transparent;
+            font-family: inherit;
+        }
+        
+        .search-box button {
+            padding: 15px 35px;
+            font-size: 16px;
+            background: #ffcb05;
+            border: none;
+            border-radius: 0 60px 60px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .results-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        body.dark-mode .results-container {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
+        .result-item {
+            display: flex;
             align-items: center;
+            gap: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .result-item:hover {
+            background: rgba(255,203,5,0.2);
+            transform: translateX(10px);
+        }
+        
+        .result-item img {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .result-info {
+            flex: 1;
+        }
+        
+        .result-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .result-name {
+            color: #ffcb05;
+        }
+        
+        .result-id {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        body.dark-mode .result-id {
+            color: #aaa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .badge-db {
+            background: #78c850;
+            color: white;
+        }
+        
+        .badge-api {
+            background: #2a75bb;
+            color: white;
+        }
+        
+        .badge-special {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .suggestions {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        body.dark-mode .suggestions {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .suggestions h3 {
+            color: #2a75bb;
+            margin-bottom: 10px;
+        }
+        
+        body.dark-mode .suggestions h3 {
+            color: #ffcb05;
+        }
+        
+        .suggestion-buttons {
+            display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .suggestion-btn {
+            padding: 8px 16px;
+            background: #ffcb05;
+            color: #2a75bb;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .suggestion-btn:hover {
+            transform: scale(1.05);
+            background: #f5b700;
         }
         
         .back-link {
             display: inline-block;
+            margin: 10px 0;
             padding: 10px 20px;
             background: rgba(0,0,0,0.3);
             color: white;
@@ -59,55 +219,20 @@
             color: #2a75bb;
         }
         
-        .search-suggestions {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .search-suggestions input {
-            padding: 10px 15px;
-            border-radius: 25px;
-            border: none;
-            width: 280px;
-            font-size: 14px;
-        }
-        
-        .suggestions-box {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            max-height: 300px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-        }
-        
-        .suggestions-box div {
-            padding: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .suggestions-box div:hover {
-            background: #ffcb05;
-        }
-        
         .control-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
             display: flex;
             gap: 10px;
-            align-items: center;
+            z-index: 100;
         }
         
         .dark-mode-toggle, .language-select {
             background: #2a75bb;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 15px;
             border-radius: 25px;
             cursor: pointer;
             font-weight: bold;
@@ -118,322 +243,128 @@
             transform: scale(1.05);
         }
         
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .nav-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background: rgba(0,0,0,0.3);
-            color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .nav-btn:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
-        .type-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-        }
-        
-        body.dark-mode .type-filters {
-            background: rgba(0,0,0,0.8);
-        }
-        
-        .type-btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            color: white;
-        }
-        
-        .type-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-        
-        .type-btn.active {
-            box-shadow: 0 0 0 3px white, 0 0 0 5px #2a75bb;
-        }
-        
-        .type-btn.all {
-            background: #2a75bb;
-        }
-        
-        .pokemon-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .pokemon-card {
-            background: rgba(255,255,255,0.95);
-            border-radius: 15px;
-            padding: 15px;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
-            position: relative;
-        }
-        
-        body.dark-mode .pokemon-card {
-            background: rgba(0,0,0,0.8);
-            color: white;
-        }
-        
-        .pokemon-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        
-        .pokemon-card img {
-            width: 120px;
-            height: 120px;
-        }
-        
-        .pokemon-card h3 {
-            color: #2a75bb;
-            margin: 10px 0;
-            font-size: 18px;
-        }
-        
-        body.dark-mode .pokemon-card h3 {
-            color: #ffcb05;
-        }
-        
-        .pokemon-number {
-            color: #666;
-            font-size: 12px;
-        }
-        
-        body.dark-mode .pokemon-number {
-            color: #aaa;
-        }
-        
-        .type-badges {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .type-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 15px;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        
-        .favorite-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            z-index: 10;
-            color: #ccc;
-        }
-        
-        .favorite-btn:hover {
-            transform: scale(1.2);
-        }
-        
-        .favorite-btn.favorited {
-            color: gold;
-            text-shadow: 0 0 3px orange;
-        }
-        
-        .special-badge {
-            display: inline-block;
-            background: #ff9800;
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-top: 8px;
-        }
-        
-        .gen-badge {
-            display: inline-block;
-            background: #78c850;
-            color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-top: 8px;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 18px;
-            color: white;
-        }
-        
         .loader {
             border: 3px solid #f3f3f3;
             border-top: 3px solid #ffcb05;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 30px;
+            height: 30px;
             animation: spin 1s linear infinite;
-            margin: 20px auto;
+            margin: 10px auto;
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
         
-        .stats-info {
-            text-align: center;
-            margin: 10px 0;
-            color: rgba(255,255,255,0.8);
-            font-size: 14px;
-        }
-        
         @media (max-width: 768px) {
-            .pokemon-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            .result-item {
+                flex-wrap: wrap;
+                text-align: center;
+                justify-content: center;
             }
-            .type-filters {
-                max-height: 200px;
-                overflow-y: auto;
+            .badge {
+                margin-top: 5px;
             }
-            .top-bar {
-                flex-direction: column;
-            }
-            .search-suggestions input {
-                width: 100%;
+            .control-buttons {
+                top: 10px;
+                right: 10px;
             }
         }
     </style>
 </head>
 <body>
+<div class="control-buttons">
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
+
 <div class="container">
-    <h1>🌟 Pokémon List 🌟</h1>
+    <h1>🔍 Search Results</h1>
     
-    <div class="top-bar">
-        <a href="start.html" class="back-link">← Home</a>
-        
-        <div class="search-suggestions">
-            <input type="text" id="searchInput" placeholder="🔍 Search Pokémon...">
-            <div id="suggestions" class="suggestions-box"></div>
-        </div>
-        
-        <div class="control-buttons">
-            <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-            <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-                <option value="en">🇬🇧 English</option>
-                <option value="de">🇩🇪 Deutsch</option>
-                <option value="fr">🇫🇷 Français</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="zh">🇨🇳 中文</option>
-            </select>
-        </div>
-        
-        <div class="nav-buttons">
-            <a href="team.html" class="nav-btn">⭐ My Team</a>
-            <a href="compare.html" class="nav-btn">📊 Compare</a>
-            <a href="type_chart.html" class="nav-btn">⚔️ Type Chart</a>
+    <div class="search-section">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search Pokémon by name or ID...">
+            <button onclick="searchPokemon()">Search</button>
         </div>
     </div>
     
-    <div class="type-filters" id="typeFilters">
-        <button class="type-btn all active" data-type="all">All</button>
+    <div class="results-container" id="resultsContainer">
+        <div class="loader"></div>
+        <p style="text-align: center;">Loading...</p>
     </div>
     
-    <div class="stats-info" id="statsInfo"></div>
-    
-    <div id="pokemonGrid" class="pokemon-grid">
-        <div class="loading"><div class="loader"></div>Loading Pokémon...</div>
+    <div style="text-align: center;">
+        <a href="start.html" class="back-link">← Back to Home</a>
+        <a href="pokemon_list.html" class="back-link">📋 All Pokémon</a>
     </div>
 </div>
 
 <script>
-    let allPokemon = [];
-    let currentType = 'all';
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    let allPokemonData = [];
     let currentLang = localStorage.getItem('language') || 'en';
     
-    const typeColors = {
-        normal: "#A8A878", fire: "#F08030", water: "#6890F0",
-        electric: "#F8D030", grass: "#78C850", ice: "#98D8D8",
-        fighting: "#C03028", poison: "#A040A0", ground: "#E0C068",
-        flying: "#A890F0", psychic: "#F85888", bug: "#A8B820",
-        rock: "#B8A038", ghost: "#705898", dragon: "#7038F8",
-        dark: "#705848", steel: "#B8B8D0", fairy: "#EE99AC"
-    };
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.querySelector('.dark-mode-toggle');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
     
-    const types = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy"];
+    function changeLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('language', lang);
+        document.getElementById('languageSelect').value = lang;
+    }
     
-    // Bekannte spezielle Formen
-    const knownSpecialForms = [
-        { id: 10034, name: "Mega Charizard X", searchName: "charizard-mega-x" },
-        { id: 10035, name: "Mega Charizard Y", searchName: "charizard-mega-y" },
-        { id: 10036, name: "Mega Mewtwo X", searchName: "mewtwo-mega-x" },
-        { id: 10037, name: "Mega Mewtwo Y", searchName: "mewtwo-mega-y" },
-        { id: 10038, name: "Mega Gengar", searchName: "gengar-mega" },
-        { id: 10003, name: "Ash-Greninja", searchName: "greninja-ash" },
-        { id: 10039, name: "Mega Gyarados", searchName: "gyarados-mega" },
-        { id: 10040, name: "Mega Aerodactyl", searchName: "aerodactyl-mega" },
-        { id: 10041, name: "Mega Ampharos", searchName: "ampharos-mega" },
-        { id: 10042, name: "Mega Steelix", searchName: "steelix-mega" },
-        { id: 10043, name: "Mega Scizor", searchName: "scizor-mega" },
-        { id: 10044, name: "Mega Heracross", searchName: "heracross-mega" },
-        { id: 10045, name: "Mega Houndoom", searchName: "houndoom-mega" },
-        { id: 10046, name: "Mega Tyranitar", searchName: "tyranitar-mega" },
-        { id: 10047, name: "Mega Blaziken", searchName: "blaziken-mega" },
-        { id: 10048, name: "Mega Gardevoir", searchName: "gardevoir-mega" }
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
+    }
+    document.getElementById('languageSelect').value = currentLang;
+    
+    // Korrigierte spezielle Formen mit richtigen Namen
+    const specialForms = [
+        { id: 10034, name: "Mega Charizard X", searchName: "charizard-mega-x", displayName: "Mega Charizard X" },
+        { id: 10035, name: "Mega Charizard Y", searchName: "charizard-mega-y", displayName: "Mega Charizard Y" },
+        { id: 10036, name: "Mega Mewtwo X", searchName: "mewtwo-mega-x", displayName: "Mega Mewtwo X" },
+        { id: 10037, name: "Mega Mewtwo Y", searchName: "mewtwo-mega-y", displayName: "Mega Mewtwo Y" },
+        { id: 10038, name: "Mega Gengar", searchName: "gengar-mega", displayName: "Mega Gengar" },
+        { id: 10003, name: "Ash-Greninja", searchName: "greninja-ash", displayName: "Ash-Greninja" },
+        { id: 10039, name: "Mega Gyarados", searchName: "gyarados-mega", displayName: "Mega Gyarados" },
+        { id: 10040, name: "Mega Aerodactyl", searchName: "aerodactyl-mega", displayName: "Mega Aerodactyl" },
+        { id: 10041, name: "Mega Ampharos", searchName: "ampharos-mega", displayName: "Mega Ampharos" },
+        { id: 10042, name: "Mega Steelix", searchName: "steelix-mega", displayName: "Mega Steelix" },
+        { id: 10043, name: "Mega Scizor", searchName: "scizor-mega", displayName: "Mega Scizor" },
+        { id: 10044, name: "Mega Heracross", searchName: "heracross-mega", displayName: "Mega Heracross" },
+        { id: 10045, name: "Mega Houndoom", searchName: "houndoom-mega", displayName: "Mega Houndoom" },
+        { id: 10046, name: "Mega Tyranitar", searchName: "tyranitar-mega", displayName: "Mega Tyranitar" },
+        { id: 10047, name: "Mega Blaziken", searchName: "blaziken-mega", displayName: "Mega Blaziken" },
+        { id: 10048, name: "Mega Gardevoir", searchName: "gardevoir-mega", displayName: "Mega Gardevoir" },
+        { id: 10049, name: "Mega Sableye", searchName: "sableye-mega", displayName: "Mega Sableye" },
+        { id: 10050, name: "Mega Mawile", searchName: "mawile-mega", displayName: "Mega Mawile" },
+        { id: 10051, name: "Mega Aggron", searchName: "aggron-mega", displayName: "Mega Aggron" }
     ];
     
-    const filterContainer = document.getElementById('typeFilters');
-    types.forEach(type => {
-        const btn = document.createElement('button');
-        btn.className = `type-btn`;
-        btn.style.background = typeColors[type];
-        btn.setAttribute('data-type', type);
-        btn.textContent = type.charAt(0).toUpperCase() + type.slice(1);
-        btn.onclick = () => filterByType(type);
-        filterContainer.appendChild(btn);
-    });
-    
-    async function loadPokemon() {
-        const container = document.getElementById('pokemonGrid');
-        container.innerHTML = '<div class="loading"><div class="loader"></div>Loading Pokémon...</div>';
-        
+    async function loadAllPokemon() {
         try {
             const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
             const data = await response.json();
             
-            allPokemon = [];
+            allPokemonData = [];
             
-            // Normale Pokémon (Gen 1-6)
+            // Normale Pokémon Gen 1-6
             for (let item of data.results) {
                 const id = parseInt(item.url.split('/').slice(-2)[0]);
                 if (id <= 721) {
@@ -445,178 +376,111 @@
                     else if (id <= 649) gen = 5;
                     else gen = 6;
                     
-                    // Typen für das Pokémon laden
-                    try {
-                        const pokeRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-                        const pokeData = await pokeRes.json();
-                        const pokemonTypes = pokeData.types.map(t => t.type.name);
-                        
-                        allPokemon.push({
-                            id: id,
-                            name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
-                            gen: gen,
-                            types: pokemonTypes,
-                            isSpecial: false
-                        });
-                    } catch(e) {
-                        allPokemon.push({
-                            id: id,
-                            name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
-                            gen: gen,
-                            types: [],
-                            isSpecial: false
-                        });
-                    }
+                    allPokemonData.push({
+                        id: id,
+                        name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+                        searchName: item.name,
+                        isSpecial: false,
+                        gen: gen
+                    });
                 }
             }
             
-            // Spezielle Formen hinzufügen
-            for (let special of knownSpecialForms) {
-                try {
-                    const pokeRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${special.id}`);
-                    const pokeData = await pokeRes.json();
-                    const pokemonTypes = pokeData.types.map(t => t.type.name);
-                    
-                    allPokemon.push({
-                        id: special.id,
-                        name: special.name,
-                        searchName: special.searchName,
-                        gen: 7,
-                        types: pokemonTypes,
-                        isSpecial: true
-                    });
-                } catch(e) {}
+            // Spezielle Formen
+            for (let special of specialForms) {
+                allPokemonData.push({
+                    id: special.id,
+                    name: special.displayName,
+                    searchName: special.searchName,
+                    isSpecial: true
+                });
             }
             
-            allPokemon.sort((a, b) => a.id - b.id);
-            updateStats();
-            renderPokemon();
-            
+            // URL-Parameter auslesen und suchen
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            if (query) {
+                document.getElementById('searchInput').value = query;
+                performSearch(query);
+            } else {
+                document.getElementById('resultsContainer').innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <p>Enter a Pokémon name or ID to search!</p>
+                    </div>
+                `;
+            }
         } catch (error) {
-            console.error('Error:', error);
-            container.innerHTML = '<div class="loading">❌ Error loading Pokémon. Please refresh.</div>';
-        }
-    }
-    
-    function updateStats() {
-        document.getElementById('statsInfo').innerHTML = `📊 ${allPokemon.length} Pokémon | ⭐ ${favorites.length}/6 in team`;
-    }
-    
-    function renderPokemon() {
-        const container = document.getElementById('pokemonGrid');
-        let filtered = [...allPokemon];
-        
-        // Nach Typ filtern
-        if (currentType !== 'all') {
-            filtered = filtered.filter(p => p.types && p.types.includes(currentType));
-        }
-        
-        // Nach Suchbegriff filtern
-        const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-        if (searchQuery.length >= 2) {
-            filtered = filtered.filter(p => 
-                p.name.toLowerCase().includes(searchQuery) || 
-                (p.searchName && p.searchName.toLowerCase().includes(searchQuery))
-            );
-        }
-        
-        if (filtered.length === 0) {
-            container.innerHTML = '<div class="loading">⚠️ No Pokémon found</div>';
-            return;
-        }
-        
-        container.innerHTML = filtered.map(p => `
-            <div class="pokemon-card" onclick="location.href='pokemon_detail.html?id=${p.id}'">
-                <button class="favorite-btn ${favorites.includes(p.id) ? 'favorited' : ''}" 
-                        onclick="event.stopPropagation(); toggleFavorite(${p.id})">
-                    ${favorites.includes(p.id) ? '★' : '☆'}
-                </button>
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png" 
-                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
-                <h3>${p.name}</h3>
-                <div class="pokemon-number">#${String(p.id).padStart(p.isSpecial ? 5 : 3, '0')}</div>
-                <div class="type-badges">
-                    ${p.types ? p.types.map(t => `<span class="type-badge" style="background: ${typeColors[t]}">${t.toUpperCase()}</span>`).join('') : ''}
+            console.error('Error loading Pokémon:', error);
+            document.getElementById('resultsContainer').innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <p>❌ Error loading Pokémon data. Please refresh the page.</p>
                 </div>
-                ${p.isSpecial ? '<div class="special-badge">⭐ Special Form</div>' : `<div class="gen-badge">Gen ${p.gen}</div>`}
-            </div>
-        `).join('');
-    }
-    
-    function filterByType(type) {
-        currentType = type;
-        document.querySelectorAll('.type-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-type') === type) {
-                btn.classList.add('active');
-            }
-        });
-        renderPokemon();
-    }
-    
-    function toggleFavorite(id) {
-        if (favorites.includes(id)) {
-            favorites = favorites.filter(f => f !== id);
-        } else if (favorites.length < 6) {
-            favorites.push(id);
-        } else {
-            alert('You can only have 6 Pokémon in your team!');
-            return;
+            `;
         }
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        updateStats();
-        renderPokemon();
     }
     
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-    
-    function changeLanguage(lang) {
-        currentLang = lang;
-        localStorage.setItem('language', lang);
-        // Hier könntest du Übersetzungen hinzufügen
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-    document.getElementById('languageSelect').value = currentLang;
-    
-    // Live-Suche mit sofortiger Anzeige
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        renderPokemon();
+    function performSearch(query) {
+        const container = document.getElementById('resultsContainer');
+        const lowerQuery = query.toLowerCase();
         
-        const query = e.target.value.toLowerCase();
-        if (query.length < 2) {
-            document.getElementById('suggestions').style.display = 'none';
+        const results = allPokemonData.filter(p => 
+            p.name.toLowerCase().includes(lowerQuery) || 
+            (p.searchName && p.searchName.toLowerCase().includes(lowerQuery))
+        );
+        
+        if (results.length === 0) {
+            container.innerHTML = `
+                <div class="no-results">
+                    <p>❌ No Pokémon found for "${query}"</p>
+                    <div class="suggestions">
+                        <h3>💡 Suggestions</h3>
+                        <p>Try searching for:</p>
+                        <div class="suggestion-buttons">
+                            <a href="search_results.html?q=pikachu" class="suggestion-btn">Pikachu</a>
+                            <a href="search_results.html?q=charizard" class="suggestion-btn">Charizard</a>
+                            <a href="search_results.html?q=mewtwo" class="suggestion-btn">Mewtwo</a>
+                            <a href="search_results.html?q=greninja" class="suggestion-btn">Greninja</a>
+                            <a href="search_results.html?q=mega" class="suggestion-btn">Mega</a>
+                            <a href="search_results.html?q=ash" class="suggestion-btn">Ash</a>
+                        </div>
+                    </div>
+                </div>
+            `;
             return;
         }
         
-        const matches = allPokemon.filter(p => 
-            p.name.toLowerCase().includes(query) || 
-            (p.searchName && p.searchName.toLowerCase().includes(query))
-        ).slice(0, 10);
-        
-        const suggestions = document.getElementById('suggestions');
-        if (matches.length > 0) {
-            suggestions.style.display = 'block';
-            suggestions.innerHTML = matches.map(p => 
-                `<div onclick="location.href='pokemon_detail.html?id=${p.id}'">${p.name} (#${String(p.id).padStart(p.isSpecial ? 5 : 3, '0')})${p.isSpecial ? ' ⭐' : ''}</div>`
-            ).join('');
-        } else {
-            suggestions.style.display = 'none';
+        container.innerHTML = `
+            <h2 style="margin-bottom: 20px;">Results for "${query}" (${results.length})</h2>
+            ${results.map(p => `
+                <div class="result-item" onclick="location.href='pokemon_detail.html?id=${p.id}'">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png" 
+                         onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
+                    <div class="result-info">
+                        <div class="result-name">${p.name}</div>
+                        <div class="result-id">#${String(p.id).padStart(p.isSpecial ? 5 : 3, '0')}</div>
+                    </div>
+                    <span class="badge ${p.isSpecial ? 'badge-special' : 'badge-db'}">
+                        ${p.isSpecial ? '⭐ Special Form' : `Gen ${p.gen}`}
+                    </span>
+                </div>
+            `).join('')}
+        `;
+    }
+    
+    function searchPokemon() {
+        const query = document.getElementById('searchInput').value.trim();
+        if (query) {
+            window.location.href = `search_results.html?q=${encodeURIComponent(query)}`;
+        }
+    }
+    
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchPokemon();
         }
     });
     
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.search-suggestions')) {
-            document.getElementById('suggestions').style.display = 'none';
-        }
-    });
-    
-    loadPokemon();
+    loadAllPokemon();
 </script>
 </body>
 </html>
