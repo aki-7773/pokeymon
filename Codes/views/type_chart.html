@@ -105,14 +105,6 @@
             color: #333;
         }
         
-        .type-badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 15px;
-            color: white;
-            font-weight: bold;
-        }
-        
         .info-panel {
             margin-top: 20px;
             padding: 20px;
@@ -194,35 +186,21 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 
 <div class="container">
     <h1>⚔️ Type Effectiveness Chart ⚔️</h1>
     
     <div class="nav-buttons">
-        <a href="/" class="nav-btn">← Back to Home</a>
-        <a href="/pokemon" class="nav-btn">📋 All Pokémon</a>
+        <a href="start.html" class="nav-btn">← Back to Home</a>
+        <a href="pokemon_list.html" class="nav-btn">📋 All Pokémon</a>
     </div>
     
     <div class="chart-container">
         <table id="typeChart">
-            <thead>
-                <tr>
-                    <th>Attack Type →<br>↓ Defense Type</th>
-                </tr>
-            </thead>
+            <thead><tr><th>Attack Type →<br>↓ Defense Type</th></tr></thead>
             <tbody id="chartBody"></tbody>
-        </table>
+         </table>
     </div>
     
     <div class="info-panel" id="infoPanel">
@@ -234,15 +212,12 @@
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        
         const btn = document.querySelector('.dark-mode-toggle');
         if (document.body.classList.contains('dark-mode')) {
             btn.innerHTML = '☀️ Light Mode';
         } else {
             btn.innerHTML = '🌙 Dark Mode';
         }
-        
-        // Chart neu rendern mit Dark Mode
         renderChart();
     }
     
@@ -324,7 +299,7 @@
                 
                 html += `<td class="${className}" onclick="showInfo('${attackType}', '${defenseType}', ${value})">
                             ${symbol}
-                         </td>`;
+                          </td>`;
             }
             html += `</tr>`;
         }
@@ -348,30 +323,6 @@
     }
     
     renderChart();
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️ Light Mode';
-        } else {
-            btn.innerHTML = '🌙 Dark Mode';
-        }
-    }
-    
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
