@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Search Results</title>
+    <title>Search Results - Pokémon</title>
     <style>
         * {
             margin: 0;
@@ -43,10 +43,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
-        body.dark-mode .search-section {
-            background: rgba(0,0,0,0.8);
-        }
-        
         .search-box {
             display: flex;
             gap: 0;
@@ -60,7 +56,6 @@
             border-radius: 60px 0 0 60px;
             outline: none;
             background: transparent;
-            font-family: inherit;
         }
         
         .search-box button {
@@ -71,7 +66,6 @@
             border-radius: 0 60px 60px 0;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
         }
         
         .results-container {
@@ -136,6 +130,7 @@
         
         .badge-db { background: #78c850; color: white; }
         .badge-api { background: #2a75bb; color: white; }
+        .badge-special { background: #ff9800; color: white; }
         
         .no-results {
             text-align: center;
@@ -150,17 +145,9 @@
             text-align: center;
         }
         
-        body.dark-mode .suggestions {
-            background: rgba(255,255,255,0.05);
-        }
-        
         .suggestions h3 {
             color: #2a75bb;
             margin-bottom: 10px;
-        }
-        
-        body.dark-mode .suggestions h3 {
-            color: #ffcb05;
         }
         
         .suggestion-buttons {
@@ -183,7 +170,6 @@
         
         .suggestion-btn:hover {
             transform: scale(1.05);
-            background: #f5b700;
         }
         
         .back-link {
@@ -197,17 +183,37 @@
             font-weight: bold;
         }
         
-        .dark-mode-toggle {
+        .control-buttons {
             position: fixed;
             top: 20px;
             right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .dark-mode-toggle, .language-select {
             background: #2a75bb;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 15px;
             border-radius: 25px;
             cursor: pointer;
-            z-index: 100;
+            font-weight: bold;
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffcb05;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         @media (max-width: 768px) {
@@ -217,71 +223,37 @@
                 justify-content: center;
             }
             .badge {
-                display: inline-block;
                 margin-top: 5px;
             }
         }
     </style>
 </head>
 <body>
-<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+<div class="control-buttons">
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
+    </select>
+</div>
 
 <div class="container">
     <h1>🔍 Search Results</h1>
     
     <div class="search-section">
         <div class="search-box">
-            <form action="search_results.html" method="get" style="display: flex; width: 100%;">
-                <input type="text" name="q" id="searchInput" placeholder="Search Pokémon by name or ID..." value="{{query}}" required>
-                <button type="submit">Search</button>
-            </form>
+            <input type="text" id="searchInput" placeholder="Search Pokémon by name or ID...">
+            <button onclick="searchPokemon()">Search</button>
         </div>
     </div>
     
-    <div class="results-container">
-        <h2 style="margin-bottom: 20px;">Results for "{{query}}"</h2>
-        
-        % if results or api_results:
-            % for p in results:
-            <div class="result-item" onclick="location.href='pokemon_detail.html?id={{p['id']}}'">
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{p['id']}}.png" 
-                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{p['id']}}.png'">
-                <div class="result-info">
-                    <div class="result-name">{{p["identifier"].capitalize()}}</div>
-                    <div class="result-id">#{{str(p['id']).zfill(3)}}</div>
-                </div>
-                <span class="badge badge-db">Gen 1-6</span>
-            </div>
-            % end
-            
-            % for p in api_results:
-            <div class="result-item" onclick="location.href='pokemon_detail.html?id={{p['id']}}'">
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{p['id']}}.png" 
-                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{p['id']}}.png'">
-                <div class="result-info">
-                    <div class="result-name">{{p["identifier"].capitalize()}}</div>
-                    <div class="result-id">#{{str(p['id']).zfill(5 if p['id'] > 10000 else 3)}}</div>
-                </div>
-                <span class="badge badge-api">{{'Special Form' if p['id'] > 10000 else 'Gen 7+'}}</span>
-            </div>
-            % end
-        % else:
-            <div class="no-results">
-                <p>❌ No Pokémon found for "{{query}}"</p>
-                <div class="suggestions">
-                    <h3>💡 Suggestions</h3>
-                    <p>Try searching for:</p>
-                    <div class="suggestion-buttons">
-                        <a href="search_results.html?q=pikachu" class="suggestion-btn">Pikachu</a>
-                        <a href="search_results.html?q=charizard" class="suggestion-btn">Charizard</a>
-                        <a href="search_results.html?q=mewtwo" class="suggestion-btn">Mewtwo</a>
-                        <a href="search_results.html?q=greninja" class="suggestion-btn">Greninja</a>
-                        <a href="search_results.html?q=lucario" class="suggestion-btn">Lucario</a>
-                        <a href="search_results.html?q=gengar" class="suggestion-btn">Gengar</a>
-                    </div>
-                </div>
-            </div>
-        % end
+    <div class="results-container" id="resultsContainer">
+        <div class="loader"></div>
+        <p style="text-align: center;">Loading...</p>
     </div>
     
     <div style="text-align: center;">
@@ -291,6 +263,9 @@
 </div>
 
 <script>
+    let allPokemonData = [];
+    let currentLang = localStorage.getItem('language') || 'en';
+    
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
@@ -302,17 +277,129 @@
         }
     }
     
+    function changeLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('language', lang);
+        document.getElementById('languageSelect').value = lang;
+    }
+    
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
         document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
     }
+    document.getElementById('languageSelect').value = currentLang;
     
-    // Query-Parameter aus URL lesen und ins Suchfeld setzen
-    const urlParams = new URLSearchParams(window.location.search);
-    const queryParam = urlParams.get('q');
-    if (queryParam) {
-        document.getElementById('searchInput').value = queryParam;
+    // Bekannte spezielle Formen
+    const specialForms = [
+        { id: 10034, name: "Mega Charizard X", searchName: "charizard-mega-x", displayName: "Mega Charizard X" },
+        { id: 10035, name: "Mega Charizard Y", searchName: "charizard-mega-y", displayName: "Mega Charizard Y" },
+        { id: 10036, name: "Mega Mewtwo X", searchName: "mewtwo-mega-x", displayName: "Mega Mewtwo X" },
+        { id: 10037, name: "Mega Mewtwo Y", searchName: "mewtwo-mega-y", displayName: "Mega Mewtwo Y" },
+        { id: 10038, name: "Mega Gengar", searchName: "gengar-mega", displayName: "Mega Gengar" },
+        { id: 10003, name: "Ash-Greninja", searchName: "greninja-ash", displayName: "Ash-Greninja" }
+    ];
+    
+    async function loadAllPokemon() {
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
+        const data = await response.json();
+        
+        allPokemonData = [];
+        
+        // Normale Pokémon Gen 1-6
+        for (let item of data.results) {
+            const id = parseInt(item.url.split('/').slice(-2)[0]);
+            if (id <= 721) {
+                allPokemonData.push({
+                    id: id,
+                    name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+                    searchName: item.name,
+                    isSpecial: false,
+                    gen: id <= 151 ? 1 : id <= 251 ? 2 : id <= 386 ? 3 : id <= 493 ? 4 : id <= 649 ? 5 : 6
+                });
+            }
+        }
+        
+        // Spezielle Formen
+        for (let special of specialForms) {
+            allPokemonData.push({
+                id: special.id,
+                name: special.displayName,
+                searchName: special.searchName,
+                isSpecial: true
+            });
+        }
+        
+        // URL-Parameter auslesen und suchen
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('q');
+        if (query) {
+            document.getElementById('searchInput').value = query;
+            performSearch(query);
+        }
     }
+    
+    function performSearch(query) {
+        const container = document.getElementById('resultsContainer');
+        const lowerQuery = query.toLowerCase();
+        
+        const results = allPokemonData.filter(p => 
+            p.name.toLowerCase().includes(lowerQuery) || 
+            (p.searchName && p.searchName.toLowerCase().includes(lowerQuery))
+        );
+        
+        if (results.length === 0) {
+            container.innerHTML = `
+                <div class="no-results">
+                    <p>❌ No Pokémon found for "${query}"</p>
+                    <div class="suggestions">
+                        <h3>💡 Suggestions</h3>
+                        <p>Try searching for:</p>
+                        <div class="suggestion-buttons">
+                            <a href="?q=pikachu" class="suggestion-btn">Pikachu</a>
+                            <a href="?q=charizard" class="suggestion-btn">Charizard</a>
+                            <a href="?q=mewtwo" class="suggestion-btn">Mewtwo</a>
+                            <a href="?q=greninja" class="suggestion-btn">Greninja</a>
+                            <a href="?q=lucario" class="suggestion-btn">Lucario</a>
+                            <a href="?q=mega" class="suggestion-btn">Mega</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = `
+            <h2 style="margin-bottom: 20px;">Results for "${query}" (${results.length})</h2>
+            ${results.map(p => `
+                <div class="result-item" onclick="location.href='pokemon_detail.html?id=${p.id}'">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png" 
+                         onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
+                    <div class="result-info">
+                        <div class="result-name">${p.name}</div>
+                        <div class="result-id">#${String(p.id).padStart(p.isSpecial ? 5 : 3, '0')}</div>
+                    </div>
+                    <span class="badge ${p.isSpecial ? 'badge-special' : 'badge-db'}">
+                        ${p.isSpecial ? '⭐ Special Form' : `Gen ${p.gen}`}
+                    </span>
+                </div>
+            `).join('')}
+        `;
+    }
+    
+    function searchPokemon() {
+        const query = document.getElementById('searchInput').value.trim();
+        if (query) {
+            window.location.href = `search_results.html?q=${encodeURIComponent(query)}`;
+        }
+    }
+    
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchPokemon();
+        }
+    });
+    
+    loadAllPokemon();
 </script>
 </body>
 </html>
