@@ -43,6 +43,10 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
+        body.dark-mode .search-section {
+            background: rgba(0,0,0,0.8);
+        }
+        
         .search-box {
             display: flex;
             gap: 0;
@@ -68,10 +72,6 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s;
-        }
-        
-        .search-box button:hover {
-            background: #f5b700;
         }
         
         .results-container {
@@ -134,20 +134,8 @@
             margin-left: 10px;
         }
         
-        .badge-db {
-            background: #78c850;
-            color: white;
-        }
-        
-        .badge-api {
-            background: #2a75bb;
-            color: white;
-        }
-        
-        .badge-special {
-            background: #ff9800;
-            color: white;
-        }
+        .badge-db { background: #78c850; color: white; }
+        .badge-api { background: #2a75bb; color: white; }
         
         .no-results {
             text-align: center;
@@ -160,6 +148,10 @@
             background: rgba(0,0,0,0.05);
             border-radius: 15px;
             text-align: center;
+        }
+        
+        body.dark-mode .suggestions {
+            background: rgba(255,255,255,0.05);
         }
         
         .suggestions h3 {
@@ -232,25 +224,15 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 
 <div class="container">
     <h1>🔍 Search Results</h1>
     
     <div class="search-section">
         <div class="search-box">
-            <form action="/search" method="get" style="display: flex; width: 100%;">
-                <input type="text" name="q" placeholder="Search Pokémon by name or ID..." value="{{query}}" required>
+            <form action="search_results.html" method="get" style="display: flex; width: 100%;">
+                <input type="text" name="q" id="searchInput" placeholder="Search Pokémon by name or ID..." value="{{query}}" required>
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -261,7 +243,7 @@
         
         % if results or api_results:
             % for p in results:
-            <div class="result-item" onclick="location.href='/pokemon/{{p['id']}}'">
+            <div class="result-item" onclick="location.href='pokemon_detail.html?id={{p['id']}}'">
                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{p['id']}}.png" 
                      onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{p['id']}}.png'">
                 <div class="result-info">
@@ -273,16 +255,14 @@
             % end
             
             % for p in api_results:
-            <div class="result-item" onclick="location.href='/pokemon/{{p['id']}}'">
+            <div class="result-item" onclick="location.href='pokemon_detail.html?id={{p['id']}}'">
                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{{p['id']}}.png" 
                      onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{p['id']}}.png'">
                 <div class="result-info">
                     <div class="result-name">{{p["identifier"].capitalize()}}</div>
                     <div class="result-id">#{{str(p['id']).zfill(5 if p['id'] > 10000 else 3)}}</div>
                 </div>
-                <span class="badge {{'badge-special' if p['id'] > 10000 else 'badge-api'}}">
-                    {{'Special Form' if p['id'] > 10000 else 'Gen 7+'}}
-                </span>
+                <span class="badge badge-api">{{'Special Form' if p['id'] > 10000 else 'Gen 7+'}}</span>
             </div>
             % end
         % else:
@@ -292,17 +272,12 @@
                     <h3>💡 Suggestions</h3>
                     <p>Try searching for:</p>
                     <div class="suggestion-buttons">
-                        <a href="/search?q=pikachu" class="suggestion-btn">Pikachu</a>
-                        <a href="/search?q=charizard" class="suggestion-btn">Charizard</a>
-                        <a href="/search?q=mewtwo" class="suggestion-btn">Mewtwo</a>
-                        <a href="/search?q=greninja" class="suggestion-btn">Greninja</a>
-                        <a href="/search?q=lucario" class="suggestion-btn">Lucario</a>
-                        <a href="/search?q=gengar" class="suggestion-btn">Gengar</a>
-                    </div>
-                    <div class="suggestion-buttons" style="margin-top: 10px;">
-                        <a href="/search?q=mega" class="suggestion-btn">Mega Evolutions</a>
-                        <a href="/search?q=gmax" class="suggestion-btn">Gigantamax</a>
-                        <a href="/search?q=alola" class="suggestion-btn">Alolan Forms</a>
+                        <a href="search_results.html?q=pikachu" class="suggestion-btn">Pikachu</a>
+                        <a href="search_results.html?q=charizard" class="suggestion-btn">Charizard</a>
+                        <a href="search_results.html?q=mewtwo" class="suggestion-btn">Mewtwo</a>
+                        <a href="search_results.html?q=greninja" class="suggestion-btn">Greninja</a>
+                        <a href="search_results.html?q=lucario" class="suggestion-btn">Lucario</a>
+                        <a href="search_results.html?q=gengar" class="suggestion-btn">Gengar</a>
                     </div>
                 </div>
             </div>
@@ -310,8 +285,8 @@
     </div>
     
     <div style="text-align: center;">
-        <a href="/" class="back-link">← Back to Home</a>
-        <a href="/pokemon" class="back-link">📋 All Pokémon</a>
+        <a href="start.html" class="back-link">← Back to Home</a>
+        <a href="pokemon_list.html" class="back-link">📋 All Pokémon</a>
     </div>
 </div>
 
@@ -319,18 +294,7 @@
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
+        const btn = document.querySelector('.dark-mode-toggle');
         if (document.body.classList.contains('dark-mode')) {
             btn.innerHTML = '☀️ Light Mode';
         } else {
@@ -338,16 +302,17 @@
         }
     }
     
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
     }
     
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
+    // Query-Parameter aus URL lesen und ins Suchfeld setzen
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('q');
+    if (queryParam) {
+        document.getElementById('searchInput').value = queryParam;
+    }
 </script>
 </body>
 </html>
