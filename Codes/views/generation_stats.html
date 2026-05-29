@@ -173,25 +173,15 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 
 <div class="container">
     <h1>📊 Generation Statistics 📊</h1>
     
     <div class="nav-buttons">
-        <a href="/" class="nav-btn">← Home</a>
-        <a href="/gallery" class="nav-btn">🎨 Gallery</a>
-        <a href="/top-10" class="nav-btn">🏆 Top 10</a>
+        <a href="start.html" class="nav-btn">← Home</a>
+        <a href="gallery.html" class="nav-btn">🎨 Gallery</a>
+        <a href="top_10.html" class="nav-btn">🏆 Top 10</a>
     </div>
     
     <div class="stats-container">
@@ -214,10 +204,19 @@
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.querySelector('.dark-mode-toggle');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+        if (chart) chart.destroy();
+        renderChart();
     }
     
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
     }
     
     const generationData = {
@@ -275,40 +274,17 @@
         const container = document.getElementById('genStatsContainer');
         
         container.innerHTML = Object.entries(generationData).map(([gen, data]) => `
-            <div class="gen-card" onclick="location.href='/region/${gen}'">
+            <div class="gen-card" onclick="location.href='region_detail.html?id=${gen}'">
                 <h2>${data.name}</h2>
-                <div class="stat-row">
-                    <span>📊 Pokémon Count:</span>
-                    <span><strong>${data.count}</strong></span>
-                </div>
-                <div class="stat-row">
-                    <span>❤️ Avg HP:</span>
-                    <span><strong>${data.avgHp}</strong></span>
-                </div>
-                <div class="stat-bar">
-                    <div class="stat-fill" style="width: ${data.avgHp / 2.55}%">${data.avgHp}</div>
-                </div>
-                <div class="stat-row">
-                    <span>⚔️ Avg Attack:</span>
-                    <span><strong>${data.avgAttack}</strong></span>
-                </div>
-                <div class="stat-bar">
-                    <div class="stat-fill" style="width: ${data.avgAttack / 2.55}%">${data.avgAttack}</div>
-                </div>
-                <div class="stat-row">
-                    <span>🛡️ Avg Defense:</span>
-                    <span><strong>${data.avgDefense}</strong></span>
-                </div>
-                <div class="stat-bar">
-                    <div class="stat-fill" style="width: ${data.avgDefense / 2.55}%">${data.avgDefense}</div>
-                </div>
-                <div class="stat-row">
-                    <span>⚡ Avg Speed:</span>
-                    <span><strong>${data.avgSpeed}</strong></span>
-                </div>
-                <div class="stat-bar">
-                    <div class="stat-fill" style="width: ${data.avgSpeed / 2.55}%">${data.avgSpeed}</div>
-                </div>
+                <div class="stat-row"><span>📊 Pokémon Count:</span><span><strong>${data.count}</strong></span></div>
+                <div class="stat-row"><span>❤️ Avg HP:</span><span><strong>${data.avgHp}</strong></span></div>
+                <div class="stat-bar"><div class="stat-fill" style="width: ${data.avgHp / 2.55}%">${data.avgHp}</div></div>
+                <div class="stat-row"><span>⚔️ Avg Attack:</span><span><strong>${data.avgAttack}</strong></span></div>
+                <div class="stat-bar"><div class="stat-fill" style="width: ${data.avgAttack / 2.55}%">${data.avgAttack}</div></div>
+                <div class="stat-row"><span>🛡️ Avg Defense:</span><span><strong>${data.avgDefense}</strong></span></div>
+                <div class="stat-bar"><div class="stat-fill" style="width: ${data.avgDefense / 2.55}%">${data.avgDefense}</div></div>
+                <div class="stat-row"><span>⚡ Avg Speed:</span><span><strong>${data.avgSpeed}</strong></span></div>
+                <div class="stat-bar"><div class="stat-fill" style="width: ${data.avgSpeed / 2.55}%">${data.avgSpeed}</div></div>
             </div>
         `).join('');
     }
@@ -320,6 +296,8 @@
         
         if (chart) chart.destroy();
         
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        
         chart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -328,7 +306,7 @@
                     label: 'Number of Pokémon',
                     data: counts,
                     backgroundColor: Object.values(generationData).map(d => d.color),
-                    borderColor: '#2a75bb',
+                    borderColor: isDarkMode ? '#ffcb05' : '#2a75bb',
                     borderWidth: 1
                 }]
             },
@@ -336,42 +314,18 @@
                 responsive: true,
                 maintainAspectRatio: true,
                 plugins: {
-                    legend: { position: 'top' },
-                    title: { display: true, text: 'Pokémon Count by Generation' }
+                    legend: { position: 'top', labels: { color: isDarkMode ? 'white' : '#333' } },
+                    title: { display: true, text: 'Pokémon Count by Generation', color: isDarkMode ? 'white' : '#333' }
                 },
                 scales: {
-                    y: { beginAtZero: true, title: { display: true, text: 'Number of Pokémon' } },
-                    x: { title: { display: true, text: 'Generation' } }
+                    y: { beginAtZero: true, title: { display: true, text: 'Number of Pokémon', color: isDarkMode ? 'white' : '#333' }, ticks: { color: isDarkMode ? 'white' : '#333' } },
+                    x: { title: { display: true, text: 'Generation', color: isDarkMode ? 'white' : '#333' }, ticks: { color: isDarkMode ? 'white' : '#333' } }
                 }
             }
         });
     }
     
     loadGenerationStats();
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️ Light Mode';
-        } else {
-            btn.innerHTML = '🌙 Dark Mode';
-        }
-    }
-    
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
