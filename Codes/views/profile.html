@@ -158,24 +158,10 @@
             transition: all 0.3s;
         }
         
-        .achievement.locked {
-            opacity: 0.5;
-        }
-        
-        .achievement.unlocked {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid #4caf50;
-        }
-        
-        .achievement-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-        
-        .achievement-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+        .achievement.locked { opacity: 0.5; }
+        .achievement.unlocked { background: rgba(76, 175, 80, 0.2); border: 1px solid #4caf50; }
+        .achievement-icon { font-size: 32px; margin-bottom: 10px; }
+        .achievement-name { font-weight: bold; margin-bottom: 5px; }
         
         .nav-buttons {
             display: flex;
@@ -232,52 +218,28 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 
 <div class="container">
     <h1>👤 My Profile 👤</h1>
     
     <div class="nav-buttons">
-        <a href="/" class="nav-btn">← Home</a>
-        <a href="/pokemon" class="nav-btn">📋 All Pokémon</a>
-        <a href="/team" class="nav-btn">⭐ My Team</a>
-        <a href="/advanced-compare" class="nav-btn">📊 Advanced Compare</a>
+        <a href="start.html" class="nav-btn">← Home</a>
+        <a href="pokemon_list.html" class="nav-btn">📋 All Pokémon</a>
+        <a href="team.html" class="nav-btn">⭐ My Team</a>
+        <a href="advanced_compare.html" class="nav-btn">📊 Advanced Compare</a>
     </div>
     
     <div class="profile-card">
-        <div class="avatar">
-            🎮
-        </div>
+        <div class="avatar">🎮</div>
         <div class="profile-name" id="profileName">Pokémon Trainer</div>
         <button class="edit-btn" onclick="editName()">✏️ Edit Name</button>
         
         <div class="profile-stats">
-            <div class="stat-box">
-                <div class="stat-number" id="totalPokemon">0</div>
-                <div>Pokémon Collected</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="totalTeams">0</div>
-                <div>Teams Created</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="achievementsUnlocked">0</div>
-                <div>Achievements</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number" id="totalFavorites">0</div>
-                <div>Favorites</div>
-            </div>
+            <div class="stat-box"><div class="stat-number" id="totalPokemon">0</div><div>Pokémon Collected</div></div>
+            <div class="stat-box"><div class="stat-number" id="totalTeams">0</div><div>Teams Created</div></div>
+            <div class="stat-box"><div class="stat-number" id="achievementsUnlocked">0</div><div>Achievements</div></div>
+            <div class="stat-box"><div class="stat-number" id="totalFavorites">0</div><div>Favorites</div></div>
         </div>
     </div>
     
@@ -306,9 +268,24 @@
         { id: 'collector', name: 'Collector', description: 'Have 10 favorite Pokémon', icon: '📦', condition: (data) => data.favorites >= 10 },
         { id: 'master', name: 'Master Trainer', description: 'Have 20 favorite Pokémon', icon: '🏆', condition: (data) => data.favorites >= 20 },
         { id: 'team_creator', name: 'Team Creator', description: 'Create your first team', icon: '📁', condition: (data) => data.teams >= 1 },
-        { id: 'strategist', name: 'Strategist', description: 'Create 3 different teams', icon: '🎯', condition: (data) => data.teams >= 3 },
-        { id: 'comparison_master', name: 'Comparison Master', description: 'Compare 6 Pokémon at once', icon: '📊', condition: (data) => data.comparisons >= 1 }
+        { id: 'strategist', name: 'Strategist', description: 'Create 3 different teams', icon: '🎯', condition: (data) => data.teams >= 3 }
     ];
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.querySelector('.dark-mode-toggle');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
+    }
     
     function updateProfile() {
         document.getElementById('profileName').textContent = profile.name;
@@ -318,24 +295,19 @@
         
         const data = {
             favorites: totalFavorites,
-            teams: profile.teams.length,
-            comparisons: localStorage.getItem('comparisonsDone') || 0
+            teams: profile.teams.length
         };
         
         document.getElementById('totalPokemon').textContent = totalFavorites;
         document.getElementById('totalTeams').textContent = profile.teams.length;
         document.getElementById('totalFavorites').textContent = totalFavorites;
         
-        // Achievements aktualisieren
         let unlockedCount = 0;
         for (let ach of allAchievements) {
             if (!profile.achievements.includes(ach.id) && ach.condition(data)) {
                 profile.achievements.push(ach.id);
-                showAchievementUnlocked(ach);
             }
-            if (profile.achievements.includes(ach.id)) {
-                unlockedCount++;
-            }
+            if (profile.achievements.includes(ach.id)) unlockedCount++;
         }
         
         document.getElementById('achievementsUnlocked').textContent = `${unlockedCount}/${allAchievements.length}`;
@@ -349,14 +321,12 @@
         const container = document.getElementById('achievementsGrid');
         container.innerHTML = allAchievements.map(ach => {
             const isUnlocked = profile.achievements.includes(ach.id);
-            return `
-                <div class="achievement ${isUnlocked ? 'unlocked' : 'locked'}">
-                    <div class="achievement-icon">${ach.icon}</div>
-                    <div class="achievement-name">${ach.name}</div>
-                    <div class="achievement-desc" style="font-size: 11px;">${ach.description}</div>
-                    ${isUnlocked ? '<span style="color: #4caf50; font-size: 11px;">✓ Unlocked</span>' : '<span style="color: #999; font-size: 11px;">🔒 Locked</span>'}
-                </div>
-            `;
+            return `<div class="achievement ${isUnlocked ? 'unlocked' : 'locked'}">
+                        <div class="achievement-icon">${ach.icon}</div>
+                        <div class="achievement-name">${ach.name}</div>
+                        <div style="font-size: 11px;">${ach.description}</div>
+                        ${isUnlocked ? '<span style="color: #4caf50;">✓ Unlocked</span>' : '<span style="color: #999;">🔒 Locked</span>'}
+                    </div>`;
         }).join('');
     }
     
@@ -371,10 +341,7 @@
             <div class="team-card" onclick="viewTeam(${index})">
                 <div class="team-name">${team.name}</div>
                 <div class="team-pokemon">
-                    ${team.pokemon.map(id => `
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png" 
-                             onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png'">
-                    `).join('')}
+                    ${team.pokemon.map(id => `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png'">`).join('')}
                     ${Array(6 - team.pokemon.length).fill('<div style="width:50px; height:50px; background:rgba(0,0,0,0.1); border-radius:10px; display:flex; align-items:center; justify-content:center;">?</div>').join('')}
                 </div>
                 <button class="edit-btn" onclick="event.stopPropagation(); deleteTeam(${index})" style="background:#f44336; margin-top:10px;">Delete</button>
@@ -386,11 +353,7 @@
         const teamName = prompt('Enter team name:', `Team ${profile.teams.length + 1}`);
         if (!teamName) return;
         
-        profile.teams.push({
-            name: teamName,
-            pokemon: []
-        });
-        
+        profile.teams.push({ name: teamName, pokemon: [] });
         localStorage.setItem('profileTeams', JSON.stringify(profile.teams));
         updateProfile();
     }
@@ -417,60 +380,7 @@
         }
     }
     
-    function showAchievementUnlocked(achievement) {
-        // Kurze Benachrichtigung
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #4caf50;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 25px;
-            z-index: 1000;
-            animation: fadeOut 3s forwards;
-        `;
-        notification.innerHTML = `🏆 Achievement Unlocked: ${achievement.name}!`;
-        document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 3000);
-    }
-    
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-    
     updateProfile();
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️ Light Mode';
-        } else {
-            btn.innerHTML = '🌙 Dark Mode';
-        }
-    }
-    
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
