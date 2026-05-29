@@ -36,6 +36,11 @@
             text-align: center;
         }
         
+        body.dark-mode .share-card {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
         .team-code {
             background: #2a75bb;
             color: white;
@@ -118,15 +123,30 @@
             width: 300px;
             margin: 10px;
         }
+        
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
 <div class="container">
     <h1>📤 Share Your Pokémon Team 📤</h1>
     
     <div class="nav-buttons" style="text-align: center;">
-        <a href="/" class="nav-btn">← Home</a>
-        <a href="/team" class="nav-btn">⭐ My Team</a>
+        <a href="start.html" class="nav-btn">← Home</a>
+        <a href="team.html" class="nav-btn">⭐ My Team</a>
     </div>
     
     <div class="share-card">
@@ -161,6 +181,22 @@
 <script>
     let currentTeamCode = null;
     
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.querySelector('.dark-mode-toggle');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
+    }
+    
     async function loadTeamPreview() {
         const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
         const container = document.getElementById('teamPreview');
@@ -173,14 +209,10 @@
         const previews = await Promise.all(favorites.map(async (id) => {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
             const pokemon = await response.json();
-            return `
-                <div class="preview-card">
-                    <img src="${pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default}" 
-                         onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png'">
-                    <br>
-                    <small>#${String(id).padStart(3, '0')}</small>
-                </div>
-            `;
+            return `<div class="preview-card">
+                        <img src="${pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png'">
+                        <br><small>#${String(id).padStart(3, '0')}</small>
+                    </div>`;
         }));
         
         container.innerHTML = previews.join('');
@@ -193,7 +225,6 @@
             return;
         }
         
-        // Team Code Format: VERSION|TEAM_NAME|POKEMON_IDS|TIMESTAMP
         const teamName = prompt('Enter a name for your team:', 'My Awesome Team');
         if (!teamName) return;
         
@@ -217,19 +248,17 @@
     }
     
     function shareViaWhatsApp() {
-        const url = `${window.location.origin}/share-team?code=${encodeURIComponent(currentTeamCode)}`;
-        const text = `Check out my Pokémon team! ${url}`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+        const url = `${window.location.origin}/share_team.html?code=${encodeURIComponent(currentTeamCode)}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(`Check out my Pokémon team! ${url}`)}`, '_blank');
     }
     
     function shareViaTwitter() {
-        const url = `${window.location.origin}/share-team?code=${encodeURIComponent(currentTeamCode)}`;
-        const text = `My Pokémon team! ${url}`;
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+        const url = `${window.location.origin}/share_team.html?code=${encodeURIComponent(currentTeamCode)}`;
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`My Pokémon team! ${url}`)}`, '_blank');
     }
     
     function shareViaFacebook() {
-        const url = `${window.location.origin}/share-team?code=${encodeURIComponent(currentTeamCode)}`;
+        const url = `${window.location.origin}/share_team.html?code=${encodeURIComponent(currentTeamCode)}`;
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
     }
     
@@ -242,42 +271,30 @@
         
         try {
             const decoded = JSON.parse(atob(code));
-            if (decoded.v !== 1) {
-                throw new Error('Unsupported version');
-            }
+            if (decoded.v !== 1) throw new Error('Unsupported version');
             
             const resultDiv = document.getElementById('importResult');
-            resultDiv.innerHTML = `
-                <div style="margin-top: 20px; padding: 15px; background: rgba(76,175,80,0.2); border-radius: 15px;">
-                    <h3>✨ Team: ${decoded.name} ✨</h3>
-                    <p>👤 Trainer: ${decoded.author}</p>
-                    <p>📅 Created: ${new Date(decoded.ts).toLocaleDateString()}</p>
-                    <div class="team-preview" id="importedPreview"></div>
-                    <button class="copy-btn" onclick="saveImportedTeam(${JSON.stringify(decoded.pokemon).replace(/"/g, '&quot;')})">Save to My Team</button>
-                </div>
-            `;
+            resultDiv.innerHTML = `<div style="margin-top:20px; padding:15px; background:rgba(76,175,80,0.2); border-radius:15px;">
+                <h3>✨ Team: ${decoded.name} ✨</h3>
+                <p>👤 Trainer: ${decoded.author}</p>
+                <p>📅 Created: ${new Date(decoded.ts).toLocaleDateString()}</p>
+                <div class="team-preview" id="importedPreview"></div>
+                <button class="copy-btn" onclick="saveImportedTeam(${JSON.stringify(decoded.pokemon).replace(/"/g, '&quot;')})">Save to My Team</button>
+            </div>`;
             
-            // Vorschau des importierten Teams
             const previewContainer = document.getElementById('importedPreview');
             const previews = await Promise.all(decoded.pokemon.map(async (id) => {
                 const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
                 const pokemon = await response.json();
-                return `
-                    <div class="preview-card">
-                        <img src="${pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default}">
-                        <br>
-                        <small>#${String(id).padStart(3, '0')}</small>
-                    </div>
-                `;
+                return `<div class="preview-card">
+                            <img src="${pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default}">
+                            <br><small>#${String(id).padStart(3, '0')}</small>
+                        </div>`;
             }));
             previewContainer.innerHTML = previews.join('');
             
         } catch (error) {
-            document.getElementById('importResult').innerHTML = `
-                <div style="margin-top: 20px; padding: 15px; background: rgba(244,67,54,0.2); border-radius: 15px; color: #f44336;">
-                    ❌ Invalid team code!
-                </div>
-            `;
+            document.getElementById('importResult').innerHTML = `<div style="margin-top:20px; padding:15px; background:rgba(244,67,54,0.2); border-radius:15px; color:#f44336;">❌ Invalid team code!</div>`;
         }
     }
     
@@ -288,7 +305,7 @@
         }
         localStorage.setItem('favorites', JSON.stringify(pokemonArray));
         alert('Team saved successfully! Go to "My Team" to view it.');
-        location.href = '/team';
+        location.href = 'team.html';
     }
     
     loadTeamPreview();
