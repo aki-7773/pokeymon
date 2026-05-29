@@ -47,6 +47,11 @@
             text-align: center;
         }
         
+        body.dark-mode .pokemon-card {
+            background: rgba(0,0,0,0.8);
+            color: white;
+        }
+        
         .vs {
             font-size: 48px;
             font-weight: bold;
@@ -58,6 +63,7 @@
         
         .search-box {
             margin-bottom: 20px;
+            position: relative;
         }
         
         .search-box input {
@@ -73,8 +79,13 @@
             max-height: 200px;
             overflow-y: auto;
             position: absolute;
-            width: calc(100% - 40px);
+            width: 100%;
             z-index: 100;
+        }
+        
+        body.dark-mode .suggestions {
+            background: #333;
+            color: white;
         }
         
         .suggestions div {
@@ -84,6 +95,7 @@
         
         .suggestions div:hover {
             background: #ffcb05;
+            color: #2a75bb;
         }
         
         .stat-bar {
@@ -92,6 +104,10 @@
             height: 20px;
             margin: 10px 0;
             overflow: hidden;
+        }
+        
+        body.dark-mode .stat-bar {
+            background: #444;
         }
         
         .stat-fill {
@@ -123,13 +139,15 @@
         }
         
         .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
             background: #2a75bb;
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 25px;
             cursor: pointer;
-            margin-left: 10px;
         }
         
         @media (max-width: 768px) {
@@ -144,23 +162,14 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
 <div class="container">
     <h1>📊 Compare Pokémon 📊</h1>
     
     <div style="text-align: center;">
-        <a href="/" class="back-link">← Back to Home</a>
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+        <a href="start.html" class="back-link">← Back to Home</a>
+        <a href="advanced_compare.html" class="back-link">📈 Advanced Compare</a>
     </div>
     
     <div class="compare-container">
@@ -201,12 +210,33 @@
     let leftPokemon = null;
     let rightPokemon = null;
     
-    async function searchPokemon(query, side) {
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+    }
+    
+    async function searchPokemon(query) {
         if (query.length < 2) return [];
         
-        const response = await fetch(`/api/search?q=${query}`);
-        const data = await response.json();
-        return data.results;
+        // Suche in der PokeAPI
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query.toLowerCase()}`);
+        if (response.ok) {
+            const data = await response.json();
+            return [{ id: data.id, name: data.name }];
+        }
+        
+        // Fallback: Liste durchsuchen
+        const listResponse = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
+        const listData = await listResponse.json();
+        const matches = listData.results.filter(p => p.name.includes(query.toLowerCase())).slice(0, 5);
+        return matches.map(p => {
+            const id = parseInt(p.url.split('/').slice(-2)[0]);
+            return { id: id, name: p.name };
+        });
     }
     
     async function loadPokemon(id, side) {
@@ -245,8 +275,8 @@
             <h2>${pokemon.name}</h2>
             <p>#${String(pokemon.id).padStart(3, '0')}</p>
             <p>📏 Height: ${pokemon.height} m | ⚖️ Weight: ${pokemon.weight} kg</p>
-            <div class="type-badges">
-                ${pokemon.types.map(t => `<span class="type-badge" style="background: ${typeColors[t]}">${t.charAt(0).toUpperCase() + t.slice(1)}</span>`).join('')}
+            <div>
+                ${pokemon.types.map(t => `<span class="type-badge" style="background: ${typeColors[t]}">${t.toUpperCase()}</span>`).join('')}
             </div>
             <h3>Stats</h3>
             <div>HP: ${pokemon.stats.hp}</div>
@@ -261,10 +291,10 @@
             <div class="stat-bar"><div class="stat-fill" style="width: ${pokemon.stats.spDefense / 2.55}%">${pokemon.stats.spDefense}</div></div>
             <div>Speed: ${pokemon.stats.speed}</div>
             <div class="stat-bar"><div class="stat-fill" style="width: ${pokemon.stats.speed / 2.55}%">${pokemon.stats.speed}</div></div>
+            <button onclick="location.href='pokemon_detail.html?id=${pokemon.id}'" style="margin-top:15px; padding:8px 20px; background:#ffcb05; border:none; border-radius:25px; cursor:pointer;">View Details →</button>
         `;
     }
     
-    // Setup für beide Seiten
     function setupSearch(side) {
         const input = document.getElementById(`${side}Search`);
         const suggestionsDiv = document.getElementById(`${side}Suggestions`);
@@ -276,7 +306,7 @@
                 return;
             }
             
-            const results = await searchPokemon(query, side);
+            const results = await searchPokemon(query);
             if (results.length > 0) {
                 suggestionsDiv.style.display = 'block';
                 suggestionsDiv.innerHTML = results.map(r => 
@@ -302,41 +332,8 @@
         document.getElementById(`${side}Search`).value = '';
     }
     
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-    
     setupSearch('left');
     setupSearch('right');
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️ Light Mode';
-        } else {
-            btn.innerHTML = '🌙 Dark Mode';
-        }
-    }
-    
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
