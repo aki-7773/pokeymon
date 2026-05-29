@@ -169,19 +169,12 @@
             font-size: 12px;
         }
         
-        .effective {
-            background: #4caf50;
-            color: white;
-        }
+        .effective { background: #4caf50; color: white; }
+        .not-effective { background: #f44336; color: white; }
+        .immune { background: #9e9e9e; color: white; }
         
-        .not-effective {
-            background: #f44336;
-            color: white;
-        }
-        
-        .immune {
-            background: #9e9e9e;
-            color: white;
+        .winner {
+            background: rgba(76, 175, 80, 0.3);
         }
         
         .nav-buttons {
@@ -221,10 +214,6 @@
             z-index: 100;
         }
         
-        .winner {
-            background: rgba(76, 175, 80, 0.3);
-        }
-        
         @media (max-width: 768px) {
             .pokemon-cell img {
                 width: 50px;
@@ -238,25 +227,15 @@
     </style>
 </head>
 <body>
-<div class="control-buttons">
-    <button class="control-btn" onclick="toggleDarkMode()" id="darkModeBtn">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
 
 <div class="container">
     <h1>📊 Advanced Pokémon Comparison 📊</h1>
     
     <div class="nav-buttons">
-        <a href="/" class="nav-btn">← Home</a>
-        <a href="/compare" class="nav-btn">Simple Compare</a>
-        <a href="/pokemon" class="nav-btn">📋 All Pokémon</a>
+        <a href="start.html" class="nav-btn">← Home</a>
+        <a href="compare.html" class="nav-btn">Simple Compare</a>
+        <a href="pokemon_list.html" class="nav-btn">📋 All Pokémon</a>
     </div>
     
     <div class="controls">
@@ -288,7 +267,6 @@
         dark: "#705848", steel: "#B8B8D0", fairy: "#EE99AC"
     };
     
-    // Typ-Effektivität für Vergleich
     const effectiveness = {
         normal: {rock: 0.5, ghost: 0, steel: 0.5},
         fire: {fire: 0.5, water: 0.5, grass: 2, ice: 2, bug: 2, rock: 0.5, dragon: 0.5, steel: 2},
@@ -310,6 +288,23 @@
         fairy: {fire: 0.5, fighting: 2, poison: 0.5, dragon: 2, dark: 2, steel: 0.5}
     };
     
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.querySelector('.dark-mode-toggle');
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
+        if (pokemonList.length > 0) renderComparison();
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-mode-toggle').innerHTML = '☀️ Light Mode';
+    }
+    
     async function searchPokemon(query) {
         try {
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query.toLowerCase()}`);
@@ -317,9 +312,7 @@
                 const data = await response.json();
                 return data;
             }
-        } catch(e) {
-            console.log('Pokémon not found');
-        }
+        } catch(e) {}
         return null;
     }
     
@@ -343,7 +336,6 @@
             return;
         }
         
-        // Duplikate vermeiden
         if (pokemonList.some(p => p.id === pokemon.id)) {
             alert(`${pokemon.name} is already in the comparison!`);
             return;
@@ -403,8 +395,7 @@
     
     function getTotalWinner() {
         if (pokemonList.length === 0) return null;
-        let maxTotal = Math.max(...pokemonList.map(p => p.stats.total));
-        return maxTotal;
+        return Math.max(...pokemonList.map(p => p.stats.total));
     }
     
     function renderComparison() {
@@ -424,7 +415,6 @@
         
         let html = '<table>';
         
-        // Kopfzeile mit Pokémon
         html += '<thead><tr><th>Attribute</th>';
         for (let p of pokemonList) {
             html += `<th class="pokemon-cell">
@@ -434,35 +424,13 @@
                         <div>#${String(p.id).padStart(3, '0')}</div>
                     </th>`;
         }
-        html += '</tr></thead><tbody>';
+        html += '</thead><tbody>';
         
-        // Basis-Info
-        html += `<tr><td><strong>📏 Height</strong></td>`;
-        for (let p of pokemonList) {
-            html += `<td>${p.height} m</td>`;
-        }
-        html += '</tr>';
+        html += `<tr><td><strong>📏 Height</strong></td>${pokemonList.map(p => `<td>${p.height} m</td>`).join('')}</tr>`;
+        html += `<tr><td><strong>⚖️ Weight</strong></td>${pokemonList.map(p => `<td>${p.weight} kg</td>`).join('')}</tr>`;
+        html += `<tr><td><strong>🎮 Base Exp</strong></td>${pokemonList.map(p => `<td>${p.baseExp}</td>`).join('')}</tr>`;
+        html += `<tr><td><strong>🌈 Types</strong></td>${pokemonList.map(p => `<td>${p.types.map(t => `<span class="type-badge" style="background: ${typeColors[t]}">${t.toUpperCase()}</span>`).join('')}</td>`).join('')}</tr>`;
         
-        html += `<tr><td><strong>⚖️ Weight</strong></td>`;
-        for (let p of pokemonList) {
-            html += `<td>${p.weight} kg</td>`;
-        }
-        html += '</tr>';
-        
-        html += `<tr><td><strong>🎮 Base Exp</strong></td>`;
-        for (let p of pokemonList) {
-            html += `<td>${p.baseExp}</td>`;
-        }
-        html += '</tr>';
-        
-        // Typen
-        html += `<tr><td><strong>🌈 Types</strong></td>`;
-        for (let p of pokemonList) {
-            html += `<td>${p.types.map(t => `<span class="type-badge" style="background: ${typeColors[t]}">${t.toUpperCase()}</span>`).join('')}</td>`;
-        }
-        html += '</tr>';
-        
-        // Stats mit Balken
         const statNames = [
             { key: 'hp', name: '❤️ HP', max: 255 },
             { key: 'attack', name: '⚔️ Attack', max: 255 },
@@ -486,20 +454,16 @@
                 const isWinner = value === maxVal && values.length > 1;
                 html += `<td class="${isWinner ? 'winner' : ''}">
                             <strong>${value}</strong>
-                            <div class="stat-bar">
-                                <div class="stat-fill" style="width: ${Math.min(percentage, 100)}%">${value}</div>
-                            </div>
-                        </td>`;
+                            <div class="stat-bar"><div class="stat-fill" style="width: ${Math.min(percentage, 100)}%">${value}</div></div>
+                         </td>`;
             }
             html += '</tr>';
         }
         
-        // Typ-Effektivitäts-Vergleich
+        const allTypes = Object.keys(typeColors);
         html += `<tr style="border-top: 2px solid #ffcb05;"><td colspan="${pokemonList.length + 1}" style="background: rgba(255,203,5,0.2);"><strong>⚔️ Type Effectiveness (Attack vs Defense)</strong></td></tr>`;
         
-        // Für jeden Angriffstyp
-        const allTypes = Object.keys(typeColors);
-        for (let attackType of allTypes.slice(0, 10)) { // Nur erste 10 für Übersichtlichkeit
+        for (let attackType of allTypes.slice(0, 10)) {
             html += `<tr><td><span class="type-badge" style="background: ${typeColors[attackType]}">${attackType.toUpperCase()}</span> attack</td>`;
             for (let p of pokemonList) {
                 const multiplier = getEffectivenessMultiplier(attackType, p.types);
@@ -524,45 +488,11 @@
         renderComparison();
     }
     
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-    }
-    
-    // Enter-Taste unterstützen
     document.getElementById('pokemonInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             addPokemon();
         }
     });
-</script>
-<script src="/static/lang.js"></script>
-<script>
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        if (document.body.classList.contains('dark-mode')) {
-            btn.innerHTML = '☀️ Light Mode';
-        } else {
-            btn.innerHTML = '🌙 Dark Mode';
-        }
-    }
-    
-    function changeLanguage(lang) {
-        setLanguage(lang);
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 </script>
 </body>
 </html>
