@@ -99,11 +99,9 @@ def api_search():
     return {"results": results}
 
 # --------------------------------------------------
-# RUN (nur für lokale Entwicklung)
+# RUN 
 # --------------------------------------------------
 if __name__ == '__main__':
     import os
     port = int(os.environ.get('PORT', 8080))
-    print(f"Server running on http://localhost:{port}")
-    print("For GitHub Pages, upload the 'views' and 'static' folders to your repository.")
-    run(host='0.0.0.0', port=port, reloader=True, debug=True)
+    run(host='0.0.0.0', port=port, reloader=False, debug=False)
