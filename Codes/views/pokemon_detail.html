@@ -24,11 +24,47 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
         }
         
         body.dark-mode .container {
             background: rgba(0,0,0,0.9);
             color: white;
+        }
+        
+        /* Navigations-Dreiecke */
+        .nav-prev, .nav-next {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2a75bb;
+            color: white;
+            width: 50px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            z-index: 100;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .nav-prev {
+            left: 20px;
+        }
+        
+        .nav-next {
+            right: 20px;
+        }
+        
+        .nav-prev:hover, .nav-next:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-50%) scale(1.1);
         }
         
         .control-buttons {
@@ -55,93 +91,45 @@
             transform: scale(1.05);
         }
         
-        .nav-prev, .nav-next {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
+        img {
+            width: 250px;
+            margin: 10px;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .info {
+            text-align: left;
+            margin: 20px;
+        }
+        
+        .evolution {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .evolution a {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 8px 15px;
             background: #2a75bb;
             color: white;
-            width: 50px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
             text-decoration: none;
             border-radius: 10px;
-            transition: all 0.3s;
-            z-index: 100;
-            border: none;
-            cursor: pointer;
         }
         
-        .nav-prev { left: 20px; }
-        .nav-next { right: 20px; }
-        
-        .nav-prev:hover, .nav-next:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
-        img { width: 250px; margin: 10px; }
-        
-        ul { list-style: none; padding: 0; }
-        
-        li { display: inline-block; margin: 5px; padding: 5px 10px; border-radius: 5px; }
-        
-        .info { text-align: left; margin: 20px; }
-        
-        .type-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            margin: 3px;
-            border-radius: 15px;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .ability-item {
-            background: #e0e0e0;
-            color: #333;
-            display: inline-block;
-            padding: 5px 12px;
-            margin: 3px;
-            border-radius: 15px;
-        }
-        
-        body.dark-mode .ability-item {
-            background: #555;
-            color: #eee;
-        }
-        
-        .stat-bar {
-            background: #e0e0e0;
-            border-radius: 10px;
-            height: 20px;
-            margin: 5px 0;
-            overflow: hidden;
-        }
-        
-        .stat-fill {
-            background: #2a75bb;
-            height: 100%;
-            color: white;
-            line-height: 20px;
-            padding-left: 5px;
-            font-size: 11px;
-        }
-        
-        .dex-entry {
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-style: italic;
-        }
-        
-        body.dark-mode .dex-entry {
-            background: #333;
-            color: #eee;
+        .evolution a:hover {
+            background: #1e5a9e;
         }
         
         .evolution-tree {
@@ -153,6 +141,15 @@
         
         body.dark-mode .evolution-tree {
             background: #333;
+        }
+        
+        .evolution-tree h3 {
+            margin-bottom: 15px;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .evolution-tree h3 {
+            color: #ffcb05;
         }
         
         .evolution-chain {
@@ -193,22 +190,12 @@
             color: #ffcb05;
         }
         
-        .cry-button, .print-btn {
-            background: #2a75bb;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin: 10px 5px;
-            font-size: 14px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .cry-button:hover, .print-btn:hover {
-            background: #ffcb05;
-            color: #2a75bb;
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
         }
         
         .back-link {
@@ -220,6 +207,88 @@
             text-decoration: none;
             border-radius: 10px;
             font-weight: bold;
+        }
+        
+        .back-link:hover {
+            background: #f5b700;
+        }
+        
+        h1 {
+            color: #2a75bb;
+        }
+        
+        body.dark-mode h1 {
+            color: #ffcb05;
+        }
+        
+        .dex-entry {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        body.dark-mode .dex-entry {
+            background: #333;
+            color: #eee;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ability-item {
+            background: #e0e0e0;
+            color: #333;
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+        }
+        
+        body.dark-mode .ability-item {
+            background: #555;
+            color: #eee;
+        }
+        
+        .cry-button, .print-btn {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .cry-button:hover, .print-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .stat-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .stat-fill {
+            background: #2a75bb;
+            height: 100%;
+            color: white;
+            line-height: 20px;
+            padding-left: 5px;
+            font-size: 11px;
         }
         
         .loader {
@@ -248,10 +317,6 @@
             .evolution-chain { gap: 10px; }
             .evolution-node img { width: 50px; height: 50px; }
             .evolution-arrow { font-size: 16px; }
-            .control-buttons {
-                top: 10px;
-                right: 10px;
-            }
         }
     </style>
 </head>
@@ -292,7 +357,10 @@
         <div class="loader"></div>
     </div>
     
-    <a href="start.html" class="back-link">← Back to Home</a>
+    <div class="button-group">
+        <a href="start.html" class="back-link">← Back to Home</a>
+        <a href="pokemon_list.html" class="back-link">📋 Back to List</a>
+    </div>
 </div>
 
 <script>
@@ -367,30 +435,7 @@
         container.innerHTML = '<h3>🌳 Evolution Tree</h3><div class="loader"></div>';
         
         try {
-            // Für spezielle Formen (ID > 10000) die Basis-ID finden
-            let actualId = pokemonId;
-            let isSpecial = pokemonId > 10000;
-            
-            if (isSpecial) {
-                // Mapping für spezielle Formen
-                if (pokemonId === 10003) actualId = 658; // Greninja
-                else if (pokemonId === 10034 || pokemonId === 10035) actualId = 6; // Charizard
-                else if (pokemonId === 10036 || pokemonId === 10037) actualId = 150; // Mewtwo
-                else if (pokemonId === 10038) actualId = 94; // Gengar
-                else if (pokemonId === 10039) actualId = 130; // Gyarados
-                else if (pokemonId === 10040) actualId = 142; // Aerodactyl
-                else if (pokemonId === 10041) actualId = 181; // Ampharos
-                else if (pokemonId === 10042) actualId = 208; // Steelix
-                else if (pokemonId === 10043) actualId = 212; // Scizor
-                else if (pokemonId === 10044) actualId = 214; // Heracross
-                else if (pokemonId === 10045) actualId = 229; // Houndoom
-                else if (pokemonId === 10046) actualId = 248; // Tyranitar
-                else if (pokemonId === 10047) actualId = 257; // Blaziken
-                else if (pokemonId === 10048) actualId = 282; // Gardevoir
-                else actualId = pokemonId - 10000;
-            }
-            
-            const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${actualId}`);
+            const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`);
             if (!speciesRes.ok) throw new Error('Species not found');
             const speciesData = await speciesRes.json();
             const chainRes = await fetch(speciesData.evolution_chain.url);
@@ -428,16 +473,14 @@
                         <a href="pokemon_detail.html?id=${details.id}">${displayName}</a>
                     </div>
                 `;
-                if (i < evolutionChain.length - 1) html += '<div class="evolution-arrow">→</div>';
+                if (i < evolutionChain.length - 1) {
+                    html += '<div class="evolution-arrow">→</div>';
+                }
             }
             html += '</div>';
             
             if (evolutionChain.length === 1) {
                 html = '<h3>🌳 Evolution Tree</h3><p>This Pokémon does not evolve</p>';
-            }
-            
-            if (isSpecial) {
-                html += `<div style="text-align: center; margin-top: 10px;"><span style="background:#ff9800; color:white; padding:2px 8px; border-radius:12px; font-size:11px;">⭐ Special Form</span></div>`;
             }
             
             container.innerHTML = html;
@@ -468,11 +511,6 @@
             
             let pokemonName = pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
             
-            // Korrektur für Ash-Greninja
-            if (pokemonData.id === 10003) {
-                pokemonName = "Ash-Greninja";
-            }
-            
             document.getElementById('pokemonName').textContent = pokemonName;
             document.getElementById('pokemonImage').src = pokemonData.sprites.other['official-artwork'].front_default || pokemonData.sprites.front_default;
             
@@ -499,7 +537,7 @@
                 <p><strong>Abilities:</strong></p>
                 <ul>${pokemonData.abilities.map(a => `<li class="ability-item">${a.ability.name.replace("-", " ").toUpperCase()}${a.is_hidden ? ' (Hidden)' : ''}</li>`).join('')}</ul>
                 <p><strong>Generation:</strong> ${generation}</p>
-                <p><strong>Region:</strong> ${region}</p>
+                <p><strong>Region:</strong> <a href="region_detail.html?id=${pokemonData.id <= 151 ? 1 : pokemonData.id <= 251 ? 2 : pokemonData.id <= 386 ? 3 : pokemonData.id <= 493 ? 4 : pokemonData.id <= 649 ? 5 : pokemonData.id <= 721 ? 6 : pokemonData.id <= 809 ? 7 : pokemonData.id <= 905 ? 8 : 9}" style="color:#2a75bb;">${region} →</a></p>
             `;
             
             document.getElementById('statsContainer').innerHTML = pokemonData.stats.map(s => `
@@ -507,7 +545,7 @@
                 <div class="stat-bar"><div class="stat-fill" style="width: ${s.base_stat / 2.55}%">${s.base_stat}</div></div>
             `).join('');
             
-            await loadEvolutionTree(pokemonData.id);
+            loadEvolutionTree(pokemonData.id);
             
         } catch (error) {
             console.error('Error loading Pokémon:', error);
