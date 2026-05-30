@@ -97,7 +97,10 @@ def api_search():
     db.close()
     
     return {"results": results}
-
+    
+@route('/favicon.ico')
+def favicon():
+    return static_file('favicon.ico', root='./static')
 # --------------------------------------------------
 # RUN 
 # --------------------------------------------------
