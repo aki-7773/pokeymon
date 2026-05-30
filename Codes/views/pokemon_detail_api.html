@@ -88,7 +88,7 @@
         dark: "#705848", steel: "#B8B8D0", fairy: "#EE99AC"
     };
     
-    // Mapping für spezielle Formen zur Basis-Form
+    // Mapping für spezielle Formen zur Basis-Form (für Pokédex und Evolution Tree)
     const specialFormBase = {
         10003: { baseId: 658, baseName: "greninja", displayName: "Ash-Greninja" },
         10034: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard X" },
@@ -98,11 +98,47 @@
         10038: { baseId: 94, baseName: "gengar", displayName: "Mega Gengar" },
         10039: { baseId: 130, baseName: "gyarados", displayName: "Mega Gyarados" },
         10040: { baseId: 142, baseName: "aerodactyl", displayName: "Mega Aerodactyl" },
+        10041: { baseId: 181, baseName: "ampharos", displayName: "Mega Ampharos" },
+        10042: { baseId: 208, baseName: "steelix", displayName: "Mega Steelix" },
+        10043: { baseId: 212, baseName: "scizor", displayName: "Mega Scizor" },
+        10044: { baseId: 214, baseName: "heracross", displayName: "Mega Heracross" },
+        10045: { baseId: 229, baseName: "houndoom", displayName: "Mega Houndoom" },
+        10046: { baseId: 248, baseName: "tyranitar", displayName: "Mega Tyranitar" },
+        10047: { baseId: 257, baseName: "blaziken", displayName: "Mega Blaziken" },
+        10048: { baseId: 282, baseName: "gardevoir", displayName: "Mega Gardevoir" },
+        10049: { baseId: 302, baseName: "sableye", displayName: "Mega Sableye" },
+        10050: { baseId: 303, baseName: "mawile", displayName: "Mega Mawile" },
+        10051: { baseId: 306, baseName: "aggron", displayName: "Mega Aggron" },
+        10052: { baseId: 308, baseName: "medicham", displayName: "Mega Medicham" },
+        10053: { baseId: 310, baseName: "manectric", displayName: "Mega Manectric" },
+        10054: { baseId: 319, baseName: "sharpedo", displayName: "Mega Sharpedo" },
+        10055: { baseId: 323, baseName: "camerupt", displayName: "Mega Camerupt" },
+        10056: { baseId: 334, baseName: "altaria", displayName: "Mega Altaria" },
+        10057: { baseId: 354, baseName: "banette", displayName: "Mega Banette" },
+        10058: { baseId: 359, baseName: "absol", displayName: "Mega Absol" },
+        10059: { baseId: 362, baseName: "glalie", displayName: "Mega Glalie" },
+        10060: { baseId: 373, baseName: "salamence", displayName: "Mega Salamence" },
+        10061: { baseId: 376, baseName: "metagross", displayName: "Mega Metagross" },
+        10062: { baseId: 380, baseName: "latias", displayName: "Mega Latias" },
+        10063: { baseId: 381, baseName: "latios", displayName: "Mega Latios" },
+        10064: { baseId: 384, baseName: "rayquaza", displayName: "Mega Rayquaza" },
+        10065: { baseId: 428, baseName: "lopunny", displayName: "Mega Lopunny" },
+        10066: { baseId: 445, baseName: "garchomp", displayName: "Mega Garchomp" },
+        10067: { baseId: 448, baseName: "lucario", displayName: "Mega Lucario" },
+        10068: { baseId: 460, baseName: "abomasnow", displayName: "Mega Abomasnow" },
+        10069: { baseId: 475, baseName: "gallade", displayName: "Mega Gallade" },
+        10070: { baseId: 531, baseName: "audino", displayName: "Mega Audino" },
+        10071: { baseId: 719, baseName: "diancie", displayName: "Mega Diancie" },
+        10080: { baseId: 382, baseName: "kyogre", displayName: "Primal Kyogre" },
+        10081: { baseId: 383, baseName: "groudon", displayName: "Primal Groudon" },
         10072: { baseId: 6, baseName: "charizard", displayName: "Gigantamax Charizard" },
         10073: { baseId: 25, baseName: "pikachu", displayName: "Gigantamax Pikachu" },
         10074: { baseId: 133, baseName: "eevee", displayName: "Gigantamax Eevee" },
         10075: { baseId: 52, baseName: "meowth", displayName: "Gigantamax Meowth" },
-        10076: { baseId: 94, baseName: "gengar", displayName: "Gigantamax Gengar" }
+        10076: { baseId: 94, baseName: "gengar", displayName: "Gigantamax Gengar" },
+        10077: { baseId: 131, baseName: "lapras", displayName: "Gigantamax Lapras" },
+        10078: { baseId: 143, baseName: "snorlax", displayName: "Gigantamax Snorlax" },
+        10079: { baseId: 68, baseName: "machamp", displayName: "Gigantamax Machamp" }
     };
     
     function getTypeColor(type) { return typeColors[type] || "#68A090"; }
@@ -146,19 +182,24 @@
         } catch(e) { console.log('Cry error:', e); }
     }
     
-    async function getPokedexEntry(speciesId) {
+    async function getPokedexEntry(speciesId, specialName) {
         try {
             const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${speciesId}`);
             if (speciesRes.ok) {
                 const species = await speciesRes.json();
                 for (let entry of species.flavor_text_entries) {
                     if (entry.language.name === "en") {
-                        return entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
+                        let text = entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
+                        // Für spezielle Formen den Namen anpassen
+                        if (specialName && specialFormBase[pokemonId]) {
+                            text = text.replace(specialFormBase[pokemonId].baseName.charAt(0).toUpperCase() + specialFormBase[pokemonId].baseName.slice(1), specialName);
+                        }
+                        return text;
                     }
                 }
             }
         } catch(e) {}
-        return "No Pokédex entry available.";
+        return "No Pokédex entry available for this Pokémon.";
     }
     
     async function loadEvolutionTree(baseId) {
@@ -195,8 +236,14 @@
                 html += `<div class="evolution-node"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${details.id}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${details.id}.png'"><a href="pokemon_detail.html?id=${details.id}">${displayName}</a></div>`;
                 if (i < evolutionChain.length - 1) html += '<div class="evolution-arrow">→</div>';
             }
+            
+            // Für spezielle Formen die Mega-Entwicklung hinzufügen
+            if (pokemonId > 10000 && specialFormBase[pokemonId]) {
+                html += `<div class="evolution-arrow">→</div><div class="evolution-node"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'"><a href="pokemon_detail.html?id=${pokemonId}"><strong>${specialFormBase[pokemonId].displayName}</strong></a><div style="font-size:10px; color:#ff9800;">Special Form</div></div>`;
+            }
+            
             html += '</div>';
-            if (evolutionChain.length === 1) html = '<h3>🌳 Evolution Tree</h3><p>This Pokémon does not evolve</p>';
+            if (evolutionChain.length === 1 && !(pokemonId > 10000)) html = '<h3>🌳 Evolution Tree</h3><p>This Pokémon does not evolve</p>';
             container.innerHTML = html;
         } catch (error) {
             container.innerHTML = '<h3>🌳 Evolution Tree</h3><p>Evolution data not available</p>';
@@ -217,14 +264,23 @@
             if (isSpecial && specialFormBase[pokemonId]) {
                 displayName = specialFormBase[pokemonId].displayName;
                 baseId = specialFormBase[pokemonId].baseId;
-                dexText = await getPokedexEntry(baseId);
+                dexText = await getPokedexEntry(baseId, displayName);
                 loadEvolutionTree(baseId);
             } else {
-                dexText = await getPokedexEntry(pokemonId);
+                dexText = await getPokedexEntry(pokemonId, null);
                 loadEvolutionTree(pokemonId);
             }
             
-            let region = pokemonData.id <= 809 ? "Alola" : (pokemonData.id <= 905 ? "Galar" : "Paldea");
+            let region = "Unknown";
+            if (pokemonData.id <= 151) region = "Kanto";
+            else if (pokemonData.id <= 251) region = "Johto";
+            else if (pokemonData.id <= 386) region = "Hoenn";
+            else if (pokemonData.id <= 493) region = "Sinnoh";
+            else if (pokemonData.id <= 649) region = "Unova";
+            else if (pokemonData.id <= 721) region = "Kalos";
+            else if (pokemonData.id <= 809) region = "Alola";
+            else if (pokemonData.id <= 905) region = "Galar";
+            else region = "Paldea";
             
             document.getElementById('pokemonName').textContent = displayName;
             document.getElementById('pokemonImage').src = pokemonData.sprites.other['official-artwork'].front_default || pokemonData.sprites.front_default;
@@ -248,6 +304,7 @@
             `).join('');
             
         } catch (error) {
+            console.error('Error loading Pokémon:', error);
             document.querySelector('.container').innerHTML = '<p>❌ Error loading Pokémon. Please try again.</p>';
         }
     }
