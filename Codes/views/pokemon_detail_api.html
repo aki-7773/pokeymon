@@ -3,42 +3,269 @@
 <head>
     <title>Pokémon Detail</title>
     <style>
-        body { font-family: Arial; text-align: center; background: #f5f5f5; margin: 0; padding: 20px; position: relative; transition: all 0.3s; }
-        body.dark-mode { background: #1a1a2e; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        body.dark-mode .container { background: rgba(0,0,0,0.9); color: white; }
-        .control-buttons { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
-        .dark-mode-toggle, .language-select { background: #2a75bb; color: white; border: none; padding: 8px 15px; border-radius: 25px; cursor: pointer; font-weight: bold; }
-        .nav-prev, .nav-next { position: fixed; top: 50%; transform: translateY(-50%); background: #2a75bb; color: white; width: 50px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 40px; border-radius: 10px; border: none; cursor: pointer; z-index: 100; }
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: #1a1a2e;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        body.dark-mode .container {
+            background: rgba(0,0,0,0.9);
+            color: white;
+        }
+        
+        .control-buttons {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .dark-mode-toggle, .language-select {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .dark-mode-toggle:hover, .language-select:hover {
+            transform: scale(1.05);
+        }
+        
+        .nav-prev, .nav-next {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #2a75bb;
+            color: white;
+            width: 50px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            z-index: 100;
+            border: none;
+            cursor: pointer;
+        }
+        
         .nav-prev { left: 20px; }
         .nav-next { right: 20px; }
-        .nav-prev:hover, .nav-next:hover { background: #ffcb05; color: #2a75bb; }
+        
+        .nav-prev:hover, .nav-next:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
         img { width: 200px; margin: 10px; }
+        
         ul { list-style: none; padding: 0; }
+        
         li { display: inline-block; margin: 5px; padding: 5px 10px; border-radius: 5px; }
+        
         .info { text-align: left; margin: 20px; }
-        .type-badge { display: inline-block; padding: 5px 12px; margin: 3px; border-radius: 15px; color: white; font-weight: bold; }
-        .ability-item { background: #e0e0e0; color: #333; display: inline-block; padding: 5px 12px; margin: 3px; border-radius: 15px; }
-        body.dark-mode .ability-item { background: #555; color: #eee; }
-        .stat-bar { background: #e0e0e0; border-radius: 10px; height: 20px; margin: 5px 0; overflow: hidden; }
-        .stat-fill { background: #2a75bb; height: 100%; color: white; line-height: 20px; padding-left: 5px; font-size: 11px; }
-        .dex-entry { background: #f0f0f0; padding: 15px; border-radius: 10px; margin-top: 20px; font-style: italic; }
-        body.dark-mode .dex-entry { background: #333; color: #eee; }
-        .evolution-tree { margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 15px; }
-        body.dark-mode .evolution-tree { background: #333; }
-        .evolution-chain { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; }
-        .evolution-node { text-align: center; }
-        .evolution-node img { width: 80px; height: 80px; }
-        .evolution-node a { display: block; margin-top: 5px; font-size: 12px; text-decoration: none; color: #2a75bb; }
-        body.dark-mode .evolution-node a { color: #ffcb05; }
-        .evolution-arrow { font-size: 24px; color: #2a75bb; }
-        .cry-button, .print-btn { background: #2a75bb; color: white; border: none; padding: 8px 20px; border-radius: 25px; cursor: pointer; margin: 10px 5px; font-size: 14px; font-weight: bold; }
-        .cry-button:hover, .print-btn:hover { background: #ffcb05; color: #2a75bb; }
-        .back-link { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #ffcb05; color: #2a75bb; text-decoration: none; border-radius: 10px; font-weight: bold; }
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #ffcb05; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 10px auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .ability-item {
+            background: #e0e0e0;
+            color: #333;
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 3px;
+            border-radius: 15px;
+        }
+        
+        body.dark-mode .ability-item {
+            background: #555;
+            color: #eee;
+        }
+        
+        .stat-bar {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .stat-fill {
+            background: #2a75bb;
+            height: 100%;
+            color: white;
+            line-height: 20px;
+            padding-left: 5px;
+            font-size: 11px;
+        }
+        
+        .dex-entry {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        body.dark-mode .dex-entry {
+            background: #333;
+            color: #eee;
+        }
+        
+        .evolution-tree {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 15px;
+        }
+        
+        body.dark-mode .evolution-tree {
+            background: #333;
+        }
+        
+        .evolution-tree h3 {
+            margin-bottom: 15px;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .evolution-tree h3 {
+            color: #ffcb05;
+        }
+        
+        .evolution-chain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .evolution-node {
+            text-align: center;
+        }
+        
+        .evolution-node img {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .evolution-node a {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            text-decoration: none;
+            color: #2a75bb;
+        }
+        
+        body.dark-mode .evolution-node a {
+            color: #ffcb05;
+        }
+        
+        .evolution-arrow {
+            font-size: 24px;
+            color: #2a75bb;
+        }
+        
+        .cry-button, .print-btn {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .cry-button:hover, .print-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #ffcb05;
+            color: #2a75bb;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        
+        .back-link:hover {
+            background: #f5b700;
+        }
+        
+        h1 {
+            color: #2a75bb;
+        }
+        
+        body.dark-mode h1 {
+            color: #ffcb05;
+        }
+        
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffcb05;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 768px) {
-            .nav-prev, .nav-next { width: 40px; height: 60px; font-size: 30px; }
+            .nav-prev, .nav-next {
+                width: 40px;
+                height: 60px;
+                font-size: 30px;
+            }
             .nav-prev { left: 5px; }
             .nav-next { right: 5px; }
             .evolution-chain { gap: 10px; }
@@ -50,8 +277,12 @@
 <div class="control-buttons">
     <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
     <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option><option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option><option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
     </select>
 </div>
 
@@ -63,13 +294,26 @@
     <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
     <button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
     
-    <div class="pokemon-img"><img id="pokemonImage" src="" alt=""></div>
+    <div class="pokemon-img">
+        <img id="pokemonImage" src="" alt="">
+    </div>
+    
     <div class="info" id="pokemonInfo"></div>
+    
     <h3>📊 Base Stats</h3>
     <div id="statsContainer"></div>
+    
     <div class="dex-entry" id="dexEntry">Loading Pokédex entry...</div>
-    <div class="evolution-tree" id="evolutionTree"><h3>🌳 Evolution Tree</h3><div class="loader"></div></div>
-    <a href="start.html" class="back-link">← Back to Home</a>
+    
+    <div class="evolution-tree" id="evolutionTree">
+        <h3>🌳 Evolution Tree</h3>
+        <div class="loader"></div>
+    </div>
+    
+    <div class="button-group">
+        <a href="start.html" class="back-link">← Back to Home</a>
+        <a href="pokemon_list.html" class="back-link">📋 Back to List</a>
+    </div>
 </div>
 
 <script>
@@ -88,7 +332,7 @@
         dark: "#705848", steel: "#B8B8D0", fairy: "#EE99AC"
     };
     
-    // Mapping für spezielle Formen zur Basis-Form (für Pokédex und Evolution Tree)
+    // Mapping für spezielle Formen zur Basis-Form
     const specialFormBase = {
         10003: { baseId: 658, baseName: "greninja", displayName: "Ash-Greninja" },
         10034: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard X" },
@@ -106,29 +350,6 @@
         10046: { baseId: 248, baseName: "tyranitar", displayName: "Mega Tyranitar" },
         10047: { baseId: 257, baseName: "blaziken", displayName: "Mega Blaziken" },
         10048: { baseId: 282, baseName: "gardevoir", displayName: "Mega Gardevoir" },
-        10049: { baseId: 302, baseName: "sableye", displayName: "Mega Sableye" },
-        10050: { baseId: 303, baseName: "mawile", displayName: "Mega Mawile" },
-        10051: { baseId: 306, baseName: "aggron", displayName: "Mega Aggron" },
-        10052: { baseId: 308, baseName: "medicham", displayName: "Mega Medicham" },
-        10053: { baseId: 310, baseName: "manectric", displayName: "Mega Manectric" },
-        10054: { baseId: 319, baseName: "sharpedo", displayName: "Mega Sharpedo" },
-        10055: { baseId: 323, baseName: "camerupt", displayName: "Mega Camerupt" },
-        10056: { baseId: 334, baseName: "altaria", displayName: "Mega Altaria" },
-        10057: { baseId: 354, baseName: "banette", displayName: "Mega Banette" },
-        10058: { baseId: 359, baseName: "absol", displayName: "Mega Absol" },
-        10059: { baseId: 362, baseName: "glalie", displayName: "Mega Glalie" },
-        10060: { baseId: 373, baseName: "salamence", displayName: "Mega Salamence" },
-        10061: { baseId: 376, baseName: "metagross", displayName: "Mega Metagross" },
-        10062: { baseId: 380, baseName: "latias", displayName: "Mega Latias" },
-        10063: { baseId: 381, baseName: "latios", displayName: "Mega Latios" },
-        10064: { baseId: 384, baseName: "rayquaza", displayName: "Mega Rayquaza" },
-        10065: { baseId: 428, baseName: "lopunny", displayName: "Mega Lopunny" },
-        10066: { baseId: 445, baseName: "garchomp", displayName: "Mega Garchomp" },
-        10067: { baseId: 448, baseName: "lucario", displayName: "Mega Lucario" },
-        10068: { baseId: 460, baseName: "abomasnow", displayName: "Mega Abomasnow" },
-        10069: { baseId: 475, baseName: "gallade", displayName: "Mega Gallade" },
-        10070: { baseId: 531, baseName: "audino", displayName: "Mega Audino" },
-        10071: { baseId: 719, baseName: "diancie", displayName: "Mega Diancie" },
         10080: { baseId: 382, baseName: "kyogre", displayName: "Primal Kyogre" },
         10081: { baseId: 383, baseName: "groudon", displayName: "Primal Groudon" },
         10072: { baseId: 6, baseName: "charizard", displayName: "Gigantamax Charizard" },
@@ -136,18 +357,29 @@
         10074: { baseId: 133, baseName: "eevee", displayName: "Gigantamax Eevee" },
         10075: { baseId: 52, baseName: "meowth", displayName: "Gigantamax Meowth" },
         10076: { baseId: 94, baseName: "gengar", displayName: "Gigantamax Gengar" },
-        10077: { baseId: 131, baseName: "lapras", displayName: "Gigantamax Lapras" },
-        10078: { baseId: 143, baseName: "snorlax", displayName: "Gigantamax Snorlax" },
-        10079: { baseId: 68, baseName: "machamp", displayName: "Gigantamax Machamp" }
+        10100: { baseId: 26, baseName: "raichu", displayName: "Alolan Raichu" },
+        10101: { baseId: 105, baseName: "marowak", displayName: "Alolan Marowak" },
+        10102: { baseId: 103, baseName: "exeggutor", displayName: "Alolan Exeggutor" },
+        10103: { baseId: 77, baseName: "ponyta", displayName: "Galarian Ponyta" },
+        10104: { baseId: 78, baseName: "rapidash", displayName: "Galarian Rapidash" },
+        10105: { baseId: 80, baseName: "slowbro", displayName: "Galarian Slowbro" },
+        10106: { baseId: 58, baseName: "growlithe", displayName: "Hisuian Growlithe" },
+        10107: { baseId: 59, baseName: "arcanine", displayName: "Hisuian Arcanine" }
     };
     
-    function getTypeColor(type) { return typeColors[type] || "#68A090"; }
+    function getTypeColor(type) {
+        return typeColors[type] || "#68A090";
+    }
     
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
         const btn = document.querySelector('.dark-mode-toggle');
-        btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+        if (document.body.classList.contains('dark-mode')) {
+            btn.innerHTML = '☀️ Light Mode';
+        } else {
+            btn.innerHTML = '🌙 Dark Mode';
+        }
     }
     
     function changeLanguage(lang) {
@@ -178,7 +410,11 @@
         if (!pokemonData) return;
         try {
             const cryUrl = pokemonData.cries?.latest || pokemonData.cries?.legacy;
-            if (cryUrl) { const audio = new Audio(cryUrl); audio.volume = 0.3; audio.play(); }
+            if (cryUrl) {
+                const audio = new Audio(cryUrl);
+                audio.volume = 0.3;
+                audio.play();
+            }
         } catch(e) { console.log('Cry error:', e); }
     }
     
@@ -190,7 +426,6 @@
                 for (let entry of species.flavor_text_entries) {
                     if (entry.language.name === "en") {
                         let text = entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
-                        // Für spezielle Formen den Namen anpassen
                         if (specialName && specialFormBase[pokemonId]) {
                             text = text.replace(specialFormBase[pokemonId].baseName.charAt(0).toUpperCase() + specialFormBase[pokemonId].baseName.slice(1), specialName);
                         }
@@ -237,7 +472,7 @@
                 if (i < evolutionChain.length - 1) html += '<div class="evolution-arrow">→</div>';
             }
             
-            // Für spezielle Formen die Mega-Entwicklung hinzufügen
+            // Für spezielle Formen die Mega/Primal/Gmax Entwicklung hinzufügen
             if (pokemonId > 10000 && specialFormBase[pokemonId]) {
                 html += `<div class="evolution-arrow">→</div><div class="evolution-node"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'"><a href="pokemon_detail.html?id=${pokemonId}"><strong>${specialFormBase[pokemonId].displayName}</strong></a><div style="font-size:10px; color:#ff9800;">Special Form</div></div>`;
             }
