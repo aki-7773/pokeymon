@@ -344,7 +344,7 @@
         <a href="start.html" class="back-link">← Home</a>
         
         <div class="search-suggestions">
-            <input type="text" id="searchInput" placeholder="🔍 Search Pokémon...">
+            <input type="text" id="searchInput" placeholder="🔍 Search Pokémon (e.g., 'mega', 'gmax', 'ash')...">
             <div id="suggestions" class="suggestions-box"></div>
         </div>
         
@@ -395,24 +395,57 @@
     
     const types = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy"];
     
-    // Korrigierte spezielle Formen mit richtigen Namen
+    // Vollständige Liste aller speziellen Formen (Mega, Gmax, Ash, Regional)
     const knownSpecialForms = [
-        { id: 10034, name: "Mega Charizard X", searchName: "charizard-mega-x" },
-        { id: 10035, name: "Mega Charizard Y", searchName: "charizard-mega-y" },
-        { id: 10036, name: "Mega Mewtwo X", searchName: "mewtwo-mega-x" },
-        { id: 10037, name: "Mega Mewtwo Y", searchName: "mewtwo-mega-y" },
-        { id: 10038, name: "Mega Gengar", searchName: "gengar-mega" },
-        { id: 10003, name: "Ash-Greninja", searchName: "greninja-ash" },
-        { id: 10039, name: "Mega Gyarados", searchName: "gyarados-mega" },
-        { id: 10040, name: "Mega Aerodactyl", searchName: "aerodactyl-mega" },
-        { id: 10041, name: "Mega Ampharos", searchName: "ampharos-mega" },
-        { id: 10042, name: "Mega Steelix", searchName: "steelix-mega" },
-        { id: 10043, name: "Mega Scizor", searchName: "scizor-mega" },
-        { id: 10044, name: "Mega Heracross", searchName: "heracross-mega" },
-        { id: 10045, name: "Mega Houndoom", searchName: "houndoom-mega" },
-        { id: 10046, name: "Mega Tyranitar", searchName: "tyranitar-mega" },
-        { id: 10047, name: "Mega Blaziken", searchName: "blaziken-mega" },
-        { id: 10048, name: "Mega Gardevoir", searchName: "gardevoir-mega" }
+        // Ash-Greninja
+        { id: 10003, name: "Ash-Greninja", searchNames: ["greninja-ash", "ash-greninja", "ash greninja", "greninja"], displayName: "Ash-Greninja" },
+        // Mega Charizard
+        { id: 10034, name: "Mega Charizard X", searchNames: ["charizard-mega-x", "mega-charizard-x", "mega charizard x", "charizard"], displayName: "Mega Charizard X" },
+        { id: 10035, name: "Mega Charizard Y", searchNames: ["charizard-mega-y", "mega-charizard-y", "mega charizard y", "charizard"], displayName: "Mega Charizard Y" },
+        // Mega Mewtwo
+        { id: 10036, name: "Mega Mewtwo X", searchNames: ["mewtwo-mega-x", "mega-mewtwo-x", "mega mewtwo x", "mewtwo"], displayName: "Mega Mewtwo X" },
+        { id: 10037, name: "Mega Mewtwo Y", searchNames: ["mewtwo-mega-y", "mega-mewtwo-y", "mega mewtwo y", "mewtwo"], displayName: "Mega Mewtwo Y" },
+        // Weitere Megas
+        { id: 10038, name: "Mega Gengar", searchNames: ["gengar-mega", "mega-gengar", "mega gengar", "gengar"], displayName: "Mega Gengar" },
+        { id: 10039, name: "Mega Gyarados", searchNames: ["gyarados-mega", "mega-gyarados", "mega gyarados", "gyarados"], displayName: "Mega Gyarados" },
+        { id: 10040, name: "Mega Aerodactyl", searchNames: ["aerodactyl-mega", "mega-aerodactyl", "mega aerodactyl", "aerodactyl"], displayName: "Mega Aerodactyl" },
+        { id: 10041, name: "Mega Ampharos", searchNames: ["ampharos-mega", "mega-ampharos", "mega ampharos", "ampharos"], displayName: "Mega Ampharos" },
+        { id: 10042, name: "Mega Steelix", searchNames: ["steelix-mega", "mega-steelix", "mega steelix", "steelix"], displayName: "Mega Steelix" },
+        { id: 10043, name: "Mega Scizor", searchNames: ["scizor-mega", "mega-scizor", "mega scizor", "scizor"], displayName: "Mega Scizor" },
+        { id: 10044, name: "Mega Heracross", searchNames: ["heracross-mega", "mega-heracross", "mega heracross", "heracross"], displayName: "Mega Heracross" },
+        { id: 10045, name: "Mega Houndoom", searchNames: ["houndoom-mega", "mega-houndoom", "mega houndoom", "houndoom"], displayName: "Mega Houndoom" },
+        { id: 10046, name: "Mega Tyranitar", searchNames: ["tyranitar-mega", "mega-tyranitar", "mega tyranitar", "tyranitar"], displayName: "Mega Tyranitar" },
+        { id: 10047, name: "Mega Blaziken", searchNames: ["blaziken-mega", "mega-blaziken", "mega blaziken", "blaziken"], displayName: "Mega Blaziken" },
+        { id: 10048, name: "Mega Gardevoir", searchNames: ["gardevoir-mega", "mega-gardevoir", "mega gardevoir", "gardevoir"], displayName: "Mega Gardevoir" },
+        { id: 10049, name: "Mega Sableye", searchNames: ["sableye-mega", "mega-sableye", "mega sableye", "sableye"], displayName: "Mega Sableye" },
+        { id: 10050, name: "Mega Mawile", searchNames: ["mawile-mega", "mega-mawile", "mega mawile", "mawile"], displayName: "Mega Mawile" },
+        { id: 10051, name: "Mega Aggron", searchNames: ["aggron-mega", "mega-aggron", "mega aggron", "aggron"], displayName: "Mega Aggron" },
+        { id: 10052, name: "Mega Medicham", searchNames: ["medicham-mega", "mega-medicham", "mega medicham", "medicham"], displayName: "Mega Medicham" },
+        { id: 10053, name: "Mega Manectric", searchNames: ["manectric-mega", "mega-manectric", "mega manectric", "manectric"], displayName: "Mega Manectric" },
+        { id: 10054, name: "Mega Sharpedo", searchNames: ["sharpedo-mega", "mega-sharpedo", "mega sharpedo", "sharpedo"], displayName: "Mega Sharpedo" },
+        { id: 10055, name: "Mega Camerupt", searchNames: ["camerupt-mega", "mega-camerupt", "mega camerupt", "camerupt"], displayName: "Mega Camerupt" },
+        { id: 10056, name: "Mega Altaria", searchNames: ["altaria-mega", "mega-altaria", "mega altaria", "altaria"], displayName: "Mega Altaria" },
+        { id: 10057, name: "Mega Banette", searchNames: ["banette-mega", "mega-banette", "mega banette", "banette"], displayName: "Mega Banette" },
+        { id: 10058, name: "Mega Absol", searchNames: ["absol-mega", "mega-absol", "mega absol", "absol"], displayName: "Mega Absol" },
+        { id: 10059, name: "Mega Glalie", searchNames: ["glalie-mega", "mega-glalie", "mega glalie", "glalie"], displayName: "Mega Glalie" },
+        { id: 10060, name: "Mega Salamence", searchNames: ["salamence-mega", "mega-salamence", "mega salamence", "salamence"], displayName: "Mega Salamence" },
+        { id: 10061, name: "Mega Metagross", searchNames: ["metagross-mega", "mega-metagross", "mega metagross", "metagross"], displayName: "Mega Metagross" },
+        { id: 10062, name: "Mega Latias", searchNames: ["latias-mega", "mega-latias", "mega latias", "latias"], displayName: "Mega Latias" },
+        { id: 10063, name: "Mega Latios", searchNames: ["latios-mega", "mega-latios", "mega latios", "latios"], displayName: "Mega Latios" },
+        { id: 10064, name: "Mega Rayquaza", searchNames: ["rayquaza-mega", "mega-rayquaza", "mega rayquaza", "rayquaza"], displayName: "Mega Rayquaza" },
+        { id: 10065, name: "Mega Lopunny", searchNames: ["lopunny-mega", "mega-lopunny", "mega lopunny", "lopunny"], displayName: "Mega Lopunny" },
+        { id: 10066, name: "Mega Garchomp", searchNames: ["garchomp-mega", "mega-garchomp", "mega garchomp", "garchomp"], displayName: "Mega Garchomp" },
+        { id: 10067, name: "Mega Lucario", searchNames: ["lucario-mega", "mega-lucario", "mega lucario", "lucario"], displayName: "Mega Lucario" },
+        { id: 10068, name: "Mega Abomasnow", searchNames: ["abomasnow-mega", "mega-abomasnow", "mega abomasnow", "abomasnow"], displayName: "Mega Abomasnow" },
+        { id: 10069, name: "Mega Gallade", searchNames: ["gallade-mega", "mega-gallade", "mega gallade", "gallade"], displayName: "Mega Gallade" },
+        { id: 10070, name: "Mega Audino", searchNames: ["audino-mega", "mega-audino", "mega audino", "audino"], displayName: "Mega Audino" },
+        { id: 10071, name: "Mega Diancie", searchNames: ["diancie-mega", "mega-diancie", "mega diancie", "diancie"], displayName: "Mega Diancie" },
+        // Gigantamax Formen
+        { id: 10072, name: "Gigantamax Charizard", searchNames: ["charizard-gmax", "gmax-charizard", "gigantamax charizard", "charizard"], displayName: "Gigantamax Charizard" },
+        { id: 10073, name: "Gigantamax Pikachu", searchNames: ["pikachu-gmax", "gmax-pikachu", "gigantamax pikachu", "pikachu"], displayName: "Gigantamax Pikachu" },
+        { id: 10074, name: "Gigantamax Eevee", searchNames: ["eevee-gmax", "gmax-eevee", "gigantamax eevee", "eevee"], displayName: "Gigantamax Eevee" },
+        { id: 10075, name: "Gigantamax Meowth", searchNames: ["meowth-gmax", "gmax-meowth", "gigantamax meowth", "meowth"], displayName: "Gigantamax Meowth" },
+        { id: 10076, name: "Gigantamax Gengar", searchNames: ["gengar-gmax", "gmax-gengar", "gigantamax gengar", "gengar"], displayName: "Gigantamax Gengar" }
     ];
     
     const filterContainer = document.getElementById('typeFilters');
@@ -456,6 +489,7 @@
                         allPokemon.push({
                             id: id,
                             name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+                            searchName: item.name,
                             gen: gen,
                             types: pokemonTypes,
                             isSpecial: false
@@ -464,6 +498,7 @@
                         allPokemon.push({
                             id: id,
                             name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
+                            searchName: item.name,
                             gen: gen,
                             types: [],
                             isSpecial: false
@@ -472,27 +507,39 @@
                 }
             }
             
-            // Spezielle Formen
+            // Spezielle Formen (für Gen 7+ und Megas)
             for (let special of knownSpecialForms) {
                 try {
                     const pokeRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${special.id}`);
-                    const pokeData = await pokeRes.json();
-                    const pokemonTypes = pokeData.types.map(t => t.type.name);
-                    
-                    allPokemon.push({
-                        id: special.id,
-                        name: special.name,
-                        searchName: special.searchName,
-                        gen: 7,
-                        types: pokemonTypes,
-                        isSpecial: true
-                    });
+                    if (pokeRes.ok) {
+                        const pokeData = await pokeRes.json();
+                        const pokemonTypes = pokeData.types.map(t => t.type.name);
+                        
+                        allPokemon.push({
+                            id: special.id,
+                            name: special.displayName,
+                            searchNames: special.searchNames,
+                            gen: 7,
+                            types: pokemonTypes,
+                            isSpecial: true
+                        });
+                    } else {
+                        // Fallback wenn API nicht verfügbar
+                        allPokemon.push({
+                            id: special.id,
+                            name: special.displayName,
+                            searchNames: special.searchNames,
+                            gen: 7,
+                            types: [],
+                            isSpecial: true
+                        });
+                    }
                 } catch(e) {
-                    // Fallback falls API nicht verfügbar
+                    console.log(`Could not load special form ${special.id}:`, e);
                     allPokemon.push({
                         id: special.id,
-                        name: special.name,
-                        searchName: special.searchName,
+                        name: special.displayName,
+                        searchNames: special.searchNames,
                         gen: 7,
                         types: [],
                         isSpecial: true
@@ -511,7 +558,8 @@
     }
     
     function updateStats() {
-        document.getElementById('statsInfo').innerHTML = `📊 ${allPokemon.length} Pokémon | ⭐ ${favorites.length}/6 in team`;
+        const specialCount = allPokemon.filter(p => p.isSpecial).length;
+        document.getElementById('statsInfo').innerHTML = `📊 ${allPokemon.length} Pokémon (${specialCount} special forms) | ⭐ ${favorites.length}/6 in team`;
     }
     
     function renderPokemon() {
@@ -526,10 +574,14 @@
         // Nach Suchbegriff filtern
         const searchQuery = document.getElementById('searchInput').value.toLowerCase();
         if (searchQuery.length >= 2) {
-            filtered = filtered.filter(p => 
-                p.name.toLowerCase().includes(searchQuery) || 
-                (p.searchName && p.searchName.toLowerCase().includes(searchQuery))
-            );
+            filtered = filtered.filter(p => {
+                if (p.name.toLowerCase().includes(searchQuery)) return true;
+                if (p.searchName && p.searchName.toLowerCase().includes(searchQuery)) return true;
+                if (p.searchNames) {
+                    return p.searchNames.some(sn => sn.toLowerCase().includes(searchQuery));
+                }
+                return false;
+            });
         }
         
         if (filtered.length === 0) {
@@ -544,7 +596,7 @@
                     ${favorites.includes(p.id) ? '★' : '☆'}
                 </button>
                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png" 
-                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
                 <h3>${p.name}</h3>
                 <div class="pokemon-number">#${String(p.id).padStart(p.isSpecial ? 5 : 3, '0')}</div>
                 <div class="type-badges">
@@ -613,16 +665,20 @@
             return;
         }
         
-        const matches = allPokemon.filter(p => 
-            p.name.toLowerCase().includes(query) || 
-            (p.searchName && p.searchName.toLowerCase().includes(query))
-        ).slice(0, 10);
+        const matches = allPokemon.filter(p => {
+            if (p.name.toLowerCase().includes(query)) return true;
+            if (p.searchName && p.searchName.toLowerCase().includes(query)) return true;
+            if (p.searchNames) {
+                return p.searchNames.some(sn => sn.toLowerCase().includes(query));
+            }
+            return false;
+        }).slice(0, 10);
         
         const suggestions = document.getElementById('suggestions');
         if (matches.length > 0) {
             suggestions.style.display = 'block';
             suggestions.innerHTML = matches.map(p => 
-                `<div onclick="location.href='pokemon_detail.html?id=${p.id}'">${p.name} (#${String(p.id).padStart(p.isSpecial ? 5 : 3, '0')})${p.isSpecial ? ' ⭐' : ''}</div>`
+                `<div onclick="location.href='pokemon_detail.html?id=${p.id}'">${p.name} (#${String(p.id).padStart(p.isSpecial ? 5 : 3, '0')})${p.isSpecial ? ' ⭐ Special' : ''}</div>`
             ).join('');
         } else {
             suggestions.style.display = 'none';
