@@ -1,2 +1,2 @@
-import bottle
-import requests
+bottle
+requests
