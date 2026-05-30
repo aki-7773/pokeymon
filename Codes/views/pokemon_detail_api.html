@@ -51,6 +51,10 @@
             transition: all 0.3s;
         }
         
+        .dark-mode-toggle:hover, .language-select:hover {
+            transform: scale(1.05);
+        }
+        
         .nav-prev, .nav-next {
             position: fixed;
             top: 50%;
@@ -282,9 +286,9 @@
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
-    const pokemonId = urlParams.get('id');
+    const pokemonId = parseInt(urlParams.get('id'));
     let pokemonData = null;
-    let currentPokemonId = parseInt(pokemonId);
+    let currentPokemonId = pokemonId;
     let currentLang = localStorage.getItem('language') || 'en';
     
     const typeColors = {
@@ -294,6 +298,17 @@
         flying: "#A890F0", psychic: "#F85888", bug: "#A8B820",
         rock: "#B8A038", ghost: "#705898", dragon: "#7038F8",
         dark: "#705848", steel: "#B8B8D0", fairy: "#EE99AC"
+    };
+    
+    // Mapping für spezielle Formen zur Basis-Pokémon für Pokédex
+    const specialFormBase = {
+        10003: { baseId: 658, baseName: "greninja", displayName: "Ash-Greninja" },  // Ash-Greninja
+        10034: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard X" },
+        10035: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard Y" },
+        10036: { baseId: 150, baseName: "mewtwo", displayName: "Mega Mewtwo X" },
+        10037: { baseId: 150, baseName: "mewtwo", displayName: "Mega Mewtwo Y" },
+        10038: { baseId: 94, baseName: "gengar", displayName: "Mega Gengar" },
+        10039: { baseId: 130, baseName: "gyarados", displayName: "Mega Gyarados" }
     };
     
     function getTypeColor(type) {
@@ -347,6 +362,39 @@
         } catch(e) { console.log('Cry error:', e); }
     }
     
+    async function getPokedexEntryForSpecialForm(specialId, pokemonName) {
+        // Für spezielle Formen den Basis-Pokédex verwenden
+        const baseInfo = specialFormBase[specialId];
+        if (baseInfo) {
+            try {
+                const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${baseInfo.baseId}`);
+                if (speciesRes.ok) {
+                    const species = await speciesRes.json();
+                    for (let entry of species.flavor_text_entries) {
+                        if (entry.language.name === "en") {
+                            return entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
+                        }
+                    }
+                }
+            } catch(e) {}
+        }
+        
+        // Fallback: Versuche direkt die Species zu laden
+        try {
+            const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${specialId}`);
+            if (speciesRes.ok) {
+                const species = await speciesRes.json();
+                for (let entry of species.flavor_text_entries) {
+                    if (entry.language.name === "en") {
+                        return entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
+                    }
+                }
+            }
+        } catch(e) {}
+        
+        return "No Pokédex entry available for this special form.";
+    }
+    
     async function loadEvolutionTree(pokemonId) {
         const container = document.getElementById('evolutionTree');
         container.innerHTML = '<h3>🌳 Evolution Tree</h3><div class="loader"></div>';
@@ -355,12 +403,19 @@
             let actualId = pokemonId;
             let isSpecial = pokemonId > 10000;
             
-            if (isSpecial) {
-                if (pokemonId === 10003) actualId = 658;
-                else if (pokemonId === 10034 || pokemonId === 10035) actualId = 6;
-                else if (pokemonId === 10036 || pokemonId === 10037) actualId = 150;
-                else if (pokemonId === 10038) actualId = 94;
-                else actualId = pokemonId - 10000;
+            // Für spezielle Formen die Basis-ID finden
+            if (isSpecial && specialFormBase[pokemonId]) {
+                actualId = specialFormBase[pokemonId].baseId;
+            } else if (isSpecial && pokemonId === 10003) {
+                actualId = 658;
+            } else if (isSpecial && (pokemonId === 10034 || pokemonId === 10035)) {
+                actualId = 6;
+            } else if (isSpecial && (pokemonId === 10036 || pokemonId === 10037)) {
+                actualId = 150;
+            } else if (isSpecial && pokemonId === 10038) {
+                actualId = 94;
+            } else if (isSpecial && pokemonId > 10000) {
+                actualId = pokemonId - 10000;
             }
             
             const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${actualId}`);
@@ -415,7 +470,8 @@
             
             container.innerHTML = html;
         } catch (error) {
-            container.innerHTML = '<h3>🌳 Evolution Tree</h3><p>Evolution data not available</p>';
+            console.error('Evolution error:', error);
+            container.innerHTML = '<h3>🌳 Evolution Tree</h3><p>Evolution data not available for this Pokémon</p>';
         }
     }
     
@@ -431,22 +487,35 @@
             else region = "Paldea";
             
             let pokemonName = pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
-            if (pokemonData.id === 10003) pokemonName = "Ash-Greninja";
+            
+            // Korrektur für Ash-Greninja
+            if (pokemonId === 10003) {
+                pokemonName = "Ash-Greninja";
+            } else if (specialFormBase[pokemonId]) {
+                pokemonName = specialFormBase[pokemonId].displayName;
+            }
             
             document.getElementById('pokemonName').textContent = pokemonName;
             document.getElementById('pokemonImage').src = pokemonData.sprites.other['official-artwork'].front_default || pokemonData.sprites.front_default;
             
+            // Pokédex Eintrag für spezielle Formen
             let dexEntry = "No entry found";
-            try {
-                const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonData.id}`);
-                const species = await speciesRes.json();
-                for (let entry of species.flavor_text_entries) {
-                    if (entry.language.name === "en") {
-                        dexEntry = entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
-                        break;
+            if (pokemonId > 10000) {
+                dexEntry = await getPokedexEntryForSpecialForm(pokemonId, pokemonName);
+            } else {
+                try {
+                    const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonData.id}`);
+                    if (speciesRes.ok) {
+                        const species = await speciesRes.json();
+                        for (let entry of species.flavor_text_entries) {
+                            if (entry.language.name === "en") {
+                                dexEntry = entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
+                                break;
+                            }
+                        }
                     }
-                }
-            } catch(e) {}
+                } catch(e) {}
+            }
             document.getElementById('dexEntry').innerHTML = `<strong>📖 Pokédex Entry</strong><br>"${dexEntry}"`;
             
             document.getElementById('pokemonInfo').innerHTML = `
@@ -466,9 +535,10 @@
                 <div class="stat-bar"><div class="stat-fill" style="width: ${s.base_stat / 2.55}%">${s.base_stat}</div></div>
             `).join('');
             
-            await loadEvolutionTree(pokemonData.id);
+            await loadEvolutionTree(pokemonId);
             
         } catch (error) {
+            console.error('Error loading Pokémon:', error);
             document.querySelector('.container').innerHTML = '<p>❌ Error loading Pokémon. Please try again.</p>';
         }
     }
