@@ -291,7 +291,7 @@
     
     <div class="search-section">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Search Pokémon by name or ID...">
+            <input type="text" id="searchInput" placeholder="Search Pokémon by name or ID... (e.g., 'mega', 'gmax', 'ash')">
             <button onclick="searchPokemon()">Search</button>
         </div>
     </div>
@@ -334,27 +334,21 @@
     }
     document.getElementById('languageSelect').value = currentLang;
     
-    // Korrigierte spezielle Formen mit richtigen Namen
+    // Vollständige Liste aller speziellen Formen
     const specialForms = [
-        { id: 10034, name: "Mega Charizard X", searchName: "charizard-mega-x", displayName: "Mega Charizard X" },
-        { id: 10035, name: "Mega Charizard Y", searchName: "charizard-mega-y", displayName: "Mega Charizard Y" },
-        { id: 10036, name: "Mega Mewtwo X", searchName: "mewtwo-mega-x", displayName: "Mega Mewtwo X" },
-        { id: 10037, name: "Mega Mewtwo Y", searchName: "mewtwo-mega-y", displayName: "Mega Mewtwo Y" },
-        { id: 10038, name: "Mega Gengar", searchName: "gengar-mega", displayName: "Mega Gengar" },
-        { id: 10003, name: "Ash-Greninja", searchName: "greninja-ash", displayName: "Ash-Greninja" },
-        { id: 10039, name: "Mega Gyarados", searchName: "gyarados-mega", displayName: "Mega Gyarados" },
-        { id: 10040, name: "Mega Aerodactyl", searchName: "aerodactyl-mega", displayName: "Mega Aerodactyl" },
-        { id: 10041, name: "Mega Ampharos", searchName: "ampharos-mega", displayName: "Mega Ampharos" },
-        { id: 10042, name: "Mega Steelix", searchName: "steelix-mega", displayName: "Mega Steelix" },
-        { id: 10043, name: "Mega Scizor", searchName: "scizor-mega", displayName: "Mega Scizor" },
-        { id: 10044, name: "Mega Heracross", searchName: "heracross-mega", displayName: "Mega Heracross" },
-        { id: 10045, name: "Mega Houndoom", searchName: "houndoom-mega", displayName: "Mega Houndoom" },
-        { id: 10046, name: "Mega Tyranitar", searchName: "tyranitar-mega", displayName: "Mega Tyranitar" },
-        { id: 10047, name: "Mega Blaziken", searchName: "blaziken-mega", displayName: "Mega Blaziken" },
-        { id: 10048, name: "Mega Gardevoir", searchName: "gardevoir-mega", displayName: "Mega Gardevoir" },
-        { id: 10049, name: "Mega Sableye", searchName: "sableye-mega", displayName: "Mega Sableye" },
-        { id: 10050, name: "Mega Mawile", searchName: "mawile-mega", displayName: "Mega Mawile" },
-        { id: 10051, name: "Mega Aggron", searchName: "aggron-mega", displayName: "Mega Aggron" }
+        { id: 10003, name: "Ash-Greninja", searchKeys: ["ash", "greninja", "ash-greninja"], displayName: "Ash-Greninja" },
+        { id: 10034, name: "Mega Charizard X", searchKeys: ["mega", "charizard", "mega-charizard-x"], displayName: "Mega Charizard X" },
+        { id: 10035, name: "Mega Charizard Y", searchKeys: ["mega", "charizard", "mega-charizard-y"], displayName: "Mega Charizard Y" },
+        { id: 10036, name: "Mega Mewtwo X", searchKeys: ["mega", "mewtwo", "mega-mewtwo-x"], displayName: "Mega Mewtwo X" },
+        { id: 10037, name: "Mega Mewtwo Y", searchKeys: ["mega", "mewtwo", "mega-mewtwo-y"], displayName: "Mega Mewtwo Y" },
+        { id: 10038, name: "Mega Gengar", searchKeys: ["mega", "gengar", "mega-gengar"], displayName: "Mega Gengar" },
+        { id: 10039, name: "Mega Gyarados", searchKeys: ["mega", "gyarados", "mega-gyarados"], displayName: "Mega Gyarados" },
+        { id: 10040, name: "Mega Aerodactyl", searchKeys: ["mega", "aerodactyl", "mega-aerodactyl"], displayName: "Mega Aerodactyl" },
+        { id: 10072, name: "Gigantamax Charizard", searchKeys: ["gmax", "gigantamax", "charizard", "gmax-charizard"], displayName: "Gigantamax Charizard" },
+        { id: 10073, name: "Gigantamax Pikachu", searchKeys: ["gmax", "gigantamax", "pikachu", "gmax-pikachu"], displayName: "Gigantamax Pikachu" },
+        { id: 10074, name: "Gigantamax Eevee", searchKeys: ["gmax", "gigantamax", "eevee", "gmax-eevee"], displayName: "Gigantamax Eevee" },
+        { id: 10075, name: "Gigantamax Meowth", searchKeys: ["gmax", "gigantamax", "meowth", "gmax-meowth"], displayName: "Gigantamax Meowth" },
+        { id: 10076, name: "Gigantamax Gengar", searchKeys: ["gmax", "gigantamax", "gengar", "gmax-gengar"], displayName: "Gigantamax Gengar" }
     ];
     
     async function loadAllPokemon() {
@@ -364,17 +358,20 @@
             
             allPokemonData = [];
             
-            // Normale Pokémon Gen 1-6
+            // Normale Pokémon (bis ID 1025)
             for (let item of data.results) {
                 const id = parseInt(item.url.split('/').slice(-2)[0]);
-                if (id <= 721) {
+                if (id <= 1025) {
                     let gen = 1;
                     if (id <= 151) gen = 1;
                     else if (id <= 251) gen = 2;
                     else if (id <= 386) gen = 3;
                     else if (id <= 493) gen = 4;
                     else if (id <= 649) gen = 5;
-                    else gen = 6;
+                    else if (id <= 721) gen = 6;
+                    else if (id <= 809) gen = 7;
+                    else if (id <= 905) gen = 8;
+                    else gen = 9;
                     
                     allPokemonData.push({
                         id: id,
@@ -386,15 +383,17 @@
                 }
             }
             
-            // Spezielle Formen
+            // Spezielle Formen hinzufügen
             for (let special of specialForms) {
                 allPokemonData.push({
                     id: special.id,
                     name: special.displayName,
-                    searchName: special.searchName,
+                    searchKeys: special.searchKeys,
                     isSpecial: true
                 });
             }
+            
+            allPokemonData.sort((a, b) => a.id - b.id);
             
             // URL-Parameter auslesen und suchen
             const urlParams = new URLSearchParams(window.location.search);
@@ -406,6 +405,7 @@
                 document.getElementById('resultsContainer').innerHTML = `
                     <div style="text-align: center; padding: 40px;">
                         <p>Enter a Pokémon name or ID to search!</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Try: "mega", "gmax", "ash", "pikachu", "charizard"</p>
                     </div>
                 `;
             }
@@ -423,10 +423,14 @@
         const container = document.getElementById('resultsContainer');
         const lowerQuery = query.toLowerCase();
         
-        const results = allPokemonData.filter(p => 
-            p.name.toLowerCase().includes(lowerQuery) || 
-            (p.searchName && p.searchName.toLowerCase().includes(lowerQuery))
-        );
+        const results = allPokemonData.filter(p => {
+            if (p.name.toLowerCase().includes(lowerQuery)) return true;
+            if (p.searchName && p.searchName.toLowerCase().includes(lowerQuery)) return true;
+            if (p.searchKeys) {
+                return p.searchKeys.some(key => key.toLowerCase().includes(lowerQuery));
+            }
+            return false;
+        });
         
         if (results.length === 0) {
             container.innerHTML = `
@@ -441,6 +445,7 @@
                             <a href="search_results.html?q=mewtwo" class="suggestion-btn">Mewtwo</a>
                             <a href="search_results.html?q=greninja" class="suggestion-btn">Greninja</a>
                             <a href="search_results.html?q=mega" class="suggestion-btn">Mega</a>
+                            <a href="search_results.html?q=gmax" class="suggestion-btn">Gigantamax</a>
                             <a href="search_results.html?q=ash" class="suggestion-btn">Ash</a>
                         </div>
                     </div>
@@ -454,7 +459,7 @@
             ${results.map(p => `
                 <div class="result-item" onclick="location.href='pokemon_detail.html?id=${p.id}'">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png" 
-                         onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
+                         onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
                     <div class="result-info">
                         <div class="result-name">${p.name}</div>
                         <div class="result-id">#${String(p.id).padStart(p.isSpecial ? 5 : 3, '0')}</div>
