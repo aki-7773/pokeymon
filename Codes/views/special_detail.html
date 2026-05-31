@@ -593,13 +593,49 @@
             ability: "Pastel Veil",
             hp: 65, attack: 100, defense: 70, spAttack: 80, spDefense: 80, speed: 105,
             dex: "Galarian Rapidash can read the emotions of others through its horn."
+        },
+        // === HISUIAN FORMS ===
+        "58-hisuian": {
+            name: "Hisuian Growlithe",
+            types: ["fire", "rock"],
+            ability: "Intimidate",
+            hp: 60, attack: 75, defense: 45, spAttack: 65, spDefense: 50, speed: 55,
+            dex: "Hisuian Growlithe has a rocky horn and is more aggressive than its Kantonian counterpart."
+        },
+        "59-hisuian": {
+            name: "Hisuian Arcanine",
+            types: ["fire", "rock"],
+            ability: "Intimidate",
+            hp: 90, attack: 115, defense: 80, spAttack: 95, spDefense: 80, speed: 90,
+            dex: "Hisuian Arcanine's rocky fur provides excellent defense. It commands respect in Hisui."
+        },
+        "571-hisuian": {
+            name: "Hisuian Zoroark",
+            types: ["normal", "ghost"],
+            ability: "Illusion",
+            hp: 55, attack: 100, defense: 60, spAttack: 125, spDefense: 60, speed: 110,
+            dex: "Hisuian Zoroark's illusions are said to be powerful enough to create tangible copies."
         }
     };
     
-    const formKey = `${basePokemonId}-${formType}`;
+    // Bestimme den korrekten FormKey basierend auf basePokemonId und formType
+    let formKey = `${basePokemonId}-${formType}`;
     let formData = specialFormData[formKey];
     
-    // Fallback für nicht definierte Spezialformen (dynamisch aus API laden)
+    // Fallback: Versuche verschiedene Kombinationen
+    if (!formData) {
+        if (formType === 'megaX') formKey = `${basePokemonId}-mega-x`;
+        else if (formType === 'megaY') formKey = `${basePokemonId}-mega-y`;
+        else if (formType === 'mega') formKey = `${basePokemonId}-mega`;
+        else if (formType === 'gmax') formKey = `${basePokemonId}-gigantamax`;
+        else if (formType === 'primal') formKey = `${basePokemonId}-primal`;
+        else if (formType === 'alolan') formKey = `${basePokemonId}-alolan`;
+        else if (formType === 'galarian') formKey = `${basePokemonId}-galarian`;
+        else if (formType === 'hisuian') formKey = `${basePokemonId}-hisuian`;
+        formData = specialFormData[formKey];
+    }
+    
+    // Fallback für nicht definierte Spezialformen
     if (!formData) {
         formData = {
             name: formName,
@@ -646,15 +682,18 @@
         let badgeClass = 'type-badge-mega';
         let badgeText = '⚡ MEGA EVOLUTION';
         
-        if (formType === 'gmax') {
+        if (formType === 'gmax' || formKey.includes('gigantamax')) {
             badgeClass = 'type-badge-gmax';
             badgeText = '💥 GIGANTAMAX';
-        } else if (formType === 'primal') {
+        } else if (formType === 'primal' || formKey.includes('primal')) {
             badgeClass = 'type-badge-primal';
             badgeText = '🌊 PRIMAL REVERSION';
-        } else if (formType === 'regional') {
+        } else if (formType === 'alolan' || formType === 'galarian' || formType === 'hisuian' || formKey.includes('alolan') || formKey.includes('galarian') || formKey.includes('hisuian')) {
             badgeClass = 'type-badge-regional';
             badgeText = '🌍 REGIONAL FORM';
+        } else if (formType === 'megaX' || formType === 'megaY' || formType === 'mega' || formKey.includes('mega')) {
+            badgeClass = 'type-badge-mega';
+            badgeText = '⚡ MEGA EVOLUTION';
         }
         
         const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${basePokemonId}.png`;
