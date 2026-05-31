@@ -3,26 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Pokémon List - Normal Pokédex</title>
+    <title>Pokémon List - Generation 1-6</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        /* Gleiche Styles wie vorher, nur Titel geändert */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             transition: all 0.3s;
             position: relative;
         }
-        
-        body.dark-mode {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        }
-        
+        body.dark-mode { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
         body::before {
             content: "";
             position: fixed;
@@ -35,23 +27,8 @@
             pointer-events: none;
             z-index: 0;
         }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        h1 {
-            text-align: center;
-            color: white;
-            font-size: 48px;
-            margin: 25px 0;
-            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
-        }
-        
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+        h1 { text-align: center; color: white; font-size: 42px; margin: 25px 0; text-shadow: 4px 4px 8px rgba(0,0,0,0.3); }
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -63,120 +40,20 @@
             padding: 12px 20px;
             border-radius: 50px;
         }
-        
-        .back-link {
-            display: inline-block;
-            padding: 10px 22px;
-            background: rgba(0,0,0,0.4);
-            color: white;
-            text-decoration: none;
-            border-radius: 40px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .back-link:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
-        .profile-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(42,117,187,0.9);
-            color: white;
-            padding: 10px 18px;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-        
-        .profile-btn:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
-        .search-suggestions {
-            position: relative;
-            display: inline-block;
-            flex: 1;
-            max-width: 350px;
-        }
-        
-        .search-suggestions input {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 40px;
-            border: none;
-            font-size: 15px;
-            background: rgba(255,255,255,0.95);
-        }
-        
-        .suggestions-box {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 20px;
-            max-height: 350px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-            margin-top: 8px;
-        }
-        
-        .suggestions-box div {
-            padding: 12px 18px;
-            cursor: pointer;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .suggestions-box div:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
-        .control-buttons {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .dark-mode-toggle, .language-select {
-            background: #2a75bb;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .nav-btn {
-            display: inline-block;
-            padding: 10px 18px;
-            background: rgba(0,0,0,0.35);
-            color: white;
-            text-decoration: none;
-            border-radius: 40px;
-            font-weight: bold;
-        }
-        
-        .nav-btn:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
-        /* SPECIAL INFO BOX - ENGLISH ONLY */
+        .back-link { display: inline-block; padding: 10px 22px; background: rgba(0,0,0,0.4); color: white; text-decoration: none; border-radius: 40px; font-weight: bold; transition: all 0.3s; }
+        .back-link:hover { background: #ffcb05; color: #2a75bb; }
+        .profile-btn { display: flex; align-items: center; gap: 8px; background: rgba(42,117,187,0.9); color: white; padding: 10px 18px; border-radius: 40px; text-decoration: none; font-weight: bold; transition: all 0.3s; }
+        .profile-btn:hover { background: #ffcb05; color: #2a75bb; }
+        .search-suggestions { position: relative; display: inline-block; flex: 1; max-width: 350px; }
+        .search-suggestions input { width: 100%; padding: 12px 20px; border-radius: 40px; border: none; font-size: 15px; background: rgba(255,255,255,0.95); }
+        .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 20px; max-height: 350px; overflow-y: auto; z-index: 1000; display: none; margin-top: 8px; }
+        .suggestions-box div { padding: 12px 18px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
+        .suggestions-box div:hover { background: #ffcb05; color: #2a75bb; }
+        .control-buttons { display: flex; gap: 12px; align-items: center; }
+        .dark-mode-toggle, .language-select { background: #2a75bb; color: white; border: none; padding: 10px 18px; border-radius: 40px; cursor: pointer; font-weight: bold; }
+        .nav-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+        .nav-btn { display: inline-block; padding: 10px 18px; background: rgba(0,0,0,0.35); color: white; text-decoration: none; border-radius: 40px; font-weight: bold; }
+        .nav-btn:hover { background: #ffcb05; color: #2a75bb; }
         .special-info-box {
             background: linear-gradient(135deg, rgba(255,152,0,0.2), rgba(255,152,0,0.1));
             border: 2px solid #ff9800;
@@ -185,16 +62,8 @@
             margin: 20px 0;
             text-align: center;
         }
-        
-        .special-info-box p {
-            color: white;
-            font-size: 14px;
-        }
-        
-        .special-info-box strong {
-            color: #ffcb05;
-        }
-        
+        .special-info-box p { color: white; font-size: 14px; }
+        .special-info-box strong { color: #ffcb05; }
         .type-filters {
             display: flex;
             flex-wrap: wrap;
@@ -205,42 +74,17 @@
             background: rgba(255,255,255,0.92);
             border-radius: 50px;
         }
-        
-        body.dark-mode .type-filters {
-            background: rgba(0,0,0,0.75);
-        }
-        
-        .type-btn {
-            padding: 8px 18px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.25s;
-            color: white;
-            font-size: 13px;
-            text-transform: uppercase;
-        }
-        
-        .type-btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .type-btn.active {
-            box-shadow: 0 0 0 3px white, 0 0 0 5px #2a75bb;
-        }
-        
-        .type-btn.all {
-            background: #2a75bb;
-        }
-        
+        body.dark-mode .type-filters { background: rgba(0,0,0,0.75); }
+        .type-btn { padding: 8px 18px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; transition: all 0.25s; color: white; font-size: 13px; text-transform: uppercase; }
+        .type-btn:hover { transform: translateY(-2px); }
+        .type-btn.active { box-shadow: 0 0 0 3px white, 0 0 0 5px #2a75bb; }
+        .type-btn.all { background: #2a75bb; }
         .pokemon-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
             gap: 25px;
             margin-top: 25px;
         }
-        
         .pokemon-card {
             background: rgba(255,255,255,0.96);
             border-radius: 24px;
@@ -251,60 +95,15 @@
             position: relative;
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
-        
-        body.dark-mode .pokemon-card {
-            background: rgba(0,0,0,0.85);
-            color: #f0f0f0;
-        }
-        
-        .pokemon-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
-        }
-        
-        .pokemon-card img {
-            width: 130px;
-            height: 130px;
-            transition: transform 0.3s;
-        }
-        
-        .pokemon-card:hover img {
-            transform: scale(1.08);
-        }
-        
-        .pokemon-card h3 {
-            color: #2a75bb;
-            margin: 12px 0 6px;
-            font-size: 20px;
-        }
-        
-        body.dark-mode .pokemon-card h3 {
-            color: #ffcb05;
-        }
-        
-        .pokemon-number {
-            color: #777;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-        
-        .type-badges {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin: 12px 0 8px;
-            flex-wrap: wrap;
-        }
-        
-        .type-badge {
-            display: inline-block;
-            padding: 4px 14px;
-            border-radius: 25px;
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-        }
-        
+        body.dark-mode .pokemon-card { background: rgba(0,0,0,0.85); color: #f0f0f0; }
+        .pokemon-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 35px rgba(0,0,0,0.2); }
+        .pokemon-card img { width: 130px; height: 130px; transition: transform 0.3s; }
+        .pokemon-card:hover img { transform: scale(1.08); }
+        .pokemon-card h3 { color: #2a75bb; margin: 12px 0 6px; font-size: 20px; }
+        body.dark-mode .pokemon-card h3 { color: #ffcb05; }
+        .pokemon-number { color: #777; font-size: 13px; margin-bottom: 8px; }
+        .type-badges { display: flex; justify-content: center; gap: 8px; margin: 12px 0 8px; flex-wrap: wrap; }
+        .type-badge { display: inline-block; padding: 4px 14px; border-radius: 25px; color: white; font-size: 11px; font-weight: bold; }
         .favorite-btn {
             position: absolute;
             top: 12px;
@@ -321,56 +120,13 @@
             align-items: center;
             justify-content: center;
         }
-        
-        .favorite-btn.favorited {
-            color: gold;
-        }
-        
-        .gen-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #4caf50, #388e3c);
-            color: white;
-            font-size: 10px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-top: 8px;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 70px;
-            color: white;
-        }
-        
-        .loader {
-            border: 4px solid rgba(255,255,255,0.3);
-            border-top: 4px solid #ffcb05;
-            border-radius: 50%;
-            width: 55px;
-            height: 55px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .stats-info {
-            text-align: center;
-            margin: 15px 0;
-            color: rgba(255,255,255,0.9);
-            background: rgba(0,0,0,0.2);
-            display: inline-block;
-            padding: 6px 20px;
-            border-radius: 40px;
-        }
-        
-        .stats-wrapper {
-            text-align: center;
-        }
-        
+        .favorite-btn.favorited { color: gold; }
+        .gen-badge { display: inline-block; background: linear-gradient(135deg, #4caf50, #388e3c); color: white; font-size: 10px; padding: 4px 10px; border-radius: 20px; margin-top: 8px; }
+        .loading { text-align: center; padding: 70px; color: white; }
+        .loader { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #ffcb05; border-radius: 50%; width: 55px; height: 55px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .stats-info { text-align: center; margin: 15px 0; color: rgba(255,255,255,0.9); background: rgba(0,0,0,0.2); display: inline-block; padding: 6px 20px; border-radius: 40px; }
+        .stats-wrapper { text-align: center; }
         @media (max-width: 768px) {
             .container { padding: 15px; }
             h1 { font-size: 32px; }
@@ -384,11 +140,12 @@
 </head>
 <body>
 <div class="container">
-    <h1>🌟 Pokémon Database 🌟</h1>
+    <h1>🌟 Generation 1-6 Pokédex 🌟</h1>
     
     <div class="top-bar">
         <a href="start.html" class="back-link">🏠 Home</a>
         <a href="profile.html" class="profile-btn">👤 Profile</a>
+        <a href="pokemon_list_gen7plus.html" class="back-link">🌟 Gen 7-9</a>
         
         <div class="search-suggestions">
             <input type="text" id="searchInput" placeholder="🔍 Search Pokémon...">
@@ -411,7 +168,7 @@
         </div>
     </div>
     
-    <!-- SPECIAL INFO BOX - ENGLISH ONLY -->
+    <!-- SPECIAL INFO BOX -->
     <div class="special-info-box">
         <p>✨ <strong>Special Forms (Mega Evolution, Gigantamax, Regional Forms)</strong> ✨</p>
         <p>➡️ These special forms can be found on the <strong>detail pages of normal Pokémon</strong>!<br>
@@ -471,7 +228,8 @@
             
             for (const item of data.results) {
                 const pokeId = parseInt(item.url.split('/').slice(-2)[0]);
-                if (pokeId <= 1025 && pokeId < 10000) {
+                // NUR Gen 1-6 (IDs 1-721) und keine Specials
+                if (pokeId <= 721 && pokeId < 10000) {
                     let generation = 1;
                     if (pokeId <= 151) generation = 1;
                     else if (pokeId <= 251) generation = 2;
@@ -479,9 +237,6 @@
                     else if (pokeId <= 493) generation = 4;
                     else if (pokeId <= 649) generation = 5;
                     else if (pokeId <= 721) generation = 6;
-                    else if (pokeId <= 809) generation = 7;
-                    else if (pokeId <= 905) generation = 8;
-                    else generation = 9;
                     
                     try {
                         const detailsResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`);
@@ -578,7 +333,11 @@
     }
     
     function navigateToDetail(pokemonId) {
-        window.location.href = `pokemon_detail.html?id=${pokemonId}`;
+        if (pokemonId <= 721) {
+            window.location.href = `pokemon_detail.html?id=${pokemonId}`;
+        } else {
+            window.location.href = `pokemon_detail_api.html?id=${pokemonId}`;
+        }
     }
     
     function toggleDarkMode() {
