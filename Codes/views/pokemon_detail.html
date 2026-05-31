@@ -204,565 +204,153 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
-        body.dark-mode .info-card {
-            background: rgba(30,30,40,0.9);
-        }
-        
-        .info-label {
-            font-weight: bold;
-            color: #2a75bb;
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-        
-        body.dark-mode .info-label {
-            color: #ffcb05;
-        }
-        
-        .info-value {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #2a75bb;
-            margin-bottom: 12px;
-            border-left: 4px solid #ffcb05;
-            padding-left: 15px;
-        }
-        
-        body.dark-mode .section-title {
-            color: #ffcb05;
-        }
-        
-        .type-badge-list, .ability-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            list-style: none;
-            padding: 0;
-            margin: 15px 0 20px;
-        }
-        
-        .type-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 40px;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .ability-item {
-            background: #e8e8e8;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-weight: 500;
-        }
-        
-        body.dark-mode .ability-item {
-            background: #3a3a4a;
-            color: #eee;
-        }
-        
-        .stats-container {
-            margin: 25px 0;
-        }
-        
-        .stat-row {
-            margin: 14px 0;
-        }
-        
-        .stat-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: inline-block;
-            width: 100px;
-        }
-        
-        .stat-bar-bg {
-            background: #e0e0e0;
-            border-radius: 20px;
-            height: 28px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-        
-        body.dark-mode .stat-bar-bg {
-            background: #3a3a4a;
-        }
-        
-        .stat-bar-fill {
-            background: linear-gradient(90deg, #2a75bb, #4a95db);
-            height: 100%;
-            color: white;
-            line-height: 28px;
-            padding-left: 12px;
-            font-weight: bold;
-            border-radius: 20px;
-            transition: width 0.5s ease;
-        }
-        
-        .dex-entry {
-            background: #f5f0e8;
-            padding: 20px;
-            border-radius: 24px;
-            margin: 25px 0;
-            font-style: italic;
-            line-height: 1.6;
-            border-left: 5px solid #ffcb05;
-        }
-        
-        body.dark-mode .dex-entry {
-            background: #2a2a3a;
-            color: #ddd;
-        }
-        
-        .evolution-section {
-            margin: 25px 0;
-            padding: 20px;
-            background: #f0f0f0;
-            border-radius: 24px;
-        }
-        
-        body.dark-mode .evolution-section {
-            background: #2a2a3a;
-        }
-        
-        .evolution-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .evolution-chain {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .evolution-node {
-            text-align: center;
-            min-width: 110px;
-        }
-        
-        .evolution-node img {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            background: white;
-            padding: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .evolution-node a {
-            display: block;
-            margin-top: 8px;
-            text-decoration: none;
-            color: #2a75bb;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        
-        body.dark-mode .evolution-node a {
-            color: #ffcb05;
-        }
-        
-        .evolution-arrow {
-            font-size: 28px;
-            color: #2a75bb;
-            font-weight: bold;
-        }
-        
-        .special-badge {
-            background: #ff9800;
-            color: white;
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-left: 10px;
-            display: inline-block;
-        }
-        
-        .loader-small {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #ffcb05;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        
-        .back-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: #ffcb05;
-            color: #2a75bb;
-            text-decoration: none;
-            border-radius: 40px;
-            font-weight: bold;
-            transition: all 0.3s;
-            text-align: center;
-        }
-        
-        .back-button:hover {
-            background: #f5b700;
-            transform: translateY(-2px);
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 15px;
-            }
-            .container {
-                padding: 20px;
-            }
-            .nav-prev, .nav-next {
-                width: 45px;
-                height: 70px;
-                font-size: 32px;
-            }
-            .nav-prev { left: 5px; }
-            .nav-next { right: 5px; }
-            .pokemon-image {
-                width: 200px;
-                height: 200px;
-            }
-            .info-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            .evolution-chain {
-                gap: 12px;
-            }
-            .evolution-node img {
-                width: 65px;
-                height: 65px;
-            }
-            .evolution-arrow {
-                font-size: 20px;
-            }
-        }
-    </style>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pokémon Detail</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 20px;
+}
+
+img {
+    width: 200px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+    margin: 3px;
+    color: white;
+    font-size: 12px;
+}
+
+.section {
+    margin-top: 20px;
+    padding: 10px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+
+.stat {
+    margin: 5px 0;
+}
+
+.back {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 15px;
+    background: #ffcb05;
+    color: black;
+    text-decoration: none;
+    border-radius: 10px;
+}
+</style>
 </head>
+
 <body>
-<div class="control-buttons">
-    <button class="dark-mode-toggle" id="darkModeBtn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
-    <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
-        <option value="en">🇬🇧 English</option>
-        <option value="de">🇩🇪 Deutsch</option>
-        <option value="fr">🇫🇷 Français</option>
-        <option value="es">🇪🇸 Español</option>
-        <option value="ja">🇯🇵 日本語</option>
-        <option value="zh">🇨🇳 中文</option>
-    </select>
-</div>
 
-<button class="nav-prev" onclick="navigatePrev()">◀</button>
-<button class="nav-next" onclick="navigateNext()">▶</button>
-
-<div class="container" id="mainContainer">
-    <div class="loader-small" style="margin: 60px auto;"></div>
-    <p style="text-align: center;">Loading Pokémon data...</p>
+<div class="container" id="content">
+    Loading...
 </div>
 
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    let currentPokemonId = parseInt(urlParams.get('id')) || 25;
-    let pokemonData = null;
-    let speciesData = null;
-    
-    const typeColors = {
-        normal: "#A8A77A", fire: "#EE8130", water: "#6390F0",
-        electric: "#F7D02C", grass: "#7AC74C", ice: "#96D9D6",
-        fighting: "#C22E28", poison: "#A33EA1", ground: "#E2BF65",
-        flying: "#A98FF3", psychic: "#F95587", bug: "#A6B91A",
-        rock: "#B6A136", ghost: "#735797", dragon: "#6F35FC",
-        dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
-    };
-    
-    // Vollständiges Mapping für alle speziellen Formen (mit Regionszuordnung)
-    const specialFormMapping = {
-        // Ash-Greninja (Gen 6 - Kalos)
-        10003: { baseId: 658, baseName: "greninja", displayName: "Ash-Greninja", region: "Kalos", regionId: 6, category: "ash" },
-        // Megas (Gen 6 - Kalos)
-        10034: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard X", region: "Kalos", regionId: 6, category: "mega" },
-        10035: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard Y", region: "Kalos", regionId: 6, category: "mega" },
-        10036: { baseId: 150, baseName: "mewtwo", displayName: "Mega Mewtwo X", region: "Kalos", regionId: 6, category: "mega" },
-        10037: { baseId: 150, baseName: "mewtwo", displayName: "Mega Mewtwo Y", region: "Kalos", regionId: 6, category: "mega" },
-        10038: { baseId: 94, baseName: "gengar", displayName: "Mega Gengar", region: "Kalos", regionId: 6, category: "mega" },
-        10039: { baseId: 130, baseName: "gyarados", displayName: "Mega Gyarados", region: "Kalos", regionId: 6, category: "mega" },
-        10040: { baseId: 142, baseName: "aerodactyl", displayName: "Mega Aerodactyl", region: "Kalos", regionId: 6, category: "mega" },
-        10041: { baseId: 181, baseName: "ampharos", displayName: "Mega Ampharos", region: "Kalos", regionId: 6, category: "mega" },
-        10042: { baseId: 208, baseName: "steelix", displayName: "Mega Steelix", region: "Kalos", regionId: 6, category: "mega" },
-        10043: { baseId: 212, baseName: "scizor", displayName: "Mega Scizor", region: "Kalos", regionId: 6, category: "mega" },
-        10044: { baseId: 214, baseName: "heracross", displayName: "Mega Heracross", region: "Kalos", regionId: 6, category: "mega" },
-        10045: { baseId: 229, baseName: "houndoom", displayName: "Mega Houndoom", region: "Kalos", regionId: 6, category: "mega" },
-        10046: { baseId: 248, baseName: "tyranitar", displayName: "Mega Tyranitar", region: "Kalos", regionId: 6, category: "mega" },
-        10047: { baseId: 257, baseName: "blaziken", displayName: "Mega Blaziken", region: "Kalos", regionId: 6, category: "mega" },
-        10048: { baseId: 282, baseName: "gardevoir", displayName: "Mega Gardevoir", region: "Kalos", regionId: 6, category: "mega" },
-        10049: { baseId: 302, baseName: "sableye", displayName: "Mega Sableye", region: "Kalos", regionId: 6, category: "mega" },
-        10050: { baseId: 303, baseName: "mawile", displayName: "Mega Mawile", region: "Kalos", regionId: 6, category: "mega" },
-        10051: { baseId: 306, baseName: "aggron", displayName: "Mega Aggron", region: "Kalos", regionId: 6, category: "mega" },
-        10052: { baseId: 308, baseName: "medicham", displayName: "Mega Medicham", region: "Kalos", regionId: 6, category: "mega" },
-        10053: { baseId: 310, baseName: "manectric", displayName: "Mega Manectric", region: "Kalos", regionId: 6, category: "mega" },
-        10054: { baseId: 319, baseName: "sharpedo", displayName: "Mega Sharpedo", region: "Kalos", regionId: 6, category: "mega" },
-        10055: { baseId: 323, baseName: "camerupt", displayName: "Mega Camerupt", region: "Kalos", regionId: 6, category: "mega" },
-        10056: { baseId: 334, baseName: "altaria", displayName: "Mega Altaria", region: "Kalos", regionId: 6, category: "mega" },
-        10057: { baseId: 354, baseName: "banette", displayName: "Mega Banette", region: "Kalos", regionId: 6, category: "mega" },
-        10058: { baseId: 359, baseName: "absol", displayName: "Mega Absol", region: "Kalos", regionId: 6, category: "mega" },
-        10059: { baseId: 362, baseName: "glalie", displayName: "Mega Glalie", region: "Kalos", regionId: 6, category: "mega" },
-        10060: { baseId: 373, baseName: "salamence", displayName: "Mega Salamence", region: "Kalos", regionId: 6, category: "mega" },
-        10061: { baseId: 376, baseName: "metagross", displayName: "Mega Metagross", region: "Kalos", regionId: 6, category: "mega" },
-        10062: { baseId: 380, baseName: "latias", displayName: "Mega Latias", region: "Kalos", regionId: 6, category: "mega" },
-        10063: { baseId: 381, baseName: "latios", displayName: "Mega Latios", region: "Kalos", regionId: 6, category: "mega" },
-        10064: { baseId: 384, baseName: "rayquaza", displayName: "Mega Rayquaza", region: "Kalos", regionId: 6, category: "mega" },
-        10065: { baseId: 428, baseName: "lopunny", displayName: "Mega Lopunny", region: "Kalos", regionId: 6, category: "mega" },
-        10066: { baseId: 445, baseName: "garchomp", displayName: "Mega Garchomp", region: "Kalos", regionId: 6, category: "mega" },
-        10067: { baseId: 448, baseName: "lucario", displayName: "Mega Lucario", region: "Kalos", regionId: 6, category: "mega" },
-        10068: { baseId: 460, baseName: "abomasnow", displayName: "Mega Abomasnow", region: "Kalos", regionId: 6, category: "mega" },
-        10069: { baseId: 475, baseName: "gallade", displayName: "Mega Gallade", region: "Kalos", regionId: 6, category: "mega" },
-        10070: { baseId: 531, baseName: "audino", displayName: "Mega Audino", region: "Kalos", regionId: 6, category: "mega" },
-        10071: { baseId: 719, baseName: "diancie", displayName: "Mega Diancie", region: "Kalos", regionId: 6, category: "mega" },
-        // Primals (Gen 3 - Hoenn)
-        10080: { baseId: 382, baseName: "kyogre", displayName: "Primal Kyogre", region: "Hoenn", regionId: 3, category: "primal" },
-        10081: { baseId: 383, baseName: "groudon", displayName: "Primal Groudon", region: "Hoenn", regionId: 3, category: "primal" },
-        // Gigantamax (Gen 8 - Galar)
-        10072: { baseId: 6, baseName: "charizard", displayName: "Gigantamax Charizard", region: "Galar", regionId: 8, category: "gmax" },
-        10073: { baseId: 25, baseName: "pikachu", displayName: "Gigantamax Pikachu", region: "Galar", regionId: 8, category: "gmax" },
-        10074: { baseId: 133, baseName: "eevee", displayName: "Gigantamax Eevee", region: "Galar", regionId: 8, category: "gmax" },
-        10075: { baseId: 52, baseName: "meowth", displayName: "Gigantamax Meowth", region: "Galar", regionId: 8, category: "gmax" },
-        10076: { baseId: 94, baseName: "gengar", displayName: "Gigantamax Gengar", region: "Galar", regionId: 8, category: "gmax" },
-        10077: { baseId: 131, baseName: "lapras", displayName: "Gigantamax Lapras", region: "Galar", regionId: 8, category: "gmax" },
-        10078: { baseId: 143, baseName: "snorlax", displayName: "Gigantamax Snorlax", region: "Galar", regionId: 8, category: "gmax" },
-        10079: { baseId: 68, baseName: "machamp", displayName: "Gigantamax Machamp", region: "Galar", regionId: 8, category: "gmax" }
-    };
-    
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-        const btn = document.getElementById('darkModeBtn');
-        btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+const typeColors = {
+    normal: "#A8A878", fire: "#F08030", water: "#6890F0",
+    electric: "#F8D030", grass: "#78C850", ice: "#98D8D8",
+    fighting: "#C03028", poison: "#A040A0", ground: "#E0C068",
+    flying: "#A890F0", psychic: "#F85888", bug: "#A8B820",
+    rock: "#B8A038", ghost: "#705898", dragon: "#7038F8",
+    dark: "#705848", steel: "#B8B8D0", fairy: "#EE99AC"
+};
+
+function getIdFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("id");
+}
+
+async function loadPokemon() {
+    const id = getIdFromUrl();
+
+    // 1️⃣ POKÉMON (FORM / SPRITE / STATS)
+    const pRes = await fetch(`/api/pokemon/${id}`);
+    const pokemon = await pRes.json();
+
+    // 2️⃣ SPECIES (POKÉDEX TEXT / EVOLUTION)
+    const sRes = await fetch(`/api/pokemon-species/${pokemon.species.name}`);
+    const species = await sRes.json();
+
+    const name = pokemon.name.toUpperCase();
+
+    // IMAGE FIX (important for forms)
+    const image =
+        pokemon.sprites.other?.["official-artwork"]?.front_default ||
+        pokemon.sprites.front_default;
+
+    // Pokédex Entry (English fix)
+    let entry = "No entry found";
+
+    if (species.flavor_text_entries) {
+        const enEntry = species.flavor_text_entries.find(
+            e => e.language.name === "en"
+        );
+        if (enEntry) entry = enEntry.flavor_text.replace(/\f/g, " ");
     }
-    
-    function changeLanguage(lang) {
-        localStorage.setItem('language', lang);
-        document.getElementById('languageSelect').value = lang;
-    }
-    
-    if (localStorage.getItem('darkMode') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-    }
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
-    
-    function navigatePrev() {
-        let newId = currentPokemonId - 1;
-        if (newId < 1) newId = 1025;
-        window.location.href = `pokemon_detail.html?id=${newId}`;
-    }
-    
-    function navigateNext() {
-        let newId = currentPokemonId + 1;
-        if (newId > 1025) newId = 1;
-        window.location.href = `pokemon_detail.html?id=${newId}`;
-    }
-    
-    async function playCry() {
-        if (!pokemonData) return;
-        try {
-            const cryUrl = pokemonData.cries?.latest || pokemonData.cries?.legacy;
-            if (cryUrl) {
-                const audio = new Audio(cryUrl);
-                audio.volume = 0.3;
-                await audio.play();
-            }
-        } catch(e) { console.log('Cry playback failed:', e); }
-    }
-    
-    async function loadEvolutionTree(baseId, specialInfo = null) {
-        const evolutionContainer = document.getElementById('evolutionTree');
-        if (!evolutionContainer) return;
-        evolutionContainer.innerHTML = '<div class="loader-small"></div><p style="text-align:center;">Loading evolution chain...</p>';
-        
-        try {
-            const speciesResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${baseId}`);
-            if (!speciesResponse.ok) throw new Error('Species not found');
-            const species = await speciesResponse.json();
-            const chainResponse = await fetch(species.evolution_chain.url);
-            const chainData = await chainResponse.json();
-            
-            let evolutionNames = [];
-            let current = chainData.chain;
-            function collectEvolutions(chain, list) {
-                list.push(chain.species.name);
-                if (chain.evolves_to && chain.evolves_to.length > 0) {
-                    for (let evo of chain.evolves_to) collectEvolutions(evo, list);
-                }
-            }
-            collectEvolutions(current, evolutionNames);
-            evolutionNames = [...new Set(evolutionNames)];
-            
-            const evolutionDetails = [];
-            for (const name of evolutionNames) {
-                try {
-                    const pokeRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-                    const pokeData = await pokeRes.json();
-                    evolutionDetails.push({ id: pokeData.id, name: name.charAt(0).toUpperCase() + name.slice(1) });
-                } catch(e) {}
-            }
-            
-            let html = '<div class="evolution-title">🌳 Evolution Tree</div><div class="evolution-chain">';
-            for (let i = 0; i < evolutionDetails.length; i++) {
-                const evo = evolutionDetails[i];
-                html += `<div class="evolution-node"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evo.id}.png'"><a href="pokemon_detail.html?id=${evo.id}">${evo.name}</a></div>`;
-                if (i < evolutionDetails.length - 1) html += '<div class="evolution-arrow">→</div>';
-            }
-            // Falls es sich um eine spezielle Form handelt, hänge diese am Ende an
-            if (specialInfo && currentPokemonId > 10000) {
-                html += `<div class="evolution-arrow">→</div>`;
-                html += `<div class="evolution-node"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${currentPokemonId}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'"><div><strong>${specialInfo.displayName}</strong></div><div class="special-badge">Special Form</div></div>`;
-            }
-            html += '</div>';
-            if (evolutionDetails.length === 0 && !specialInfo) html = '<p>No evolution data available for this Pokémon.</p>';
-            evolutionContainer.innerHTML = html;
-        } catch(error) {
-            evolutionContainer.innerHTML = '<p>⚠️ Evolution data could not be loaded.</p>';
-        }
-    }
-    
-    async function loadPokedexEntry(speciesId, customName = null) {
-        try {
-            const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${speciesId}`);
-            if (!response.ok) return "No Pokédex entry available.";
-            const data = await response.json();
-            for (const entry of data.flavor_text_entries) {
-                if (entry.language.name === "en") {
-                    let text = entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
-                    if (customName) {
-                        const originalName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
-                        text = text.replace(originalName, customName);
-                    }
-                    return text;
-                }
-            }
-            return "No English Pokédex entry found.";
-        } catch(e) { return "Unable to load Pokédex entry."; }
-    }
-    
-    async function loadPokemonDetail() {
-        const container = document.getElementById('mainContainer');
-        container.innerHTML = '<div class="loader-small" style="margin: 60px auto;"></div><p style="text-align: center;">Loading Pokémon data...</p>';
-        
-        try {
-            const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${currentPokemonId}`);
-            if (!pokemonResponse.ok) throw new Error('Pokémon not found');
-            pokemonData = await pokemonResponse.json();
-            currentPokemonId = pokemonData.id;
-            
-            const isSpecial = currentPokemonId > 10000;
-            let displayName = pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
-            let baseSpeciesId = currentPokemonId;
-            let specialInfo = null;
-            let specialBadge = "";
-            let region = "Unknown";
-            
-            if (isSpecial && specialFormMapping[currentPokemonId]) {
-                specialInfo = specialFormMapping[currentPokemonId];
-                displayName = specialInfo.displayName;
-                baseSpeciesId = specialInfo.baseId;
-                region = specialInfo.region;
-                if (specialInfo.category === "mega") specialBadge = '<span class="special-badge">Mega Evolution</span>';
-                else if (specialInfo.category === "primal") specialBadge = '<span class="special-badge">Primal Reversion</span>';
-                else if (specialInfo.category === "gmax") specialBadge = '<span class="special-badge">Gigantamax</span>';
-                else if (specialInfo.category === "ash") specialBadge = '<span class="special-badge">Bond Phenomenon</span>';
-                else specialBadge = '<span class="special-badge">Special Form</span>';
-            } else {
-                // Normale Region bestimmen
-                if (pokemonData.id <= 151) region = "Kanto";
-                else if (pokemonData.id <= 251) region = "Johto";
-                else if (pokemonData.id <= 386) region = "Hoenn";
-                else if (pokemonData.id <= 493) region = "Sinnoh";
-                else if (pokemonData.id <= 649) region = "Unova";
-                else if (pokemonData.id <= 721) region = "Kalos";
-                else if (pokemonData.id <= 809) region = "Alola";
-                else if (pokemonData.id <= 905) region = "Galar";
-                else region = "Paldea";
-            }
-            
-            const pokedexText = await loadPokedexEntry(baseSpeciesId, isSpecial ? displayName : null);
-            
-            const stats = {
-                hp: pokemonData.stats[0].base_stat,
-                attack: pokemonData.stats[1].base_stat,
-                defense: pokemonData.stats[2].base_stat,
-                spAttack: pokemonData.stats[3].base_stat,
-                spDefense: pokemonData.stats[4].base_stat,
-                speed: pokemonData.stats[5].base_stat
-            };
-            const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
-            
-            container.innerHTML = `
-                <div class="pokemon-header">
-                    <h1>${displayName} ${specialBadge}</h1>
-                    <div class="pokemon-id">#${String(pokemonData.id).padStart(isSpecial ? 5 : 3, '0')}${isSpecial ? ' ⭐ Special Form' : ''}</div>
-                </div>
-                <div class="pokemon-image-container">
-                    <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonData.id}.png" 
-                         alt="${displayName}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
-                </div>
-                <div class="action-buttons">
-                    <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
-                    <button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
-                </div>
-                <div class="info-grid">
-                    <div class="info-card"><div class="info-label">📏 Height</div><div class="info-value">${pokemonData.height / 10} m</div></div>
-                    <div class="info-card"><div class="info-label">⚖️ Weight</div><div class="info-value">${pokemonData.weight / 10} kg</div></div>
-                    <div class="info-card"><div class="info-label">🎮 Base Exp</div><div class="info-value">${pokemonData.base_experience}</div></div>
-                    <div class="info-card"><div class="info-label">🗺️ Region</div><div class="info-value">${region}</div></div>
-                </div>
-                <div class="section-title">🌈 Types</div>
-                <ul class="type-badge-list">${pokemonData.types.map(t => `<li class="type-badge" style="background: ${typeColors[t.type.name]}">${t.type.name.toUpperCase()}</li>`).join('')}</ul>
-                <div class="section-title">✨ Abilities</div>
-                <ul class="ability-list">${pokemonData.abilities.map(a => `<li class="ability-item">${a.ability.name.replace("-", " ").toUpperCase()}${a.is_hidden ? ' (Hidden)' : ''}</li>`).join('')}</ul>
-                <div class="stats-container">
-                    <div class="section-title">📊 Base Stats</div>
-                    <div class="stat-row"><span class="stat-name">❤️ HP</span> ${stats.hp}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.hp/255)*100}%">${stats.hp}</div></div></div>
-                    <div class="stat-row"><span class="stat-name">⚔️ Attack</span> ${stats.attack}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.attack/255)*100}%">${stats.attack}</div></div></div>
-                    <div class="stat-row"><span class="stat-name">🛡️ Defense</span> ${stats.defense}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.defense/255)*100}%">${stats.defense}</div></div></div>
-                    <div class="stat-row"><span class="stat-name">🔮 Sp. Attack</span> ${stats.spAttack}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.spAttack/255)*100}%">${stats.spAttack}</div></div></div>
-                    <div class="stat-row"><span class="stat-name">✨ Sp. Defense</span> ${stats.spDefense}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.spDefense/255)*100}%">${stats.spDefense}</div></div></div>
-                    <div class="stat-row"><span class="stat-name">⚡ Speed</span> ${stats.speed}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.speed/255)*100}%">${stats.speed}</div></div></div>
-                    <div class="stat-row" style="margin-top:15px; border-top:2px solid #ffcb05; padding-top:10px;"><span class="stat-name">⭐ Total</span> <strong>${totalStats}</strong></div>
-                </div>
-                <div class="dex-entry"><strong>📖 Pokédex Entry</strong><br>"${pokedexText}"</div>
-                <div class="evolution-section" id="evolutionTree"><div class="evolution-title">🌳 Evolution Tree</div><div class="loader-small"></div></div>
-                <div style="text-align: center;"><a href="pokemon_list.html" class="back-button">← Back to Pokédex</a> <a href="start.html" class="back-button" style="margin-left: 15px;">🏠 Home</a></div>
-            `;
-            
-            await loadEvolutionTree(baseSpeciesId, specialInfo);
-            
-        } catch(error) {
-            console.error('Error loading Pokémon:', error);
-            container.innerHTML = `<div style="text-align: center; padding: 50px;"><h2>❌ Pokémon not found!</h2><p>The Pokémon with ID ${currentPokemonId} does not exist.</p><a href="pokemon_list.html" class="back-button">← Back to Pokédex</a></div>`;
-        }
-    }
-    
-    loadPokemonDetail();
+
+    // TYPES
+    const types = pokemon.types.map(t =>
+        `<span class="badge" style="background:${typeColors[t.type.name]}">
+        ${t.type.name.toUpperCase()}
+        </span>`
+    ).join("");
+
+    // STATS
+    const stats = pokemon.stats.map(s =>
+        `<div class="stat">${s.stat.name.toUpperCase()}: ${s.base_stat}</div>`
+    ).join("");
+
+    document.getElementById("content").innerHTML = `
+        <h1>${name}</h1>
+        <h3>#${pokemon.id}</h3>
+
+        <img src="${image}">
+
+        <div class="section">
+            <h3>Types</h3>
+            ${types}
+        </div>
+
+        <div class="section">
+            <h3>Stats</h3>
+            ${stats}
+        </div>
+
+        <div class="section">
+            <h3>Pokédex Entry</h3>
+            <p>${entry}</p>
+        </div>
+
+        <a class="back" href="pokemon_list.html">← Back</a>
+    `;
+}
+
+loadPokemon();
 </script>
+
 </body>
 </html>
