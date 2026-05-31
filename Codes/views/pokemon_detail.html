@@ -20,7 +20,7 @@ body.dark{
 .topbar{
     position:fixed;
     top:10px;
-    left:10px;
+    right:10px;
     display:flex;
     gap:8px;
     z-index:1000;
@@ -31,52 +31,77 @@ body.dark{
     margin:auto;
     margin-top:70px;
     background:rgba(0,0,0,0.4);
-    padding:20px;
+    padding:25px;
     border-radius:20px;
 }
 
-img{
-    width:220px;
+img{ width:220px; }
+
+.title{
+    font-size:32px;
+    font-weight:bold;
 }
 
+.sub{
+    opacity:0.8;
+    margin-bottom:10px;
+}
+
+/* NAV */
 .navRow{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin:10px 0;
+    margin:15px 0;
 }
 
+.navBtn{
+    font-size:34px;
+    padding:10px 20px;
+}
+
+/* CENTER */
 .centerCol{
     display:flex;
     flex-direction:column;
     align-items:center;
+    gap:10px;
 }
 
+/* SECTIONS */
 .section{
     margin-top:15px;
-    padding:10px;
+    padding:12px;
     background:rgba(255,255,255,0.08);
-    border-radius:10px;
+    border-radius:12px;
 }
 
+/* TABLE STYLE */
+.table{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.12);
+}
+
+/* BADGE */
 .badge{
     padding:6px 10px;
     border-radius:20px;
     margin:3px;
     display:inline-block;
     font-size:12px;
+    background:rgba(255,255,255,0.2);
 }
 
-button,a,select{
-    padding:10px 12px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-    background:#ffcb05;
-    color:black;
-    text-decoration:none;
-}
-
+/* EVO */
 .evoBox{
     display:flex;
     justify-content:center;
@@ -91,6 +116,21 @@ button,a,select{
 
 .evoItem img{
     width:100px;
+    transition:0.2s;
+}
+
+.evoItem:hover img{
+    transform:scale(1.1);
+}
+
+button,a,select{
+    padding:10px 12px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    background:#ffcb05;
+    color:black;
+    text-decoration:none;
 }
 </style>
 </head>
@@ -116,31 +156,20 @@ button,a,select{
 
 const id = Number(new URLSearchParams(location.search).get("id")) || 1;
 
-// GEN LIMIT
 if(id > 721){
     document.getElementById("content").innerHTML =
-        "<h2>❌ Only Gen 1–6 supported</h2>";
+        "<h2>Only Gen 1–6 supported</h2>";
     throw new Error("Gen limit");
 }
 
-const typeColors = {
- normal:"#A8A878", fire:"#F08030", water:"#6890F0",
- electric:"#F8D030", grass:"#78C850", ice:"#98D8D8",
- fighting:"#C03028", poison:"#A040A0", ground:"#E0C068",
- flying:"#A890F0", psychic:"#F85888", bug:"#A8B820",
- rock:"#B8A038", ghost:"#705898", dragon:"#7038F8",
- dark:"#705848", steel:"#B8B8D0", fairy:"#EE99AC"
-};
-
-// 🌍 LANGUAGE
 let lang = localStorage.getItem("lang") || "en";
+
 function setLang(l){
     lang = l;
     localStorage.setItem("lang", l);
     load();
 }
 
-// 🌙 DARK MODE
 if(localStorage.getItem("dark")==="true")
     document.body.classList.add("dark");
 
@@ -149,7 +178,6 @@ function toggleDark(){
     localStorage.setItem("dark", document.body.classList.contains("dark"));
 }
 
-// ◀ ▶ NAV
 function nav(x){
     let newId = id + x;
     if(newId < 1) newId = 721;
@@ -157,17 +185,14 @@ function nav(x){
     location.href = `?id=${newId}`;
 }
 
-// 🔊 CRY
 function playCry(url){
     if(url) new Audio(url).play();
 }
 
-// TEXT FIX
 function fix(t){
     return t ? t.replace(/\f/g," ").replace(/\n/g," ") : "No entry";
 }
 
-// REGION
 function region(id){
     if(id<=151) return "Kanto";
     if(id<=251) return "Johto";
@@ -177,119 +202,125 @@ function region(id){
     return "Kalos";
 }
 
-// 🌳 EVOLUTION (CLICKABLE)
+/* EVOLUTION FIX (FULL TREE + REAL CHECK) */
 async function loadEvolution(species){
-    try{
-        const s = await fetch(`/api/pokemon-species/${species}`).then(r=>r.json());
-        const chain = await fetch(s.evolution_chain.url).then(r=>r.json());
+    const s = await fetch(`/api/pokemon-species/${species}`).then(r=>r.json());
+    const evo = await fetch(s.evolution_chain.url).then(r=>r.json());
 
-        let list = [];
+    let list = [];
 
-        function walk(c){
-            list.push(c.species.name);
-            c.evolves_to.forEach(walk);
-        }
-
-        walk(chain.chain);
-
-        const html = await Promise.all(list.map(async name=>{
-            const p = await fetch(`/api/pokemon/${name}`).then(r=>r.json());
-
-            return `
-            <div class="evoItem" onclick="location.href='?id=${p.id}'">
-                <img src="${p.sprites.front_default}">
-                <div>${name}</div>
-            </div>`;
-        }));
-
-        document.getElementById("evo").innerHTML =
-            `<div class="evoBox">${html.join("")}</div>`;
-
-    } catch(e){
-        document.getElementById("evo").innerHTML = "";
+    function walk(node){
+        list.push(node.species.name);
+        node.evolves_to.forEach(walk);
     }
+
+    walk(evo.chain);
+
+    if(list.length <= 1){
+        const p = await fetch(`/api/pokemon/${species}`).then(r=>r.json());
+
+        document.getElementById("evo").innerHTML = `
+            <div class="section">
+                <h3>Evolution Tree</h3>
+                <img src="${p.sprites.front_default}">
+                <p>This Pokémon does not evolve.</p>
+            </div>
+        `;
+        return;
+    }
+
+    const html = await Promise.all(list.map(async name=>{
+        const p = await fetch(`/api/pokemon/${name}`).then(r=>r.json());
+
+        return `
+        <div class="evoItem" onclick="location.href='?id=${p.id}'">
+            <img src="${p.sprites.front_default}">
+            <div>${name}</div>
+        </div>`;
+    }));
+
+    document.getElementById("evo").innerHTML = `
+        <div class="section">
+            <h3>Evolution Tree</h3>
+            <div class="evoBox">${html.join("")}</div>
+        </div>
+    `;
 }
 
-// MAIN
 async function load(){
-    try{
+    const p = await fetch(`/api/pokemon/${id}`).then(r=>r.json());
+    const s = await fetch(`/api/pokemon-species/${p.species.name}`).then(r=>r.json());
 
-        const p = await fetch(`/api/pokemon/${id}`).then(r=>r.json());
-        const s = await fetch(`/api/pokemon-species/${p.species.name}`).then(r=>r.json());
+    const entryObj =
+        s.flavor_text_entries.find(e=>e.language.name===lang)
+        || s.flavor_text_entries.find(e=>e.language.name==="en");
 
-        const entryObj = s.flavor_text_entries.find(e=>e.language.name===lang)
-            || s.flavor_text_entries.find(e=>e.language.name==="en");
+    const entry = fix(entryObj?.flavor_text);
 
-        const entry = fix(entryObj?.flavor_text);
+    const types = p.types.map(t=>
+        `<span class="badge">${t.type.name.toUpperCase()}</span>`
+    ).join("");
 
-        const types = p.types.map(t=>
-            `<span class="badge" style="background:${typeColors[t.type.name]}">
-                ${t.type.name.toUpperCase()}
-            </span>`
-        ).join("");
+    const abilities = p.abilities.map(a=>
+        `<div class="row"><b>Ability</b><span>${a.ability.name.toUpperCase()}</span></div>`
+    ).join("");
 
-        const abilities = p.abilities.map(a=>
-            `<div>${a.ability.name.toUpperCase()}</div>`
-        ).join("");
+    const stats = p.stats.map(x=>
+        `<div class="row"><b>${x.stat.name.toUpperCase()}</b><span>${x.base_stat}</span></div>`
+    ).join("");
 
-        const stats = p.stats.map(x=>
-            `<div>${x.stat.name.toUpperCase()}: ${x.base_stat}</div>`
-        ).join("");
+    const cry = p.cries?.latest || p.cries?.legacy;
 
-        const cry = p.cries?.latest || p.cries?.legacy;
+    document.getElementById("content").innerHTML = `
+    <div class="container">
 
-        document.getElementById("content").innerHTML = `
-        <div class="container">
+        <div class="title">${p.name.toUpperCase()}</div>
+        <div class="sub">#${p.id}</div>
 
-            <h1>${p.name.toUpperCase()}</h1>
-            <h3>#${p.id} | ${region(p.id)}</h3>
+        <div class="navRow">
+            <button class="navBtn" onclick="nav(-1)">⬅</button>
 
-            <div class="navRow">
-                <button onclick="nav(-1)">⬅</button>
-
-                <div class="centerCol">
-                    <img src="${p.sprites.other?.["official-artwork"]?.front_default || p.sprites.front_default}">
-                    <button onclick="playCry('${cry}')">🔊 Cry</button>
-                </div>
-
-                <button onclick="nav(1)">➡</button>
+            <div class="centerCol">
+                <img src="${p.sprites.other?.["official-artwork"]?.front_default || p.sprites.front_default}">
+                <button onclick="playCry('${cry}')">🔊 Cry</button>
             </div>
 
-            <div class="section">
-                <h3>Types</h3>
-                ${types}
-            </div>
-
-            <div class="section">
-                <h3>Abilities</h3>
-                ${abilities}
-            </div>
-
-            <div class="section">
-                <h3>Stats</h3>
-                ${stats}
-            </div>
-
-            <div class="section">
-                <h3>Pokédex Entry</h3>
-                <p>${entry}</p>
-            </div>
-
-            <div class="section">
-                <h3>🌳 Evolution</h3>
-                <div id="evo">Loading...</div>
-            </div>
-
+            <button class="navBtn" onclick="nav(1)">➡</button>
         </div>
-        `;
 
-        loadEvolution(p.species.name);
+        <div class="section">
+            <h3>Types</h3>
+            ${types}
+        </div>
 
-    } catch(e){
-        console.error(e);
-        document.getElementById("content").innerHTML =
-            "<h2>❌ Error loading Pokémon</h2>";
-    }
+        <div class="section">
+            <h3>Abilities</h3>
+            ${abilities}
+        </div>
+
+        <div class="section">
+            <h3>Stats</h3>
+            <div class="table">${stats}</div>
+        </div>
+
+        <div class="section">
+            <h3>Pokédex Entry</h3>
+            <p>${entry}</p>
+        </div>
+
+        <div class="section">
+            <h3>Region</h3>
+            <button onclick="location.href='/region.html?name=${region(p.id)}'">
+                ${region(p.id)}
+            </button>
+        </div>
+
+        <div id="evo">Loading...</div>
+
+    </div>
+    `;
+
+    loadEvolution(p.species.name);
 }
 
 load();
