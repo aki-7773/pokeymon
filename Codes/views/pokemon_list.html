@@ -4,15 +4,26 @@
     <meta charset="UTF-8">
     <title>Pokémon List - Complete Pokédex</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ========== GLOBALE STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             transition: background-color 0.3s ease;
             position: relative;
         }
-        body.dark-mode { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        /* Pokéball Hintergrundmuster */
         body::before {
             content: "";
             position: fixed;
@@ -25,53 +36,416 @@
             pointer-events: none;
             z-index: 0;
         }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
-        h1 { text-align: center; color: white; font-size: 48px; margin: 25px 0; text-shadow: 4px 4px 8px rgba(0,0,0,0.3); letter-spacing: 2px; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; background: rgba(0,0,0,0.2); padding: 12px 20px; border-radius: 50px; backdrop-filter: blur(5px); }
-        .back-link { display: inline-block; padding: 10px 22px; background: rgba(0,0,0,0.4); color: white; text-decoration: none; border-radius: 40px; font-weight: bold; transition: all 0.3s; font-size: 15px; border: 1px solid rgba(255,255,255,0.2); }
-        .back-link:hover { background: #ffcb05; color: #2a75bb; transform: translateY(-2px); border-color: #ffcb05; }
-        .search-suggestions { position: relative; display: inline-block; flex: 1; max-width: 350px; }
-        .search-suggestions input { width: 100%; padding: 12px 20px; border-radius: 40px; border: none; font-size: 15px; background: rgba(255,255,255,0.95); box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: all 0.3s; }
-        .search-suggestions input:focus { outline: none; box-shadow: 0 0 0 3px #ffcb05; background: white; }
-        .suggestions-box { position: absolute; top: 100%; left: 0; right: 0; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 350px; overflow-y: auto; z-index: 1000; display: none; margin-top: 8px; }
-        .suggestions-box div { padding: 12px 18px; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid #f0f0f0; font-weight: 500; color: #333; }
-        .suggestions-box div:hover { background: #ffcb05; color: #2a75bb; }
-        .control-buttons { display: flex; gap: 12px; align-items: center; }
-        .dark-mode-toggle, .language-select { background: #2a75bb; color: white; border: none; padding: 10px 18px; border-radius: 40px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 14px; border: 1px solid rgba(255,255,255,0.2); }
-        .dark-mode-toggle:hover, .language-select:hover { background: #ffcb05; color: #2a75bb; transform: scale(1.03); border-color: #ffcb05; }
-        .nav-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
-        .nav-btn { display: inline-block; padding: 10px 18px; background: rgba(0,0,0,0.35); color: white; text-decoration: none; border-radius: 40px; font-weight: bold; transition: all 0.3s; font-size: 14px; border: 1px solid rgba(255,255,255,0.15); }
-        .nav-btn:hover { background: #ffcb05; color: #2a75bb; transform: translateY(-2px); border-color: #ffcb05; }
-        .type-filters { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 25px 0; padding: 18px; background: rgba(255,255,255,0.92); border-radius: 50px; backdrop-filter: blur(4px); }
-        body.dark-mode .type-filters { background: rgba(0,0,0,0.75); }
-        .type-btn { padding: 8px 18px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; transition: all 0.25s; color: white; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-        .type-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 5px 12px rgba(0,0,0,0.25); }
-        .type-btn.active { box-shadow: 0 0 0 3px white, 0 0 0 5px #2a75bb; transform: scale(1.02); }
-        .type-btn.all { background: #2a75bb; }
-        .pokemon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 25px; margin-top: 25px; }
-        .pokemon-card { background: rgba(255,255,255,0.96); border-radius: 24px; padding: 18px 15px 20px; text-align: center; transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1); cursor: pointer; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.12); backdrop-filter: blur(2px); border: 1px solid rgba(255,255,255,0.3); }
-        body.dark-mode .pokemon-card { background: rgba(0,0,0,0.85); color: #f0f0f0; border-color: rgba(255,255,255,0.1); }
-        .pokemon-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 35px rgba(0,0,0,0.2); }
-        .pokemon-card img { width: 130px; height: 130px; transition: transform 0.3s; filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.15)); }
-        .pokemon-card:hover img { transform: scale(1.08); }
-        .pokemon-card h3 { color: #2a75bb; margin: 12px 0 6px; font-size: 20px; font-weight: 700; }
-        body.dark-mode .pokemon-card h3 { color: #ffcb05; }
-        .pokemon-number { color: #777; font-size: 13px; font-weight: 500; margin-bottom: 8px; }
-        body.dark-mode .pokemon-number { color: #aaa; }
-        .type-badges { display: flex; justify-content: center; gap: 8px; margin: 12px 0 8px; flex-wrap: wrap; }
-        .type-badge { display: inline-block; padding: 4px 14px; border-radius: 25px; color: white; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .favorite-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.5); border: none; font-size: 26px; cursor: pointer; transition: all 0.2s; z-index: 10; color: #ddd; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-        .favorite-btn:hover { transform: scale(1.15); background: rgba(0,0,0,0.7); }
-        .favorite-btn.favorited { color: gold; text-shadow: 0 0 5px orange; background: rgba(0,0,0,0.5); }
-        .special-badge { display: inline-block; background: linear-gradient(135deg, #ff9800, #f57c00); color: white; font-size: 10px; padding: 4px 10px; border-radius: 20px; margin-top: 8px; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
-        .gen-badge { display: inline-block; background: linear-gradient(135deg, #4caf50, #388e3c); color: white; font-size: 10px; padding: 4px 10px; border-radius: 20px; margin-top: 8px; font-weight: bold; }
-        .loading { text-align: center; padding: 70px; font-size: 20px; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
-        .loader { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #ffcb05; border-radius: 50%; width: 55px; height: 55px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .stats-info { text-align: center; margin: 15px 0; color: rgba(255,255,255,0.9); font-size: 15px; font-weight: 500; background: rgba(0,0,0,0.2); display: inline-block; padding: 6px 20px; border-radius: 40px; backdrop-filter: blur(4px); }
-        .stats-wrapper { text-align: center; }
-        @media (max-width: 768px) { .container { padding: 15px; } h1 { font-size: 32px; } .pokemon-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; } .type-filters { gap: 8px; padding: 12px; border-radius: 30px; } .type-btn { padding: 6px 12px; font-size: 11px; } .top-bar { flex-direction: column; align-items: stretch; border-radius: 30px; } .search-suggestions { max-width: 100%; } .control-buttons { justify-content: center; } .nav-buttons { justify-content: center; } }
-        @media (max-width: 480px) { .pokemon-card img { width: 100px; height: 100px; } .pokemon-card h3 { font-size: 17px; } }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 48px;
+            margin: 25px 0;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+            letter-spacing: 2px;
+        }
+        
+        /* ========== TOP BAR ========== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: rgba(0,0,0,0.2);
+            padding: 12px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .back-link {
+            display: inline-block;
+            padding: 10px 22px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .back-link:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-2px);
+            border-color: #ffcb05;
+        }
+        
+        /* ========== SUCHFELD MIT VORSCHLÄGEN ========== */
+        .search-suggestions {
+            position: relative;
+            display: inline-block;
+            flex: 1;
+            max-width: 350px;
+        }
+        
+        .search-suggestions input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 40px;
+            border: none;
+            font-size: 15px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .search-suggestions input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px #ffcb05;
+            background: white;
+        }
+        
+        .suggestions-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-height: 350px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            margin-top: 8px;
+        }
+        
+        .suggestions-box div {
+            padding: 12px 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .suggestions-box div:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .suggestions-box div:last-child {
+            border-bottom: none;
+        }
+        
+        /* ========== STEUERUNGSBUTTONS ========== */
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .dark-mode-toggle, .language-select {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .dark-mode-toggle:hover, .language-select:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: scale(1.03);
+            border-color: #ffcb05;
+        }
+        
+        /* ========== NAVIGATIONSBUTTONS ========== */
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: rgba(0,0,0,0.35);
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        
+        .nav-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-2px);
+            border-color: #ffcb05;
+        }
+        
+        /* ========== TYP-FILTER ========== */
+        .type-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 25px 0;
+            padding: 18px;
+            background: rgba(255,255,255,0.92);
+            border-radius: 50px;
+            backdrop-filter: blur(4px);
+        }
+        
+        body.dark-mode .type-filters {
+            background: rgba(0,0,0,0.75);
+        }
+        
+        .type-btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.25s;
+            color: white;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .type-btn:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+        }
+        
+        .type-btn.active {
+            box-shadow: 0 0 0 3px white, 0 0 0 5px #2a75bb;
+            transform: scale(1.02);
+        }
+        
+        .type-btn.all {
+            background: #2a75bb;
+        }
+        
+        /* ========== POKÉMON GRID ========== */
+        .pokemon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        /* ========== POKÉMON KARTE ========== */
+        .pokemon-card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 24px;
+            padding: 18px 15px 20px;
+            text-align: center;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        body.dark-mode .pokemon-card {
+            background: rgba(0,0,0,0.85);
+            color: #f0f0f0;
+            border-color: rgba(255,255,255,0.1);
+        }
+        
+        .pokemon-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+        }
+        
+        .pokemon-card img {
+            width: 130px;
+            height: 130px;
+            transition: transform 0.3s;
+            filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.15));
+        }
+        
+        .pokemon-card:hover img {
+            transform: scale(1.08);
+        }
+        
+        .pokemon-card h3 {
+            color: #2a75bb;
+            margin: 12px 0 6px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        body.dark-mode .pokemon-card h3 {
+            color: #ffcb05;
+        }
+        
+        .pokemon-number {
+            color: #777;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        body.dark-mode .pokemon-number {
+            color: #aaa;
+        }
+        
+        /* ========== TYPEN-ANZEIGE ========== */
+        .type-badges {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px 0 8px;
+            flex-wrap: wrap;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 25px;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        /* ========== FAVORITEN-STERNE ========== */
+        .favorite-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.5);
+            border: none;
+            font-size: 26px;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+            color: #ddd;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        
+        .favorite-btn:hover {
+            transform: scale(1.15);
+            background: rgba(0,0,0,0.7);
+        }
+        
+        .favorite-btn.favorited {
+            color: gold;
+            text-shadow: 0 0 5px orange;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        /* ========== BADGES ========== */
+        .special-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 8px;
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .gen-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+            color: white;
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+        
+        /* ========== LOADING ========== */
+        .loading {
+            text-align: center;
+            padding: 70px;
+            font-size: 20px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .loader {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #ffcb05;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats-info {
+            text-align: center;
+            margin: 15px 0;
+            color: rgba(255,255,255,0.9);
+            font-size: 15px;
+            font-weight: 500;
+            background: rgba(0,0,0,0.2);
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+        }
+        
+        .stats-wrapper {
+            text-align: center;
+        }
+        
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            h1 { font-size: 32px; }
+            .pokemon-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
+            .type-filters { gap: 8px; padding: 12px; border-radius: 30px; }
+            .type-btn { padding: 6px 12px; font-size: 11px; }
+            .top-bar { flex-direction: column; align-items: stretch; border-radius: 30px; }
+            .search-suggestions { max-width: 100%; }
+            .control-buttons { justify-content: center; }
+            .nav-buttons { justify-content: center; }
+        }
+        
+        @media (max-width: 480px) {
+            .pokemon-card img { width: 100px; height: 100px; }
+            .pokemon-card h3 { font-size: 17px; }
+        }
     </style>
 </head>
 <body>
@@ -82,7 +456,7 @@
         <a href="start.html" class="back-link">🏠 Home</a>
         
         <div class="search-suggestions">
-            <input type="text" id="searchInput" placeholder="🔍 Search Pokémon by name (e.g., 'mega', 'gmax', 'charizard')...">
+            <input type="text" id="searchInput" placeholder="🔍 Search Pokémon (e.g., 'mega', 'gmax', 'charizard')...">
             <div id="suggestions" class="suggestions-box"></div>
         </div>
         
@@ -140,7 +514,95 @@
     
     const allTypes = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "dark", "steel", "fairy"];
     
-    // Typ-Filter Buttons generieren
+    // ========== VOLLSTÄNDIGE DATENBANK FÜR SPEZIELLE FORMEN ==========
+    // Enthält Megas (Gen 6: Kalos), Gmax (Gen 8: Galar), Primals (Gen 3: Hoenn), Ash/Bond (Gen 6: Kalos)
+    const specialFormsDatabase = [
+        // ==================== ASH-GRENINJA / BOND PHÄNOMEN (Gen 6 - Kalos) ====================
+        { id: 10003, name: "Ash-Greninja", baseId: 658, regionId: 6, regionName: "Kalos", category: "ash", searchTerms: ["ash greninja", "ash-greninja", "bond greninja", "greninja"] },
+        
+        // ==================== MEGA ENTWICKLUNGEN (Gen 6 - Kalos) ====================
+        { id: 10034, name: "Mega Charizard X", baseId: 6, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega charizard x", "charizard", "mega-x"] },
+        { id: 10035, name: "Mega Charizard Y", baseId: 6, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega charizard y", "charizard", "mega-y"] },
+        { id: 10036, name: "Mega Mewtwo X", baseId: 150, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega mewtwo x", "mewtwo", "mega-x"] },
+        { id: 10037, name: "Mega Mewtwo Y", baseId: 150, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega mewtwo y", "mewtwo", "mega-y"] },
+        { id: 10038, name: "Mega Gengar", baseId: 94, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega gengar", "gengar"] },
+        { id: 10039, name: "Mega Gyarados", baseId: 130, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega gyarados", "gyarados"] },
+        { id: 10040, name: "Mega Aerodactyl", baseId: 142, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega aerodactyl", "aerodactyl"] },
+        { id: 10041, name: "Mega Ampharos", baseId: 181, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega ampharos", "ampharos"] },
+        { id: 10042, name: "Mega Steelix", baseId: 208, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega steelix", "steelix"] },
+        { id: 10043, name: "Mega Scizor", baseId: 212, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega scizor", "scizor"] },
+        { id: 10044, name: "Mega Heracross", baseId: 214, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega heracross", "heracross"] },
+        { id: 10045, name: "Mega Houndoom", baseId: 229, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega houndoom", "houndoom"] },
+        { id: 10046, name: "Mega Tyranitar", baseId: 248, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega tyranitar", "tyranitar"] },
+        { id: 10047, name: "Mega Blaziken", baseId: 257, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega blaziken", "blaziken"] },
+        { id: 10048, name: "Mega Gardevoir", baseId: 282, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega gardevoir", "gardevoir"] },
+        { id: 10049, name: "Mega Sableye", baseId: 302, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega sableye", "sableye"] },
+        { id: 10050, name: "Mega Mawile", baseId: 303, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega mawile", "mawile"] },
+        { id: 10051, name: "Mega Aggron", baseId: 306, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega aggron", "aggron"] },
+        { id: 10052, name: "Mega Medicham", baseId: 308, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega medicham", "medicham"] },
+        { id: 10053, name: "Mega Manectric", baseId: 310, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega manectric", "manectric"] },
+        { id: 10054, name: "Mega Sharpedo", baseId: 319, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega sharpedo", "sharpedo"] },
+        { id: 10055, name: "Mega Camerupt", baseId: 323, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega camerupt", "camerupt"] },
+        { id: 10056, name: "Mega Altaria", baseId: 334, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega altaria", "altaria"] },
+        { id: 10057, name: "Mega Banette", baseId: 354, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega banette", "banette"] },
+        { id: 10058, name: "Mega Absol", baseId: 359, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega absol", "absol"] },
+        { id: 10059, name: "Mega Glalie", baseId: 362, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega glalie", "glalie"] },
+        { id: 10060, name: "Mega Salamence", baseId: 373, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega salamence", "salamence"] },
+        { id: 10061, name: "Mega Metagross", baseId: 376, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega metagross", "metagross"] },
+        { id: 10062, name: "Mega Latias", baseId: 380, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega latias", "latias"] },
+        { id: 10063, name: "Mega Latios", baseId: 381, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega latios", "latios"] },
+        { id: 10064, name: "Mega Rayquaza", baseId: 384, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega rayquaza", "rayquaza"] },
+        { id: 10065, name: "Mega Lopunny", baseId: 428, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega lopunny", "lopunny"] },
+        { id: 10066, name: "Mega Garchomp", baseId: 445, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega garchomp", "garchomp"] },
+        { id: 10067, name: "Mega Lucario", baseId: 448, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega lucario", "lucario"] },
+        { id: 10068, name: "Mega Abomasnow", baseId: 460, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega abomasnow", "abomasnow"] },
+        { id: 10069, name: "Mega Gallade", baseId: 475, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega gallade", "gallade"] },
+        { id: 10070, name: "Mega Audino", baseId: 531, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega audino", "audino"] },
+        { id: 10071, name: "Mega Diancie", baseId: 719, regionId: 6, regionName: "Kalos", category: "mega", searchTerms: ["mega diancie", "diancie"] },
+        
+        // ==================== PRIMALE RÜCKKEHR (Gen 3 - Hoenn) ====================
+        { id: 10080, name: "Primal Kyogre", baseId: 382, regionId: 3, regionName: "Hoenn", category: "primal", searchTerms: ["primal kyogre", "kyogre"] },
+        { id: 10081, name: "Primal Groudon", baseId: 383, regionId: 3, regionName: "Hoenn", category: "primal", searchTerms: ["primal groudon", "groudon"] },
+        
+        // ==================== GIGANTAMAX (Gen 8 - Galar) ====================
+        { id: 10072, name: "Gigantamax Charizard", baseId: 6, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax charizard", "gigantamax charizard", "charizard"] },
+        { id: 10073, name: "Gigantamax Pikachu", baseId: 25, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax pikachu", "gigantamax pikachu", "pikachu"] },
+        { id: 10074, name: "Gigantamax Eevee", baseId: 133, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax eevee", "gigantamax eevee", "eevee"] },
+        { id: 10075, name: "Gigantamax Meowth", baseId: 52, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax meowth", "gigantamax meowth", "meowth"] },
+        { id: 10076, name: "Gigantamax Gengar", baseId: 94, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax gengar", "gigantamax gengar", "gengar"] },
+        { id: 10077, name: "Gigantamax Lapras", baseId: 131, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax lapras", "gigantamax lapras", "lapras"] },
+        { id: 10078, name: "Gigantamax Snorlax", baseId: 143, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax snorlax", "gigantamax snorlax", "snorlax"] },
+        { id: 10079, name: "Gigantamax Machamp", baseId: 68, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax machamp", "gigantamax machamp", "machamp"] },
+        { id: 10082, name: "Gigantamax Kingler", baseId: 99, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax kingler", "gigantamax kingler", "kingler"] },
+        { id: 10083, name: "Gigantamax Corviknight", baseId: 823, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax corviknight", "gigantamax corviknight", "corviknight"] },
+        { id: 10084, name: "Gigantamax Orbeetle", baseId: 826, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax orbeetle", "gigantamax orbeetle", "orbeetle"] },
+        { id: 10085, name: "Gigantamax Drednaw", baseId: 834, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax drednaw", "gigantamax drednaw", "drednaw"] },
+        { id: 10086, name: "Gigantamax Coalossal", baseId: 839, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax coalossal", "gigantamax coalossal", "coalossal"] },
+        { id: 10087, name: "Gigantamax Flapple", baseId: 841, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax flapple", "gigantamax flapple", "flapple"] },
+        { id: 10088, name: "Gigantamax Appletun", baseId: 842, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax appletun", "gigantamax appletun", "appletun"] },
+        { id: 10089, name: "Gigantamax Toxtricity", baseId: 849, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax toxtricity", "gigantamax toxtricity", "toxtricity"] },
+        { id: 10090, name: "Gigantamax Centiskorch", baseId: 851, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax centiskorch", "gigantamax centiskorch", "centiskorch"] },
+        { id: 10091, name: "Gigantamax Hatterene", baseId: 858, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax hatterene", "gigantamax hatterene", "hatterene"] },
+        { id: 10092, name: "Gigantamax Grimmsnarl", baseId: 861, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax grimmsnarl", "gigantamax grimmsnarl", "grimmsnarl"] },
+        { id: 10093, name: "Gigantamax Alcremie", baseId: 869, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax alcremie", "gigantamax alcremie", "alcremie"] },
+        { id: 10094, name: "Gigantamax Copperajah", baseId: 879, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax copperajah", "gigantamax copperajah", "copperajah"] },
+        { id: 10095, name: "Gigantamax Duraludon", baseId: 884, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax duraludon", "gigantamax duraludon", "duraludon"] },
+        { id: 10096, name: "Gigantamax Rillaboom", baseId: 812, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax rillaboom", "gigantamax rillaboom", "rillaboom"] },
+        { id: 10097, name: "Gigantamax Cinderace", baseId: 815, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax cinderace", "gigantamax cinderace", "cinderace"] },
+        { id: 10098, name: "Gigantamax Inteleon", baseId: 818, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax inteleon", "gigantamax inteleon", "inteleon"] },
+        { id: 10099, name: "Gigantamax Melmetal", baseId: 809, regionId: 8, regionName: "Galar", category: "gmax", searchTerms: ["gmax melmetal", "gigantamax melmetal", "melmetal"] },
+        
+        // ==================== REGIONALE FORMEN (Alola, Galar, Hisui) - hier nur als Beispiele ====================
+        { id: 10100, name: "Alolan Raichu", baseId: 26, regionId: 7, regionName: "Alola", category: "regional", searchTerms: ["alolan raichu", "alola raichu", "raichu"] },
+        { id: 10101, name: "Alolan Marowak", baseId: 105, regionId: 7, regionName: "Alola", category: "regional", searchTerms: ["alolan marowak", "alola marowak", "marowak"] },
+        { id: 10102, name: "Alolan Exeggutor", baseId: 103, regionId: 7, regionName: "Alola", category: "regional", searchTerms: ["alolan exeggutor", "alola exeggutor", "exeggutor"] },
+        { id: 10103, name: "Galarian Ponyta", baseId: 77, regionId: 8, regionName: "Galar", category: "regional", searchTerms: ["galarian ponyta", "galar ponyta", "ponyta"] },
+        { id: 10104, name: "Galarian Rapidash", baseId: 78, regionId: 8, regionName: "Galar", category: "regional", searchTerms: ["galarian rapidash", "galar rapidash", "rapidash"] },
+        { id: 10105, name: "Hisuian Growlithe", baseId: 58, regionId: 8, regionName: "Hisui", category: "regional", searchTerms: ["hisuian growlithe", "hisui growlithe", "growlithe"] },
+        { id: 10106, name: "Hisuian Arcanine", baseId: 59, regionId: 8, regionName: "Hisui", category: "regional", searchTerms: ["hisuian arcanine", "hisui arcanine", "arcanine"] }
+    ];
+    
+    // ========== Typ-Filter Buttons generieren ==========
     const filterContainer = document.getElementById('typeFilters');
     allTypes.forEach(type => {
         const btn = document.createElement('button');
@@ -151,74 +613,6 @@
         btn.onclick = () => applyTypeFilter(type);
         filterContainer.appendChild(btn);
     });
-    
-    // ========== KOMPLETTE DATENBANK ALLER SPEZIELLEN FORMEN ==========
-    const specialFormsDatabase = [
-        // Mega Evolutions (Gen 6)
-        { id: 10034, name: "Mega Charizard X", baseId: 6, gen: 6, category: "mega", searchTerms: ["mega charizard x", "charizard", "mega-x"] },
-        { id: 10035, name: "Mega Charizard Y", baseId: 6, gen: 6, category: "mega", searchTerms: ["mega charizard y", "charizard", "mega-y"] },
-        { id: 10036, name: "Mega Mewtwo X", baseId: 150, gen: 6, category: "mega", searchTerms: ["mega mewtwo x", "mewtwo", "mega-x"] },
-        { id: 10037, name: "Mega Mewtwo Y", baseId: 150, gen: 6, category: "mega", searchTerms: ["mega mewtwo y", "mewtwo", "mega-y"] },
-        { id: 10038, name: "Mega Gengar", baseId: 94, gen: 6, category: "mega", searchTerms: ["mega gengar", "gengar"] },
-        { id: 10039, name: "Mega Gyarados", baseId: 130, gen: 6, category: "mega", searchTerms: ["mega gyarados", "gyarados"] },
-        { id: 10040, name: "Mega Aerodactyl", baseId: 142, gen: 6, category: "mega", searchTerms: ["mega aerodactyl", "aerodactyl"] },
-        { id: 10041, name: "Mega Ampharos", baseId: 181, gen: 6, category: "mega", searchTerms: ["mega ampharos", "ampharos"] },
-        { id: 10042, name: "Mega Steelix", baseId: 208, gen: 6, category: "mega", searchTerms: ["mega steelix", "steelix"] },
-        { id: 10043, name: "Mega Scizor", baseId: 212, gen: 6, category: "mega", searchTerms: ["mega scizor", "scizor"] },
-        { id: 10044, name: "Mega Heracross", baseId: 214, gen: 6, category: "mega", searchTerms: ["mega heracross", "heracross"] },
-        { id: 10045, name: "Mega Houndoom", baseId: 229, gen: 6, category: "mega", searchTerms: ["mega houndoom", "houndoom"] },
-        { id: 10046, name: "Mega Tyranitar", baseId: 248, gen: 6, category: "mega", searchTerms: ["mega tyranitar", "tyranitar"] },
-        { id: 10047, name: "Mega Blaziken", baseId: 257, gen: 6, category: "mega", searchTerms: ["mega blaziken", "blaziken"] },
-        { id: 10048, name: "Mega Gardevoir", baseId: 282, gen: 6, category: "mega", searchTerms: ["mega gardevoir", "gardevoir"] },
-        { id: 10049, name: "Mega Sableye", baseId: 302, gen: 6, category: "mega", searchTerms: ["mega sableye", "sableye"] },
-        { id: 10050, name: "Mega Mawile", baseId: 303, gen: 6, category: "mega", searchTerms: ["mega mawile", "mawile"] },
-        { id: 10051, name: "Mega Aggron", baseId: 306, gen: 6, category: "mega", searchTerms: ["mega aggron", "aggron"] },
-        { id: 10052, name: "Mega Medicham", baseId: 308, gen: 6, category: "mega", searchTerms: ["mega medicham", "medicham"] },
-        { id: 10053, name: "Mega Manectric", baseId: 310, gen: 6, category: "mega", searchTerms: ["mega manectric", "manectric"] },
-        { id: 10054, name: "Mega Sharpedo", baseId: 319, gen: 6, category: "mega", searchTerms: ["mega sharpedo", "sharpedo"] },
-        { id: 10055, name: "Mega Camerupt", baseId: 323, gen: 6, category: "mega", searchTerms: ["mega camerupt", "camerupt"] },
-        { id: 10056, name: "Mega Altaria", baseId: 334, gen: 6, category: "mega", searchTerms: ["mega altaria", "altaria"] },
-        { id: 10057, name: "Mega Banette", baseId: 354, gen: 6, category: "mega", searchTerms: ["mega banette", "banette"] },
-        { id: 10058, name: "Mega Absol", baseId: 359, gen: 6, category: "mega", searchTerms: ["mega absol", "absol"] },
-        { id: 10059, name: "Mega Glalie", baseId: 362, gen: 6, category: "mega", searchTerms: ["mega glalie", "glalie"] },
-        { id: 10060, name: "Mega Salamence", baseId: 373, gen: 6, category: "mega", searchTerms: ["mega salamence", "salamence"] },
-        { id: 10061, name: "Mega Metagross", baseId: 376, gen: 6, category: "mega", searchTerms: ["mega metagross", "metagross"] },
-        { id: 10062, name: "Mega Latias", baseId: 380, gen: 6, category: "mega", searchTerms: ["mega latias", "latias"] },
-        { id: 10063, name: "Mega Latios", baseId: 381, gen: 6, category: "mega", searchTerms: ["mega latios", "latios"] },
-        { id: 10064, name: "Mega Rayquaza", baseId: 384, gen: 6, category: "mega", searchTerms: ["mega rayquaza", "rayquaza"] },
-        { id: 10065, name: "Mega Lopunny", baseId: 428, gen: 6, category: "mega", searchTerms: ["mega lopunny", "lopunny"] },
-        { id: 10066, name: "Mega Garchomp", baseId: 445, gen: 6, category: "mega", searchTerms: ["mega garchomp", "garchomp"] },
-        { id: 10067, name: "Mega Lucario", baseId: 448, gen: 6, category: "mega", searchTerms: ["mega lucario", "lucario"] },
-        { id: 10068, name: "Mega Abomasnow", baseId: 460, gen: 6, category: "mega", searchTerms: ["mega abomasnow", "abomasnow"] },
-        { id: 10069, name: "Mega Gallade", baseId: 475, gen: 6, category: "mega", searchTerms: ["mega gallade", "gallade"] },
-        { id: 10070, name: "Mega Audino", baseId: 531, gen: 6, category: "mega", searchTerms: ["mega audino", "audino"] },
-        { id: 10071, name: "Mega Diancie", baseId: 719, gen: 6, category: "mega", searchTerms: ["mega diancie", "diancie"] },
-        // Primal Forms (Gen 6)
-        { id: 10080, name: "Primal Kyogre", baseId: 382, gen: 6, category: "primal", searchTerms: ["primal kyogre", "kyogre"] },
-        { id: 10081, name: "Primal Groudon", baseId: 383, gen: 6, category: "primal", searchTerms: ["primal groudon", "groudon"] },
-        // Ash-Greninja (Gen 6)
-        { id: 10003, name: "Ash-Greninja", baseId: 658, gen: 6, category: "special", searchTerms: ["ash greninja", "ash-greninja", "greninja"] },
-        // Gigantamax Forms (Gen 8)
-        { id: 10072, name: "Gigantamax Charizard", baseId: 6, gen: 8, category: "gmax", searchTerms: ["gmax charizard", "gigantamax charizard", "charizard"] },
-        { id: 10073, name: "Gigantamax Pikachu", baseId: 25, gen: 8, category: "gmax", searchTerms: ["gmax pikachu", "gigantamax pikachu", "pikachu"] },
-        { id: 10074, name: "Gigantamax Eevee", baseId: 133, gen: 8, category: "gmax", searchTerms: ["gmax eevee", "gigantamax eevee", "eevee"] },
-        { id: 10075, name: "Gigantamax Meowth", baseId: 52, gen: 8, category: "gmax", searchTerms: ["gmax meowth", "gigantamax meowth", "meowth"] },
-        { id: 10076, name: "Gigantamax Gengar", baseId: 94, gen: 8, category: "gmax", searchTerms: ["gmax gengar", "gigantamax gengar", "gengar"] },
-        { id: 10077, name: "Gigantamax Lapras", baseId: 131, gen: 8, category: "gmax", searchTerms: ["gmax lapras", "gigantamax lapras", "lapras"] },
-        { id: 10078, name: "Gigantamax Snorlax", baseId: 143, gen: 8, category: "gmax", searchTerms: ["gmax snorlax", "gigantamax snorlax", "snorlax"] },
-        { id: 10079, name: "Gigantamax Machamp", baseId: 68, gen: 8, category: "gmax", searchTerms: ["gmax machamp", "gigantamax machamp", "machamp"] },
-        // Regional Forms (Alola Gen 7, Galar/Hisui Gen 8)
-        { id: 10100, name: "Alolan Raichu", baseId: 26, gen: 7, category: "regional", searchTerms: ["alolan raichu", "alola raichu", "raichu"] },
-        { id: 10101, name: "Alolan Marowak", baseId: 105, gen: 7, category: "regional", searchTerms: ["alolan marowak", "alola marowak", "marowak"] },
-        { id: 10102, name: "Alolan Exeggutor", baseId: 103, gen: 7, category: "regional", searchTerms: ["alolan exeggutor", "alola exeggutor", "exeggutor"] },
-        { id: 10103, name: "Alolan Ninetales", baseId: 38, gen: 7, category: "regional", searchTerms: ["alolan ninetales", "alola ninetales", "ninetales"] },
-        { id: 10104, name: "Galarian Ponyta", baseId: 77, gen: 8, category: "regional", searchTerms: ["galarian ponyta", "galar ponyta", "ponyta"] },
-        { id: 10105, name: "Galarian Rapidash", baseId: 78, gen: 8, category: "regional", searchTerms: ["galarian rapidash", "galar rapidash", "rapidash"] },
-        { id: 10106, name: "Galarian Slowbro", baseId: 80, gen: 8, category: "regional", searchTerms: ["galarian slowbro", "galar slowbro", "slowbro"] },
-        { id: 10107, name: "Hisuian Growlithe", baseId: 58, gen: 8, category: "regional", searchTerms: ["hisuian growlithe", "hisui growlithe", "growlithe"] },
-        { id: 10108, name: "Hisuian Arcanine", baseId: 59, gen: 8, category: "regional", searchTerms: ["hisuian arcanine", "hisui arcanine", "arcanine"] },
-        { id: 10109, name: "Hisuian Zoroark", baseId: 571, gen: 8, category: "regional", searchTerms: ["hisuian zoroark", "hisui zoroark", "zoroark"] }
-    ];
     
     // ========== HAUPTFUNKTION: ALLE POKÉMON LADEN ==========
     async function loadAllPokemon() {
@@ -270,7 +664,7 @@
                 }
             }
             
-            // 2. Spezielle Formen hinzufügen
+            // 2. Spezielle Formen hinzufügen (aus unserer festen Datenbank)
             for (const special of specialFormsDatabase) {
                 try {
                     const specialResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${special.id}`);
@@ -280,7 +674,9 @@
                             id: special.id,
                             name: special.name,
                             rawName: special.name.toLowerCase().replace(/\s/g, '-'),
-                            generation: special.gen,
+                            generation: special.regionId, // Verwende Regions-ID als Generation (für Anzeige)
+                            regionId: special.regionId,
+                            regionName: special.regionName,
                             types: specialData.types.map(t => t.type.name),
                             isSpecial: true,
                             searchTerms: special.searchTerms,
@@ -292,7 +688,9 @@
                             id: special.id,
                             name: special.name,
                             rawName: special.name.toLowerCase().replace(/\s/g, '-'),
-                            generation: special.gen,
+                            generation: special.regionId,
+                            regionId: special.regionId,
+                            regionName: special.regionName,
                             types: [],
                             isSpecial: true,
                             searchTerms: special.searchTerms,
@@ -305,7 +703,9 @@
                         id: special.id,
                         name: special.name,
                         rawName: special.name.toLowerCase().replace(/\s/g, '-'),
-                        generation: special.gen,
+                        generation: special.regionId,
+                        regionId: special.regionId,
+                        regionName: special.regionName,
                         types: [],
                         isSpecial: true,
                         searchTerms: special.searchTerms,
@@ -361,6 +761,7 @@
                 if (pokemon.category === "mega") categoryDisplay = '<div class="special-badge">⭐ Mega Evolution</div>';
                 else if (pokemon.category === "primal") categoryDisplay = '<div class="special-badge">⭐ Primal Reversion</div>';
                 else if (pokemon.category === "gmax") categoryDisplay = '<div class="special-badge">⭐ Gigantamax</div>';
+                else if (pokemon.category === "ash") categoryDisplay = '<div class="special-badge">⭐ Bond Phenomenon</div>';
                 else if (pokemon.category === "regional") categoryDisplay = '<div class="special-badge">⭐ Regional Form</div>';
                 else categoryDisplay = '<div class="special-badge">⭐ Special Form</div>';
             } else {
@@ -374,7 +775,8 @@
                     ${favoritePokemon.includes(pokemon.id) ? '★' : '☆'}
                 </button>
                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png" 
-                     alt="${pokemon.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
+                     alt="${pokemon.name}" 
+                     onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
                 <h3>${pokemon.name}</h3>
                 <div class="pokemon-number">#${String(pokemon.id).padStart(pokemon.isSpecial ? 5 : 3, '0')}</div>
                 <div class="type-badges">
