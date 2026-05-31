@@ -458,6 +458,9 @@
             .info-grid { grid-template-columns: 1fr; }
             .special-buttons { gap: 8px; }
             .special-btn { padding: 6px 15px; font-size: 12px; }
+            .profile-btn, .control-buttons { top: 10px; }
+            .profile-btn { left: 10px; padding: 6px 12px; font-size: 12px; }
+            .dark-mode-toggle, .language-select { padding: 6px 12px; font-size: 11px; }
         }
     </style>
 </head>
@@ -469,6 +472,10 @@
     <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
         <option value="en">🇬🇧 English</option>
         <option value="de">🇩🇪 Deutsch</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="zh">🇨🇳 中文</option>
     </select>
 </div>
 
@@ -486,9 +493,10 @@
     let pokemonData = null;
     let currentLanguage = localStorage.getItem('language') || 'en';
     
-    // Spezialformen Mapping für jedes Pokémon
+    // ========== KOMPLETTE SPEZIALFORMEN LISTE für ALLE Pokémon ==========
     const specialFormsMap = {
-        6: {  // Charizard
+        // === MEGA EVOLUTIONS ===
+        6: {   // Charizard
             megaX: { id: "mega-x", name: "Mega Charizard X", type: "mega" },
             megaY: { id: "mega-y", name: "Mega Charizard Y", type: "mega" },
             gmax: { id: "gigantamax", name: "Gigantamax Charizard", type: "gmax" }
@@ -573,14 +581,27 @@
         475: { // Gallade
             mega: { id: "mega", name: "Mega Gallade", type: "mega" }
         },
+        531: { // Audino
+            mega: { id: "mega", name: "Mega Audino", type: "mega" }
+        },
+        719: { // Diancie
+            mega: { id: "mega", name: "Mega Diancie", type: "mega" }
+        },
+        // === PRIMAL FORMS ===
+        382: { // Kyogre
+            primal: { id: "primal", name: "Primal Kyogre", type: "primal" }
+        },
+        383: { // Groudon
+            primal: { id: "primal", name: "Primal Groudon", type: "primal" }
+        },
+        // === GIGANTAMAX FORMS ===
         25: {  // Pikachu
             gmax: { id: "gigantamax", name: "Gigantamax Pikachu", type: "gmax" }
         },
-        133: { // Eevee
-            gmax: { id: "gigantamax", name: "Gigantamax Eevee", type: "gmax" }
-        },
         52: {  // Meowth
             gmax: { id: "gigantamax", name: "Gigantamax Meowth", type: "gmax" }
+        133: { // Eevee
+            gmax: { id: "gigantamax", name: "Gigantamax Eevee", type: "gmax" }
         },
         143: { // Snorlax
             gmax: { id: "gigantamax", name: "Gigantamax Snorlax", type: "gmax" }
@@ -608,6 +629,31 @@
         },
         809: { // Melmetal
             gmax: { id: "gigantamax", name: "Gigantamax Melmetal", type: "gmax" }
+        },
+        // === REGIONAL FORMS (werden auf der normalen Seite mit Buttons angezeigt) ===
+        26: {  // Raichu
+            alolan: { id: "alolan", name: "Alolan Raichu", type: "regional" }
+        },
+        105: { // Marowak
+            alolan: { id: "alolan", name: "Alolan Marowak", type: "regional" }
+        },
+        103: { // Exeggutor
+            alolan: { id: "alolan", name: "Alolan Exeggutor", type: "regional" }
+        },
+        77: {  // Ponyta
+            galarian: { id: "galarian", name: "Galarian Ponyta", type: "regional" }
+        },
+        78: {  // Rapidash
+            galarian: { id: "galarian", name: "Galarian Rapidash", type: "regional" }
+        },
+        58: {  // Growlithe
+            hisuian: { id: "hisuian", name: "Hisuian Growlithe", type: "regional" }
+        },
+        59: {  // Arcanine
+            hisuian: { id: "hisuian", name: "Hisuian Arcanine", type: "regional" }
+        },
+        571: { // Zoroark
+            hisuian: { id: "hisuian", name: "Hisuian Zoroark", type: "regional" }
         }
     };
     
@@ -734,7 +780,6 @@
             
             const pokemonName = pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
             
-            // Bestimme Generation
             let generation = 1;
             if (currentPokemonId <= 151) generation = 1;
             else if (currentPokemonId <= 251) generation = 2;
@@ -746,7 +791,6 @@
             else if (currentPokemonId <= 905) generation = 8;
             else generation = 9;
             
-            // Pokédex Eintrag
             let dexEntry = "No Pokédex entry found.";
             try {
                 const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${currentPokemonId}`);
@@ -781,6 +825,7 @@
                     let btnClass = 'special-btn';
                     if (form.type === 'mega') btnClass += ' mega';
                     else if (form.type === 'gmax') btnClass += ' gmax';
+                    else if (form.type === 'primal') btnClass += ' mega';
                     else btnClass += ' regional';
                     
                     specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${form.name}', '${form.type}')">✨ ${form.name}</button>`;
