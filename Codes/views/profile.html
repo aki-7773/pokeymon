@@ -3,6 +3,7 @@
 <head>
     <title>My Profile - Pokémon Website</title>
     <style>
+        /* Basis-Styles wie gehabt – bereits responsive */
         * {
             margin: 0;
             padding: 0;
@@ -267,7 +268,7 @@
             z-index: 100;
         }
         
-        /* Modal für Pokémon-Auswahl */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -369,7 +370,8 @@
     <div class="profile-card">
         <div class="avatar-container" onclick="openAvatarModal()">
             <div class="avatar" id="avatarDisplay">
-                <img id="avatarImg" src="" alt="Avatar">
+                <img id="avatarImg" src="" alt="Avatar" style="display: none;">
+                <span id="avatarDefault">🎮</span>
             </div>
             <button class="change-avatar-btn" onclick="event.stopPropagation(); openAvatarModal()">✏️</button>
         </div>
@@ -396,7 +398,7 @@
     </div>
 </div>
 
-<!-- Modal für Pokémon-Avatar-Auswahl -->
+<!-- Modal -->
 <div id="avatarModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -411,7 +413,6 @@
 </div>
 
 <script>
-    // ========== PROFIL-DATEN ==========
     let profile = {
         name: localStorage.getItem('profileName') || 'Pokémon Trainer',
         teams: JSON.parse(localStorage.getItem('profileTeams') || '[]'),
@@ -449,14 +450,14 @@
     
     function updateAvatarDisplay() {
         const avatarImg = document.getElementById('avatarImg');
+        const avatarDefault = document.getElementById('avatarDefault');
         if (profile.avatarUrl && profile.avatarUrl !== '') {
             avatarImg.src = profile.avatarUrl;
             avatarImg.style.display = 'block';
-            document.querySelector('.avatar').innerHTML = '';
-            document.querySelector('.avatar').appendChild(avatarImg);
+            avatarDefault.style.display = 'none';
         } else {
             avatarImg.style.display = 'none';
-            document.querySelector('.avatar').innerHTML = '🎮';
+            avatarDefault.style.display = 'flex';
         }
     }
     
@@ -478,7 +479,7 @@
             allPokemonForAvatar = [];
             for (let item of data.results) {
                 const id = parseInt(item.url.split('/').slice(-2)[0]);
-                if (id <= 721) { // Gen 1-6 für Übersichtlichkeit
+                if (id <= 721) {
                     allPokemonForAvatar.push({
                         id: id,
                         name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
@@ -499,6 +500,10 @@
             filtered = filtered.filter(p => p.name.toLowerCase().includes(searchTerm));
         }
         const container = document.getElementById('pokemonListModal');
+        if (filtered.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:20px;">No Pokémon found.</div>';
+            return;
+        }
         container.innerHTML = filtered.slice(0, 50).map(p => `
             <div class="pokemon-option" onclick="setAvatar(${p.id}, '${p.image}')">
                 <img src="${p.image}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png'">
