@@ -785,10 +785,8 @@
     <!-- Search Box -->
     <div class="search-container">
         <div class="search-box">
-            <form action="search_results.html" method="get" style="display: flex; width: 100%;">
-                <input type="text" name="q" id="searchInput" placeholder="🔍 Search Pokémon by name or ID..." required>
-                <button type="submit" id="searchBtn">Search</button>
-            </form>
+            <input type="text" id="searchInput" placeholder="🔍 Search Pokémon by name or ID...">
+            <button type="button" id="searchBtn" onclick="performSearch()">Search</button>
         </div>
     </div>
     
@@ -998,6 +996,53 @@
             statusDiv.innerHTML = '❌ API Offline';
         }
     }
+    
+    // ========== SUCH-FIX: NUR NORMALE POKÉMON (KEINE SPECIALS) ==========
+    let allPokemonNames = [];
+
+    async function loadPokemonNames() {
+        try {
+            // Lade NUR normale Pokémon (IDs 1-1025)
+            const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1025');
+            const data = await response.json();
+            allPokemonNames = data.results.map(p => {
+                const id = parseInt(p.url.split('/').slice(-2)[0]);
+                // Nur IDs unter 10000 (keine Specials wie Mega, Gmax etc.)
+                if (id < 10000) {
+                    return {
+                        id: id,
+                        name: p.name.charAt(0).toUpperCase() + p.name.slice(1)
+                    };
+                }
+                return null;
+            }).filter(p => p !== null);
+        } catch(e) {
+            console.error('Error loading Pokémon names');
+        }
+    }
+
+    function performSearch() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (query.length >= 2) {
+            // Prüfe ob das gesuchte Pokémon existiert (optional)
+            const exists = allPokemonNames.some(p => p.name.toLowerCase().includes(query));
+            if (exists || query.length >= 2) {
+                window.location.href = `search_results.html?q=${encodeURIComponent(query)}`;
+            } else {
+                alert('No Pokémon found with that name!');
+            }
+        } else {
+            alert('Please enter at least 2 characters');
+        }
+    }
+    
+    // Enter-Taste für Suche
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') performSearch();
+    });
+    
+    // Lade Pokémon Namen für die Suche
+    loadPokemonNames();
     
     // Random Pokémon
     function getRandomPokemonId() {
