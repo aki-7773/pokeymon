@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - {{app_name}}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            border-radius: 32px;
+            padding: 40px;
+        }
+        h1 { color: #2a75bb; margin-bottom: 20px; }
+        .version { color: #666; margin-bottom: 30px; }
+        .feature-list { margin: 20px 0; padding-left: 20px; }
+        .feature-list li { margin: 10px 0; }
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: #ffcb05;
+            color: #2a75bb;
+            text-decoration: none;
+            border-radius: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 {{app_name}}</h1>
+        <div class="version">Version {{version}}</div>
+        <p>Your complete Pokémon encyclopedia with real-time data from the official PokeAPI.</p>
+        <ul class="feature-list">
+            <li>✅ Complete Pokédex (Generations 1-9)</li>
+            <li>✅ Mega Evolutions & Gigantamax Forms</li>
+            <li>✅ Regional Variants (Alolan, Galarian, Hisuian)</li>
+            <li>✅ Dark Mode Support</li>
+            <li>✅ Multi-Language Interface</li>
+            <li>✅ Team Builder</li>
+            <li>✅ Pokémon Comparison Tool</li>
+            <li>✅ Type Effectiveness Chart</li>
+            <li>✅ Quiz Game</li>
+            <li>✅ Mobile Friendly Design</li>
+        </ul>
+        <p style="margin-top: 20px;">
+            Data provided by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a><br>
+            Pokémon © 1995-2024 Nintendo, Game Freak, and Creatures Inc.
+        </p>
+        <a href="/" class="back-button">← Back to Home</a>
+    </div>
+</body>
+</html>
