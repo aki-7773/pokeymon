@@ -178,6 +178,11 @@
             color: white;
         }
         
+        .special-btn.primal {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            color: white;
+        }
+        
         .special-btn.regional {
             background: linear-gradient(135deg, #2196f3, #1976d2);
             color: white;
@@ -503,61 +508,102 @@
     
     // ========== KOMPLETTE SPEZIALFORMEN MAP für ALLE Pokémon ==========
     const specialFormsMap = {
-        // === MEGA EVOLUTIONS (Gen 6) ===
+        // Charizard
         6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard" },
+        // Mewtwo
         150: { megaX: "Mega Mewtwo X", megaY: "Mega Mewtwo Y" },
+        // Gengar
         94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar" },
+        // Venusaur
+        3: { gmax: "Gigantamax Venusaur" },
+        // Blastoise
+        9: { gmax: "Gigantamax Blastoise" },
+        // Pikachu
+        25: { gmax: "Gigantamax Pikachu" },
+        // Meowth
+        52: { gmax: "Gigantamax Meowth" },
+        // Eevee
+        133: { gmax: "Gigantamax Eevee" },
+        // Snorlax
+        143: { gmax: "Gigantamax Snorlax" },
+        // Machamp
+        68: { gmax: "Gigantamax Machamp" },
+        // Gyarados
         130: { mega: "Mega Gyarados" },
+        // Tyranitar
         248: { mega: "Mega Tyranitar" },
+        // Blaziken
         257: { mega: "Mega Blaziken" },
+        // Gardevoir
         282: { mega: "Mega Gardevoir" },
+        // Sableye
         302: { mega: "Mega Sableye" },
+        // Aggron
         306: { mega: "Mega Aggron" },
+        // Medicham
         308: { mega: "Mega Medicham" },
+        // Manectric
         310: { mega: "Mega Manectric" },
+        // Sharpedo
         319: { mega: "Mega Sharpedo" },
+        // Camerupt
         323: { mega: "Mega Camerupt" },
+        // Altaria
         334: { mega: "Mega Altaria" },
+        // Banette
         354: { mega: "Mega Banette" },
+        // Absol
         359: { mega: "Mega Absol" },
+        // Glalie
         362: { mega: "Mega Glalie" },
+        // Salamence
         373: { mega: "Mega Salamence" },
+        // Metagross
         376: { mega: "Mega Metagross" },
+        // Latias
         380: { mega: "Mega Latias" },
+        // Latios
         381: { mega: "Mega Latios" },
+        // Rayquaza
         384: { mega: "Mega Rayquaza" },
+        // Lopunny
         428: { mega: "Mega Lopunny" },
+        // Garchomp
         445: { mega: "Mega Garchomp" },
+        // Lucario
         448: { mega: "Mega Lucario" },
+        // Abomasnow
         460: { mega: "Mega Abomasnow" },
+        // Gallade
         475: { mega: "Mega Gallade" },
+        // Audino
         531: { mega: "Mega Audino" },
+        // Diancie
         719: { mega: "Mega Diancie" },
+        // Ampharos
         181: { mega: "Mega Ampharos" },
+        // Steelix
         208: { mega: "Mega Steelix" },
+        // Scizor
         212: { mega: "Mega Scizor" },
+        // Heracross
         214: { mega: "Mega Heracross" },
+        // Houndoom
         229: { mega: "Mega Houndoom" },
+        // Mawile
         303: { mega: "Mega Mawile" },
-        354: { mega: "Mega Banette" },
-        359: { mega: "Mega Absol" },
-        // === PRIMAL FORMS (Gen 3) ===
+        // Primal Forms
         382: { primal: "Primal Kyogre" },
         383: { primal: "Primal Groudon" },
-        // === GIGANTAMAX FORMS (Gen 8) ===
-        25: { gmax: "Gigantamax Pikachu" },
-        52: { gmax: "Gigantamax Meowth" },
-        133: { gmax: "Gigantamax Eevee" },
-        143: { gmax: "Gigantamax Snorlax" },
-        68: { gmax: "Gigantamax Machamp" },
-        131: { gmax: "Gigantamax Lapras" },
+        // Gigantamax
         99: { gmax: "Gigantamax Kingler" },
-        823: { gmax: "Gigantamax Corviknight" },
+        131: { gmax: "Gigantamax Lapras" },
+        809: { gmax: "Gigantamax Melmetal" },
         812: { gmax: "Gigantamax Rillaboom" },
         815: { gmax: "Gigantamax Cinderace" },
         818: { gmax: "Gigantamax Inteleon" },
-        809: { gmax: "Gigantamax Melmetal" },
-        // === REGIONAL FORMS ===
+        823: { gmax: "Gigantamax Corviknight" },
+        // Regional Forms
         26: { alolan: "Alolan Raichu" },
         105: { alolan: "Alolan Marowak" },
         103: { alolan: "Alolan Exeggutor" },
@@ -570,7 +616,7 @@
         144: { galarian: "Galarian Articuno" },
         145: { galarian: "Galarian Zapdos" },
         146: { galarian: "Galarian Moltres" },
-        // === HISUIAN FORMS ===
+        // Hisuian Forms
         58: { hisuian: "Hisuian Growlithe" },
         59: { hisuian: "Hisuian Arcanine" },
         571: { hisuian: "Hisuian Zoroark" },
@@ -673,7 +719,7 @@
             };
             const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
             
-            // Spezialformen Buttons - JETZT mit ALLEN Pokémon
+            // Spezialformen Buttons
             let specialButtonsHtml = '';
             const specials = specialFormsMap[currentPokemonId];
             if (specials) {
@@ -683,7 +729,7 @@
                     let btnClass = 'special-btn';
                     if (key.includes('mega')) btnClass += ' mega';
                     else if (key === 'gmax') btnClass += ' gmax';
-                    else if (key === 'primal') btnClass += ' mega';
+                    else if (key === 'primal') btnClass += ' primal';
                     else btnClass += ' regional';
                     
                     specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${name}')">✨ ${name}</button>`;
@@ -718,19 +764,10 @@
                         let html = '<div class="evolution-title">🌳 Evolution Tree</div><div class="evolution-chain">';
                         for (let i = 0; i < evolutionChain.length; i++) {
                             const evoName = evolutionChain[i];
-                            // Finde ID für jedes Evolutions-Pokémon
                             let evoId = i + 1;
-                            if (evoName === pokemonData.name) evoId = currentPokemonId;
-                            else if (evoName === "charmander") evoId = 4;
-                            else if (evoName === "charmeleon") evoId = 5;
-                            else if (evoName === "charizard") evoId = 6;
-                            else if (evoName === "squirtle") evoId = 7;
-                            else if (evoName === "wartortle") evoId = 8;
-                            else if (evoName === "blastoise") evoId = 9;
-                            else if (evoName === "bulbasaur") evoId = 1;
-                            else if (evoName === "ivysaur") evoId = 2;
-                            else if (evoName === "venusaur") evoId = 3;
-                            else evoId = i + 1;
+                            // Einfache ID-Zuordnung für bekannte Pokémon
+                            const knownIds = { "bulbasaur":1, "ivysaur":2, "venusaur":3, "charmander":4, "charmeleon":5, "charizard":6, "squirtle":7, "wartortle":8, "blastoise":9 };
+                            if (knownIds[evoName]) evoId = knownIds[evoName];
                             
                             const displayName = evoName.charAt(0).toUpperCase() + evoName.slice(1);
                             html += `
