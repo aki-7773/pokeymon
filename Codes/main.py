@@ -112,11 +112,6 @@ def pokemon_detail(id):
 # --------------------------------------------------
 # SPEZIELLE FORMEN ROUTES (NEU)
 # --------------------------------------------------
-@route("/specials-list")
-def specials_list():
-    """Zeigt alle speziellen Formen (Megas, Gmax, Primals, Regionale)"""
-    return template("specials_list.html")
-
 @route("/special-detail")
 def special_detail():
     """Detailansicht für spezielle Formen"""
