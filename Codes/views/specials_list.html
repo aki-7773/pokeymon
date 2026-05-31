@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Special Forms - Mega, Gmax, Regional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            transition: all 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 48px;
+            margin: 25px 0;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: rgba(0,0,0,0.2);
+            padding: 12px 20px;
+            border-radius: 50px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            padding: 10px 22px;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .back-link:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .search-suggestions {
+            position: relative;
+            display: inline-block;
+            flex: 1;
+            max-width: 350px;
+        }
+        
+        .search-suggestions input {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 40px;
+            border: none;
+            font-size: 15px;
+            background: rgba(255,255,255,0.95);
+        }
+        
+        .suggestions-box {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 20px;
+            max-height: 350px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            margin-top: 8px;
+        }
+        
+        .suggestions-box div {
+            padding: 12px 18px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .suggestions-box div:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .dark-mode-toggle, .language-select {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            display: inline-block;
+            padding: 10px 18px;
+            background: rgba(0,0,0,0.35);
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+        }
+        
+        .nav-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
+        .special-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .special-card {
+            background: rgba(255,255,255,0.96);
+            border-radius: 24px;
+            padding: 18px 15px 20px;
+            text-align: center;
+            transition: all 0.35s;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid #ff9800;
+        }
+        
+        body.dark-mode .special-card {
+            background: rgba(0,0,0,0.85);
+            color: #f0f0f0;
+        }
+        
+        .special-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+        }
+        
+        .special-card img {
+            width: 130px;
+            height: 130px;
+        }
+        
+        .special-card h3 {
+            color: #2a75bb;
+            margin: 12px 0 6px;
+        }
+        
+        body.dark-mode .special-card h3 {
+            color: #ffcb05;
+        }
+        
+        .special-number {
+            color: #777;
+            font-size: 13px;
+        }
+        
+        .type-badges {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px 0 8px;
+            flex-wrap: wrap;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 25px;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+        
+        .favorite-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.5);
+            border: none;
+            font-size: 26px;
+            cursor: pointer;
+            color: #ddd;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        
+        .favorite-btn.favorited {
+            color: gold;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 70px;
+            color: white;
+        }
+        
+        .loader {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #ffcb05;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats-info {
+            text-align: center;
+            margin: 15px 0;
+            color: rgba(255,255,255,0.9);
+            background: rgba(0,0,0,0.2);
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 40px;
+        }
+        
+        .stats-wrapper {
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .special-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-suggestions {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>⭐ Special Pokémon Forms ⭐</h1>
+    
+    <div class="top-bar">
+        <a href="start.html" class="back-link">🏠 Home</a>
+        <a href="pokemon_list.html" class="back-link">📋 Normal Pokédex</a>
+        
+        <div class="search-suggestions">
+            <input type="text" id="searchInput" placeholder="🔍 Search special forms...">
+            <div id="suggestions" class="suggestions-box"></div>
+        </div>
+        
+        <div class="control-buttons">
+            <button class="dark-mode-toggle" id="darkModeBtn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+            <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
+                <option value="en">🇬🇧 English</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="zh">🇨🇳 中文</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="stats-wrapper">
+        <div class="stats-info" id="statsInfo"></div>
+    </div>
+    
+    <div id="specialGrid" class="special-grid">
+        <div class="loading"><div class="loader"></div><p>Loading special forms...</p></div>
+    </div>
+</div>
+
+<script>
+    let allSpecialForms = [];
+    let favoritePokemon = JSON.parse(localStorage.getItem('favorites') || '[]');
+    let currentLanguage = localStorage.getItem('language') || 'en';
+    
+    const typeColorMap = {
+        normal: "#A8A77A", fire: "#EE8130", water: "#6390F0",
+        electric: "#F7D02C", grass: "#7AC74C", ice: "#96D9D6",
+        fighting: "#C22E28", poison: "#A33EA1", ground: "#E2BF65",
+        flying: "#A98FF3", psychic: "#F95587", bug: "#A6B91A",
+        rock: "#B6A136", ghost: "#735797", dragon: "#6F35FC",
+        dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
+    };
+    
+    // Vollständige Liste aller speziellen Formen
+    const specialFormsList = [
+        // Ash-Greninja
+        { id: 10003, name: "Ash-Greninja", category: "Bond Phenomenon", region: "Kalos", searchKeys: ["ash", "greninja", "ash-greninja"] },
+        // Mega Evolutions (Gen 6 - Kalos)
+        { id: 10034, name: "Mega Charizard X", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "charizard", "mega-charizard-x"] },
+        { id: 10035, name: "Mega Charizard Y", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "charizard", "mega-charizard-y"] },
+        { id: 10036, name: "Mega Mewtwo X", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "mewtwo", "mega-mewtwo-x"] },
+        { id: 10037, name: "Mega Mewtwo Y", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "mewtwo", "mega-mewtwo-y"] },
+        { id: 10038, name: "Mega Gengar", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "gengar"] },
+        { id: 10039, name: "Mega Gyarados", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "gyarados"] },
+        { id: 10040, name: "Mega Aerodactyl", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "aerodactyl"] },
+        { id: 10041, name: "Mega Ampharos", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "ampharos"] },
+        { id: 10042, name: "Mega Steelix", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "steelix"] },
+        { id: 10043, name: "Mega Scizor", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "scizor"] },
+        { id: 10044, name: "Mega Heracross", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "heracross"] },
+        { id: 10045, name: "Mega Houndoom", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "houndoom"] },
+        { id: 10046, name: "Mega Tyranitar", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "tyranitar"] },
+        { id: 10047, name: "Mega Blaziken", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "blaziken"] },
+        { id: 10048, name: "Mega Gardevoir", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "gardevoir"] },
+        { id: 10049, name: "Mega Sableye", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "sableye"] },
+        { id: 10050, name: "Mega Mawile", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "mawile"] },
+        { id: 10051, name: "Mega Aggron", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "aggron"] },
+        { id: 10052, name: "Mega Medicham", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "medicham"] },
+        { id: 10053, name: "Mega Manectric", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "manectric"] },
+        { id: 10054, name: "Mega Sharpedo", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "sharpedo"] },
+        { id: 10055, name: "Mega Camerupt", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "camerupt"] },
+        { id: 10056, name: "Mega Altaria", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "altaria"] },
+        { id: 10057, name: "Mega Banette", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "banette"] },
+        { id: 10058, name: "Mega Absol", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "absol"] },
+        { id: 10059, name: "Mega Glalie", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "glalie"] },
+        { id: 10060, name: "Mega Salamence", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "salamence"] },
+        { id: 10061, name: "Mega Metagross", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "metagross"] },
+        { id: 10062, name: "Mega Latias", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "latias"] },
+        { id: 10063, name: "Mega Latios", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "latios"] },
+        { id: 10064, name: "Mega Rayquaza", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "rayquaza"] },
+        { id: 10065, name: "Mega Lopunny", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "lopunny"] },
+        { id: 10066, name: "Mega Garchomp", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "garchomp"] },
+        { id: 10067, name: "Mega Lucario", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "lucario"] },
+        { id: 10068, name: "Mega Abomasnow", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "abomasnow"] },
+        { id: 10069, name: "Mega Gallade", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "gallade"] },
+        { id: 10070, name: "Mega Audino", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "audino"] },
+        { id: 10071, name: "Mega Diancie", category: "Mega Evolution", region: "Kalos", searchKeys: ["mega", "diancie"] },
+        // Primal Forms (Gen 3 - Hoenn)
+        { id: 10080, name: "Primal Kyogre", category: "Primal Reversion", region: "Hoenn", searchKeys: ["primal", "kyogre"] },
+        { id: 10081, name: "Primal Groudon", category: "Primal Reversion", region: "Hoenn", searchKeys: ["primal", "groudon"] },
+        // Gigantamax Forms (Gen 8 - Galar)
+        { id: 10072, name: "Gigantamax Charizard", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "charizard"] },
+        { id: 10073, name: "Gigantamax Pikachu", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "pikachu"] },
+        { id: 10074, name: "Gigantamax Eevee", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "eevee"] },
+        { id: 10075, name: "Gigantamax Meowth", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "meowth"] },
+        { id: 10076, name: "Gigantamax Gengar", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "gengar"] },
+        { id: 10077, name: "Gigantamax Lapras", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "lapras"] },
+        { id: 10078, name: "Gigantamax Snorlax", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "snorlax"] },
+        { id: 10079, name: "Gigantamax Machamp", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "machamp"] },
+        { id: 10082, name: "Gigantamax Kingler", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "kingler"] },
+        { id: 10083, name: "Gigantamax Corviknight", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "corviknight"] },
+        { id: 10096, name: "Gigantamax Rillaboom", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "rillaboom"] },
+        { id: 10097, name: "Gigantamax Cinderace", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "cinderace"] },
+        { id: 10098, name: "Gigantamax Inteleon", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "inteleon"] },
+        { id: 10099, name: "Gigantamax Melmetal", category: "Gigantamax", region: "Galar", searchKeys: ["gmax", "gigantamax", "melmetal"] },
+        // Regional Forms
+        { id: 10100, name: "Alolan Raichu", category: "Regional Form", region: "Alola", searchKeys: ["alola", "raichu"] },
+        { id: 10101, name: "Alolan Marowak", category: "Regional Form", region: "Alola", searchKeys: ["alola", "marowak"] },
+        { id: 10102, name: "Alolan Exeggutor", category: "Regional Form", region: "Alola", searchKeys: ["alola", "exeggutor"] },
+        { id: 10103, name: "Galarian Ponyta", category: "Regional Form", region: "Galar", searchKeys: ["galar", "ponyta"] },
+        { id: 10104, name: "Galarian Rapidash", category: "Regional Form", region: "Galar", searchKeys: ["galar", "rapidash"] },
+        { id: 10105, name: "Galarian Slowbro", category: "Regional Form", region: "Galar", searchKeys: ["galar", "slowbro"] },
+        { id: 10106, name: "Hisuian Growlithe", category: "Regional Form", region: "Hisui", searchKeys: ["hisui", "growlithe"] },
+        { id: 10107, name: "Hisuian Arcanine", category: "Regional Form", region: "Hisui", searchKeys: ["hisui", "arcanine"] },
+        { id: 10108, name: "Hisuian Zoroark", category: "Regional Form", region: "Hisui", searchKeys: ["hisui", "zoroark"] }
+    };
+    
+    async function loadSpecialForms() {
+        const container = document.getElementById('specialGrid');
+        container.innerHTML = '<div class="loading"><div class="loader"></div><p>Loading special forms...</p></div>';
+        
+        const tempList = [];
+        
+        for (const special of specialFormsList) {
+            try {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${special.id}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    tempList.push({
+                        id: special.id,
+                        name: special.name,
+                        category: special.category,
+                        region: special.region,
+                        searchKeys: special.searchKeys,
+                        types: data.types.map(t => t.type.name),
+                        imageUrl: data.sprites.other['official-artwork'].front_default || data.sprites.front_default
+                    });
+                } else {
+                    tempList.push({
+                        id: special.id,
+                        name: special.name,
+                        category: special.category,
+                        region: special.region,
+                        searchKeys: special.searchKeys,
+                        types: [],
+                        imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${special.id}.png`
+                    });
+                }
+            } catch(e) {
+                tempList.push({
+                    id: special.id,
+                    name: special.name,
+                    category: special.category,
+                    region: special.region,
+                    searchKeys: special.searchKeys,
+                    types: [],
+                    imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${special.id}.png`
+                });
+            }
+        }
+        
+        allSpecialForms = tempList;
+        updateStats();
+        renderGrid();
+    }
+    
+    function updateStats() {
+        document.getElementById('statsInfo').innerHTML = `📊 ${allSpecialForms.length} special forms | ⭐ ${favoritePokemon.filter(id => id > 10000).length}/6 in team`;
+    }
+    
+    function renderGrid() {
+        const container = document.getElementById('specialGrid');
+        let filtered = [...allSpecialForms];
+        
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (searchTerm.length >= 2) {
+            filtered = filtered.filter(s => 
+                s.name.toLowerCase().includes(searchTerm) || 
+                s.searchKeys.some(key => key.toLowerCase().includes(searchTerm))
+            );
+        }
+        
+        if (filtered.length === 0) {
+            container.innerHTML = '<div class="loading"><p>⚠️ No special forms found</p></div>';
+            return;
+        }
+        
+        container.innerHTML = filtered.map(s => `
+            <div class="special-card" onclick="location.href='special_detail.html?id=${s.id}'">
+                <button class="favorite-btn ${favoritePokemon.includes(s.id) ? 'favorited' : ''}" 
+                        onclick="event.stopPropagation(); toggleFavorite(${s.id})">
+                    ${favoritePokemon.includes(s.id) ? '★' : '☆'}
+                </button>
+                <img src="${s.imageUrl}" alt="${s.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
+                <h3>${s.name}</h3>
+                <div class="special-number">#${String(s.id).padStart(5, '0')}</div>
+                <div class="type-badges">
+                    ${s.types.map(t => `<span class="type-badge" style="background: ${typeColorMap[t]}">${t.toUpperCase()}</span>`).join('')}
+                </div>
+                <div class="category-badge">${s.category}</div>
+                <div style="font-size: 11px; margin-top: 5px;">📍 ${s.region}</div>
+            </div>
+        `).join('');
+    }
+    
+    function toggleFavorite(id) {
+        if (favoritePokemon.includes(id)) {
+            favoritePokemon = favoritePokemon.filter(f => f !== id);
+        } else if (favoritePokemon.length < 6) {
+            favoritePokemon.push(id);
+        } else {
+            alert('You can only have 6 Pokémon in your team!');
+            return;
+        }
+        localStorage.setItem('favorites', JSON.stringify(favoritePokemon));
+        updateStats();
+        renderGrid();
+    }
+    
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        const btn = document.getElementById('darkModeBtn');
+        btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    }
+    
+    function changeLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+        document.getElementById('languageSelect').value = lang;
+    }
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
+    }
+    document.getElementById('languageSelect').value = currentLanguage;
+    
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        renderGrid();
+        const query = e.target.value.toLowerCase();
+        if (query.length < 2) {
+            document.getElementById('suggestions').style.display = 'none';
+            return;
+        }
+        const matches = allSpecialForms.filter(s => 
+            s.name.toLowerCase().includes(query) || 
+            s.searchKeys.some(key => key.toLowerCase().includes(query))
+        ).slice(0, 10);
+        const suggestions = document.getElementById('suggestions');
+        if (matches.length > 0) {
+            suggestions.style.display = 'block';
+            suggestions.innerHTML = matches.map(s => `<div onclick="location.href='special_detail.html?id=${s.id}'">${s.name} (#${String(s.id).padStart(5, '0')})</div>`).join('');
+        } else {
+            suggestions.style.display = 'none';
+        }
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-suggestions')) {
+            document.getElementById('suggestions').style.display = 'none';
+        }
+    });
+    
+    loadSpecialForms();
+</script>
+</body>
+</html>
