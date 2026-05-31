@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Pokémon Special Form - Complete Info</title>
     <style>
+        /* ========== GLOBALE STYLES (wie gehabt - bereits responsive) ========== */
         * {
             margin: 0;
             padding: 0;
@@ -566,24 +567,24 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // Vollständiges Mapping für alle speziellen Formen (gleiches wie in pokemon_detail.html)
+    // Mapping für spezielle Formen – mit zusätzlichen eigenen Pokédex-Texten (Fallback)
     const specialFormsMapping = {
-        10003: { displayName: "Ash-Greninja", baseId: 658, baseName: "greninja", region: "Kalos", regionId: 6, category: "ash" },
-        10034: { displayName: "Mega Charizard X", baseId: 6, baseName: "charizard", region: "Kalos", regionId: 6, category: "mega" },
-        10035: { displayName: "Mega Charizard Y", baseId: 6, baseName: "charizard", region: "Kalos", regionId: 6, category: "mega" },
-        10036: { displayName: "Mega Mewtwo X", baseId: 150, baseName: "mewtwo", region: "Kalos", regionId: 6, category: "mega" },
-        10037: { displayName: "Mega Mewtwo Y", baseId: 150, baseName: "mewtwo", region: "Kalos", regionId: 6, category: "mega" },
-        10038: { displayName: "Mega Gengar", baseId: 94, baseName: "gengar", region: "Kalos", regionId: 6, category: "mega" },
-        10080: { displayName: "Primal Kyogre", baseId: 382, baseName: "kyogre", region: "Hoenn", regionId: 3, category: "primal" },
-        10081: { displayName: "Primal Groudon", baseId: 383, baseName: "groudon", region: "Hoenn", regionId: 3, category: "primal" },
-        10072: { displayName: "Gigantamax Charizard", baseId: 6, baseName: "charizard", region: "Galar", regionId: 8, category: "gmax" },
-        10073: { displayName: "Gigantamax Pikachu", baseId: 25, baseName: "pikachu", region: "Galar", regionId: 8, category: "gmax" },
-        10074: { displayName: "Gigantamax Eevee", baseId: 133, baseName: "eevee", region: "Galar", regionId: 8, category: "gmax" },
-        10075: { displayName: "Gigantamax Meowth", baseId: 52, baseName: "meowth", region: "Galar", regionId: 8, category: "gmax" },
-        10076: { displayName: "Gigantamax Gengar", baseId: 94, baseName: "gengar", region: "Galar", regionId: 8, category: "gmax" },
-        10077: { displayName: "Gigantamax Lapras", baseId: 131, baseName: "lapras", region: "Galar", regionId: 8, category: "gmax" },
-        10078: { displayName: "Gigantamax Snorlax", baseId: 143, baseName: "snorlax", region: "Galar", regionId: 8, category: "gmax" },
-        10079: { displayName: "Gigantamax Machamp", baseId: 68, baseName: "machamp", region: "Galar", regionId: 8, category: "gmax" }
+        10003: { displayName: "Ash-Greninja", baseId: 658, baseName: "greninja", region: "Kalos", regionId: 6, category: "ash", customDex: "Ash-Greninja is a special form of Greninja that appears when its bond with its Trainer reaches its peak. It has a unique appearance and increased power." },
+        10034: { displayName: "Mega Charizard X", baseId: 6, baseName: "charizard", region: "Kalos", regionId: 6, category: "mega", customDex: "Mega Charizard X has a black body and blue flames. It becomes a Fire/Dragon type and its Attack increases dramatically." },
+        10035: { displayName: "Mega Charizard Y", baseId: 6, baseName: "charizard", region: "Kalos", regionId: 6, category: "mega", customDex: "Mega Charizard Y has a sleeker build and larger wings. It gains the Drought ability, intensifying sunlight." },
+        10036: { displayName: "Mega Mewtwo X", baseId: 150, baseName: "mewtwo", region: "Kalos", regionId: 6, category: "mega", customDex: "Mega Mewtwo X focuses on physical combat. It gains the Fighting type and immense strength." },
+        10037: { displayName: "Mega Mewtwo Y", baseId: 150, baseName: "mewtwo", region: "Kalos", regionId: 6, category: "mega", customDex: "Mega Mewtwo Y's psychic powers are amplified to their maximum. Its Special Attack is unmatched." },
+        10038: { displayName: "Mega Gengar", baseId: 94, baseName: "gengar", region: "Kalos", regionId: 6, category: "mega", customDex: "Mega Gengar's body melts into the shadows. It can trap opponents with the Shadow Tag ability." },
+        10080: { displayName: "Primal Kyogre", baseId: 382, baseName: "kyogre", region: "Hoenn", regionId: 3, category: "primal", customDex: "Primal Kyogre has awakened its full power. It summons heavy rain that never stops." },
+        10081: { displayName: "Primal Groudon", baseId: 383, baseName: "groudon", region: "Hoenn", regionId: 3, category: "primal", customDex: "Primal Groudon's body is covered in magma. Its Desolate Land ability eliminates all water." },
+        10072: { displayName: "Gigantamax Charizard", baseId: 6, baseName: "charizard", region: "Galar", regionId: 8, category: "gmax", customDex: "Gigantamax Charizard's wings are made of fire. Its G-Max move, G-Max Wildfire, deals continuous damage." },
+        10073: { displayName: "Gigantamax Pikachu", baseId: 25, baseName: "pikachu", region: "Galar", regionId: 8, category: "gmax", customDex: "Gigantamax Pikachu's tail becomes a lightning bolt. Its G-Max move paralyzes all opponents." },
+        10074: { displayName: "Gigantamax Eevee", baseId: 133, baseName: "eevee", region: "Galar", regionId: 8, category: "gmax", customDex: "Gigantamax Eevee's fluffy fur becomes a majestic mane. Its G-Max move charms opponents." },
+        10075: { displayName: "Gigantamax Meowth", baseId: 52, baseName: "meowth", region: "Galar", regionId: 8, category: "gmax", customDex: "Gigantamax Meowth's body elongates like a coin. Its G-Max move scatters gold coins." },
+        10076: { displayName: "Gigantamax Gengar", baseId: 94, baseName: "gengar", region: "Galar", regionId: 8, category: "gmax", customDex: "Gigantamax Gengar's mouth opens to a dimension. Its G-Max move traps opponents in a nightmare." },
+        10077: { displayName: "Gigantamax Lapras", baseId: 131, baseName: "lapras", region: "Galar", regionId: 8, category: "gmax", customDex: "Gigantamax Lapras's shell becomes a musical stage. Its G-Max move heals allies." },
+        10078: { displayName: "Gigantamax Snorlax", baseId: 143, baseName: "snorlax", region: "Galar", regionId: 8, category: "gmax", customDex: "Gigantamax Snorlax's belly becomes a mountain. Its G-Max move restores HP." },
+        10079: { displayName: "Gigantamax Machamp", baseId: 68, baseName: "machamp", region: "Galar", regionId: 8, category: "gmax", customDex: "Gigantamax Machamp's four arms swell to massive size. Its G-Max move throws opponents." }
     };
     
     function toggleDarkMode() {
@@ -631,39 +632,43 @@
         }
     }
     
-    async function loadPokedexEntry(speciesId, customDisplayName = null) {
-        try {
-            const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${speciesId}`);
-            if (!response.ok) return "No Pokédex entry available for this special form.";
-            const data = await response.json();
-            let targetLanguage = currentLanguage;
-            let foundEntry = null;
-            for (const entry of data.flavor_text_entries) {
-                if (entry.language.name === targetLanguage) {
-                    foundEntry = entry;
-                    break;
-                }
-            }
-            if (!foundEntry) {
-                for (const entry of data.flavor_text_entries) {
-                    if (entry.language.name === "en") {
-                        foundEntry = entry;
-                        break;
+    // Pokédex-Eintrag: Priorität 1: Custom-Text, 2: API-Eintrag der Basis-Form (angepasst)
+    async function getPokedexEntry(specialInfo, pokemonId) {
+        if (specialInfo && specialInfo.customDex) {
+            return specialInfo.customDex;
+        }
+        // Fallback: Versuche, den Eintrag der Basis-Form zu laden und Namen zu ersetzen
+        if (specialInfo && specialInfo.baseId) {
+            try {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${specialInfo.baseId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    let targetLanguage = currentLanguage;
+                    let foundEntry = null;
+                    for (const entry of data.flavor_text_entries) {
+                        if (entry.language.name === targetLanguage) {
+                            foundEntry = entry;
+                            break;
+                        }
+                    }
+                    if (!foundEntry) {
+                        for (const entry of data.flavor_text_entries) {
+                            if (entry.language.name === "en") {
+                                foundEntry = entry;
+                                break;
+                            }
+                        }
+                    }
+                    if (foundEntry) {
+                        let text = foundEntry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
+                        const originalName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
+                        text = text.replace(originalName, specialInfo.displayName);
+                        return text;
                     }
                 }
-            }
-            if (foundEntry) {
-                let text = foundEntry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
-                if (customDisplayName) {
-                    const originalName = data.name.charAt(0).toUpperCase() + data.name.slice(1);
-                    text = text.replace(originalName, customDisplayName);
-                }
-                return text;
-            }
-            return "No Pokédex entry available for this special form.";
-        } catch(error) {
-            return "Unable to load Pokédex data.";
+            } catch(e) {}
         }
+        return "No Pokédex entry available for this special form.";
     }
     
     async function loadEvolutionTree(baseSpeciesId, specialInfo) {
@@ -748,7 +753,14 @@
                 else region = "Paldea";
             }
             
-            const pokedexText = await loadPokedexEntry(baseSpeciesId, isSpecial ? displayName : null);
+            // Pokédex-Eintrag: zuerst versuchen, spezifischen Text zu laden
+            let dexText = await getPokedexEntry(specialInfo, currentPokemonId);
+            
+            // Korrekte Bild-URL: Verwende front_default (existiert immer) für spezielle Formen
+            let imageUrl = pokemonData.sprites.front_default || pokemonData.sprites.other['official-artwork'].front_default;
+            if (!imageUrl) {
+                imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${currentPokemonId}.png`;
+            }
             
             const stats = {
                 hp: pokemonData.stats[0].base_stat,
@@ -766,7 +778,7 @@
                     <div class="pokemon-id">#${String(pokemonData.id).padStart(5, '0')} ⭐ ${categoryText}</div>
                 </div>
                 <div class="pokemon-image-container">
-                    <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonData.id}.png" 
+                    <img class="pokemon-image" src="${imageUrl}" 
                          alt="${displayName}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
                 </div>
                 <div class="action-buttons">
@@ -793,7 +805,7 @@
                     <div class="stat-row"><span class="stat-name">⚡ Speed</span> ${stats.speed}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.speed/255)*100}%">${stats.speed}</div></div></div>
                     <div class="stat-row" style="margin-top: 15px; border-top: 2px solid #ffcb05; padding-top: 12px;"><span class="stat-name">⭐ Total</span> <strong>${totalStats}</strong></div>
                 </div>
-                <div class="dex-entry"><strong>📖 Pokédex Entry</strong><br>"${pokedexText}"</div>
+                <div class="dex-entry"><strong>📖 Pokédex Entry</strong><br>"${dexText}"</div>
                 <div class="evolution-section" id="evolutionTree"></div>
                 <div class="back-buttons"><a href="pokemon_list.html" class="back-button">← Back to Pokédex</a><a href="start.html" class="back-button">🏠 Home</a></div>
             `;
