@@ -3,14 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Pokémon Detail</title>
+    <title>Pokémon Detail - Gen 1-6</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        /* Gleiche Styles wie vorher */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -19,11 +15,7 @@
             padding: 20px;
             position: relative;
         }
-        
-        body.dark-mode {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        }
-        
+        body.dark-mode { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
         .container {
             max-width: 700px;
             margin: 0 auto;
@@ -34,12 +26,7 @@
             position: relative;
             z-index: 2;
         }
-        
-        body.dark-mode .container {
-            background: rgba(0,0,0,0.88);
-            color: #e0e0e0;
-        }
-        
+        body.dark-mode .container { background: rgba(0,0,0,0.88); color: #e0e0e0; }
         .nav-prev, .nav-next {
             position: fixed;
             top: 50%;
@@ -58,15 +45,9 @@
             border: none;
             cursor: pointer;
         }
-        
         .nav-prev { left: 20px; }
         .nav-next { right: 20px; }
-        
-        .nav-prev:hover, .nav-next:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
+        .nav-prev:hover, .nav-next:hover { background: #ffcb05; color: #2a75bb; }
         .control-buttons {
             position: fixed;
             top: 20px;
@@ -75,7 +56,6 @@
             gap: 12px;
             z-index: 100;
         }
-        
         .dark-mode-toggle, .language-select {
             background: rgba(42,117,187,0.9);
             color: white;
@@ -86,7 +66,6 @@
             font-weight: bold;
             font-size: 14px;
         }
-        
         .profile-btn {
             position: fixed;
             top: 20px;
@@ -99,123 +78,25 @@
             font-weight: bold;
             z-index: 100;
         }
-        
-        .dark-mode-toggle:hover, .language-select:hover, .profile-btn:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
-        .pokemon-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        
-        .pokemon-header h1 {
-            color: #2a75bb;
-            font-size: 38px;
-        }
-        
-        body.dark-mode .pokemon-header h1 {
-            color: #ffcb05;
-        }
-        
-        .pokemon-id {
-            font-size: 16px;
-            color: #777;
-        }
-        
-        .pokemon-image-container {
-            text-align: center;
-            margin: 15px 0;
-        }
-        
-        .pokemon-image {
-            width: 260px;
-            height: 260px;
-            object-fit: contain;
-            filter: drop-shadow(8px 12px 20px rgba(0,0,0,0.2));
-        }
-        
-        .special-forms-section {
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255,152,0,0.15);
-            border-radius: 20px;
-            text-align: center;
-        }
-        
-        .special-forms-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ff9800;
-            margin-bottom: 12px;
-        }
-        
-        .special-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-        
-        .special-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-        
-        .special-btn.mega {
-            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
-            color: white;
-        }
-        
-        .special-btn.gmax {
-            background: linear-gradient(135deg, #f44336, #d32f2f);
-            color: white;
-        }
-        
-        .special-btn.primal {
-            background: linear-gradient(135deg, #00bcd4, #0097a7);
-            color: white;
-        }
-        
-        .special-btn.regional {
-            background: linear-gradient(135deg, #2196f3, #1976d2);
-            color: white;
-        }
-        
-        .special-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        
-        .cry-button, .print-btn {
-            background: #2a75bb;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .cry-button:hover, .print-btn:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-        }
-        
+        .dark-mode-toggle:hover, .language-select:hover, .profile-btn:hover { background: #ffcb05; color: #2a75bb; }
+        .pokemon-header { text-align: center; margin-bottom: 25px; }
+        .pokemon-header h1 { color: #2a75bb; font-size: 38px; }
+        body.dark-mode .pokemon-header h1 { color: #ffcb05; }
+        .pokemon-id { font-size: 16px; color: #777; }
+        .pokemon-image-container { text-align: center; margin: 15px 0; }
+        .pokemon-image { width: 260px; height: 260px; object-fit: contain; filter: drop-shadow(8px 12px 20px rgba(0,0,0,0.2)); }
+        .special-forms-section { margin: 20px 0; padding: 15px; background: rgba(255,152,0,0.15); border-radius: 20px; text-align: center; }
+        .special-forms-title { font-size: 16px; font-weight: bold; color: #ff9800; margin-bottom: 12px; }
+        .special-buttons { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .special-btn { padding: 8px 20px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 14px; }
+        .special-btn.mega { background: linear-gradient(135deg, #9c27b0, #7b1fa2); color: white; }
+        .special-btn.gmax { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; }
+        .special-btn.primal { background: linear-gradient(135deg, #00bcd4, #0097a7); color: white; }
+        .special-btn.regional { background: linear-gradient(135deg, #2196f3, #1976d2); color: white; }
+        .special-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .action-buttons { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
+        .cry-button, .print-btn { background: #2a75bb; color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; font-weight: bold; }
+        .cry-button:hover, .print-btn:hover { background: #ffcb05; color: #2a75bb; }
         .info-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -225,233 +106,41 @@
             padding: 18px;
             border-radius: 24px;
         }
-        
-        body.dark-mode .info-grid {
-            background: rgba(255,255,255,0.05);
-        }
-        
-        .info-card {
-            background: white;
-            padding: 14px;
-            border-radius: 20px;
-            text-align: center;
-        }
-        
-        body.dark-mode .info-card {
-            background: rgba(30,30,40,0.9);
-        }
-        
-        .info-label {
-            font-weight: bold;
-            color: #2a75bb;
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-        
-        body.dark-mode .info-label {
-            color: #ffcb05;
-        }
-        
-        .info-value {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        
-        .types-section, .abilities-section {
-            margin: 20px 0;
-        }
-        
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: #2a75bb;
-            margin-bottom: 12px;
-            border-left: 4px solid #ffcb05;
-            padding-left: 15px;
-        }
-        
-        body.dark-mode .section-title {
-            color: #ffcb05;
-        }
-        
-        .type-badge-list, .ability-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            list-style: none;
-            padding: 0;
-        }
-        
-        .type-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 40px;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-        
-        .ability-item {
-            background: #e8e8e8;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-weight: 500;
-        }
-        
-        body.dark-mode .ability-item {
-            background: #3a3a4a;
-            color: #eee;
-        }
-        
-        .stats-container {
-            margin: 25px 0;
-        }
-        
-        .stat-row {
-            margin: 14px 0;
-        }
-        
-        .stat-name {
-            font-weight: bold;
-            display: inline-block;
-            width: 100px;
-        }
-        
-        .stat-bar-bg {
-            background: #e0e0e0;
-            border-radius: 20px;
-            height: 28px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
-        
-        body.dark-mode .stat-bar-bg {
-            background: #3a3a4a;
-        }
-        
-        .stat-bar-fill {
-            background: linear-gradient(90deg, #2a75bb, #4a95db);
-            height: 100%;
-            color: white;
-            line-height: 28px;
-            padding-left: 12px;
-            font-weight: bold;
-            border-radius: 20px;
-            transition: width 0.5s ease;
-        }
-        
-        .dex-entry {
-            background: #f5f0e8;
-            padding: 20px;
-            border-radius: 24px;
-            margin: 25px 0;
-            font-style: italic;
-            line-height: 1.6;
-            border-left: 5px solid #ffcb05;
-        }
-        
-        body.dark-mode .dex-entry {
-            background: #2a2a3a;
-            color: #ddd;
-        }
-        
-        .evolution-section {
-            margin: 25px 0;
-            padding: 20px;
-            background: #f0f0f0;
-            border-radius: 24px;
-        }
-        
-        body.dark-mode .evolution-section {
-            background: #2a2a3a;
-        }
-        
-        .evolution-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .evolution-chain {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .evolution-node {
-            text-align: center;
-            min-width: 110px;
-        }
-        
-        .evolution-node img {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            background: white;
-            padding: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            cursor: pointer;
-        }
-        
-        .evolution-node img:hover {
-            transform: scale(1.05);
-        }
-        
-        .evolution-node a {
-            display: block;
-            margin-top: 8px;
-            text-decoration: none;
-            color: #2a75bb;
-            font-weight: bold;
-            font-size: 13px;
-        }
-        
-        body.dark-mode .evolution-node a {
-            color: #ffcb05;
-        }
-        
-        .evolution-arrow {
-            font-size: 28px;
-            color: #2a75bb;
-            font-weight: bold;
-        }
-        
-        .back-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: #ffcb05;
-            color: #2a75bb;
-            text-decoration: none;
-            border-radius: 40px;
-            font-weight: bold;
-            text-align: center;
-        }
-        
-        .back-button:hover {
-            background: #f5b700;
-            transform: translateY(-2px);
-        }
-        
-        .loader-small {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #ffcb05;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
+        body.dark-mode .info-grid { background: rgba(255,255,255,0.05); }
+        .info-card { background: white; padding: 14px; border-radius: 20px; text-align: center; }
+        body.dark-mode .info-card { background: rgba(30,30,40,0.9); }
+        .info-label { font-weight: bold; color: #2a75bb; margin-bottom: 6px; font-size: 14px; }
+        body.dark-mode .info-label { color: #ffcb05; }
+        .info-value { font-size: 18px; font-weight: 600; }
+        .types-section, .abilities-section { margin: 20px 0; }
+        .section-title { font-size: 20px; font-weight: bold; color: #2a75bb; margin-bottom: 12px; border-left: 4px solid #ffcb05; padding-left: 15px; }
+        body.dark-mode .section-title { color: #ffcb05; }
+        .type-badge-list, .ability-list { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; padding: 0; }
+        .type-badge { display: inline-block; padding: 8px 20px; border-radius: 40px; color: white; font-weight: bold; font-size: 14px; text-transform: uppercase; }
+        .ability-item { background: #e8e8e8; padding: 8px 18px; border-radius: 40px; font-weight: 500; }
+        body.dark-mode .ability-item { background: #3a3a4a; color: #eee; }
+        .stats-container { margin: 25px 0; }
+        .stat-row { margin: 14px 0; }
+        .stat-name { font-weight: bold; display: inline-block; width: 100px; }
+        .stat-bar-bg { background: #e0e0e0; border-radius: 20px; height: 28px; overflow: hidden; margin-top: 5px; }
+        body.dark-mode .stat-bar-bg { background: #3a3a4a; }
+        .stat-bar-fill { background: linear-gradient(90deg, #2a75bb, #4a95db); height: 100%; color: white; line-height: 28px; padding-left: 12px; font-weight: bold; border-radius: 20px; transition: width 0.5s ease; }
+        .dex-entry { background: #f5f0e8; padding: 20px; border-radius: 24px; margin: 25px 0; font-style: italic; line-height: 1.6; border-left: 5px solid #ffcb05; }
+        body.dark-mode .dex-entry { background: #2a2a3a; color: #ddd; }
+        .evolution-section { margin: 25px 0; padding: 20px; background: #f0f0f0; border-radius: 24px; }
+        body.dark-mode .evolution-section { background: #2a2a3a; }
+        .evolution-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .evolution-chain { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; }
+        .evolution-node { text-align: center; min-width: 110px; }
+        .evolution-node img { width: 85px; height: 85px; border-radius: 50%; background: white; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); cursor: pointer; }
+        .evolution-node img:hover { transform: scale(1.05); }
+        .evolution-node a { display: block; margin-top: 8px; text-decoration: none; color: #2a75bb; font-weight: bold; font-size: 13px; }
+        body.dark-mode .evolution-node a { color: #ffcb05; }
+        .evolution-arrow { font-size: 28px; color: #2a75bb; font-weight: bold; }
+        .back-button { display: inline-block; margin-top: 20px; padding: 12px 30px; background: #ffcb05; color: #2a75bb; text-decoration: none; border-radius: 40px; font-weight: bold; text-align: center; }
+        .back-button:hover { background: #f5b700; transform: translateY(-2px); }
+        .loader-small { border: 3px solid #f3f3f3; border-top: 3px solid #ffcb05; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @media (max-width: 768px) {
             body { padding: 15px; }
             .container { padding: 20px; }
@@ -506,124 +195,54 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== KOMPLETTE SPEZIALFORMEN MAP für ALLE Pokémon ==========
+    // ========== SPEZIALFORMEN für Gen 1-6 ==========
     const specialFormsMap = {
-        // Charizard
-        6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard" },
-        // Mewtwo
-        150: { megaX: "Mega Mewtwo X", megaY: "Mega Mewtwo Y" },
-        // Gengar
-        94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar" },
-        // Venusaur
         3: { gmax: "Gigantamax Venusaur" },
-        // Blastoise
+        6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard" },
         9: { gmax: "Gigantamax Blastoise" },
-        // Pikachu
         25: { gmax: "Gigantamax Pikachu" },
-        // Meowth
         52: { gmax: "Gigantamax Meowth" },
-        // Eevee
-        133: { gmax: "Gigantamax Eevee" },
-        // Snorlax
-        143: { gmax: "Gigantamax Snorlax" },
-        // Machamp
         68: { gmax: "Gigantamax Machamp" },
-        // Gyarados
+        94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar" },
+        99: { gmax: "Gigantamax Kingler" },
         130: { mega: "Mega Gyarados" },
-        // Tyranitar
-        248: { mega: "Mega Tyranitar" },
-        // Blaziken
-        257: { mega: "Mega Blaziken" },
-        // Gardevoir
-        282: { mega: "Mega Gardevoir" },
-        // Sableye
-        302: { mega: "Mega Sableye" },
-        // Aggron
-        306: { mega: "Mega Aggron" },
-        // Medicham
-        308: { mega: "Mega Medicham" },
-        // Manectric
-        310: { mega: "Mega Manectric" },
-        // Sharpedo
-        319: { mega: "Mega Sharpedo" },
-        // Camerupt
-        323: { mega: "Mega Camerupt" },
-        // Altaria
-        334: { mega: "Mega Altaria" },
-        // Banette
-        354: { mega: "Mega Banette" },
-        // Absol
-        359: { mega: "Mega Absol" },
-        // Glalie
-        362: { mega: "Mega Glalie" },
-        // Salamence
-        373: { mega: "Mega Salamence" },
-        // Metagross
-        376: { mega: "Mega Metagross" },
-        // Latias
-        380: { mega: "Mega Latias" },
-        // Latios
-        381: { mega: "Mega Latios" },
-        // Rayquaza
-        384: { mega: "Mega Rayquaza" },
-        // Lopunny
-        428: { mega: "Mega Lopunny" },
-        // Garchomp
-        445: { mega: "Mega Garchomp" },
-        // Lucario
-        448: { mega: "Mega Lucario" },
-        // Abomasnow
-        460: { mega: "Mega Abomasnow" },
-        // Gallade
-        475: { mega: "Mega Gallade" },
-        // Audino
-        531: { mega: "Mega Audino" },
-        // Diancie
-        719: { mega: "Mega Diancie" },
-        // Ampharos
+        131: { gmax: "Gigantamax Lapras" },
+        133: { gmax: "Gigantamax Eevee" },
+        143: { gmax: "Gigantamax Snorlax" },
+        150: { megaX: "Mega Mewtwo X", megaY: "Mega Mewtwo Y" },
         181: { mega: "Mega Ampharos" },
-        // Steelix
         208: { mega: "Mega Steelix" },
-        // Scizor
         212: { mega: "Mega Scizor" },
-        // Heracross
         214: { mega: "Mega Heracross" },
-        // Houndoom
         229: { mega: "Mega Houndoom" },
-        // Mawile
+        248: { mega: "Mega Tyranitar" },
+        257: { mega: "Mega Blaziken" },
+        282: { mega: "Mega Gardevoir" },
+        302: { mega: "Mega Sableye" },
         303: { mega: "Mega Mawile" },
-        // Primal Forms
+        306: { mega: "Mega Aggron" },
+        308: { mega: "Mega Medicham" },
+        310: { mega: "Mega Manectric" },
+        319: { mega: "Mega Sharpedo" },
+        323: { mega: "Mega Camerupt" },
+        334: { mega: "Mega Altaria" },
+        354: { mega: "Mega Banette" },
+        359: { mega: "Mega Absol" },
+        362: { mega: "Mega Glalie" },
+        373: { mega: "Mega Salamence" },
+        376: { mega: "Mega Metagross" },
+        380: { mega: "Mega Latias" },
+        381: { mega: "Mega Latios" },
         382: { primal: "Primal Kyogre" },
         383: { primal: "Primal Groudon" },
-        // Gigantamax
-        99: { gmax: "Gigantamax Kingler" },
-        131: { gmax: "Gigantamax Lapras" },
-        809: { gmax: "Gigantamax Melmetal" },
-        812: { gmax: "Gigantamax Rillaboom" },
-        815: { gmax: "Gigantamax Cinderace" },
-        818: { gmax: "Gigantamax Inteleon" },
-        823: { gmax: "Gigantamax Corviknight" },
-        // Regional Forms
-        26: { alolan: "Alolan Raichu" },
-        105: { alolan: "Alolan Marowak" },
-        103: { alolan: "Alolan Exeggutor" },
-        77: { galarian: "Galarian Ponyta" },
-        78: { galarian: "Galarian Rapidash" },
-        79: { galarian: "Galarian Slowpoke" },
-        80: { galarian: "Galarian Slowbro" },
-        110: { galarian: "Galarian Weezing" },
-        122: { galarian: "Galarian Mr. Mime" },
-        144: { galarian: "Galarian Articuno" },
-        145: { galarian: "Galarian Zapdos" },
-        146: { galarian: "Galarian Moltres" },
-        // Hisuian Forms
-        58: { hisuian: "Hisuian Growlithe" },
-        59: { hisuian: "Hisuian Arcanine" },
-        571: { hisuian: "Hisuian Zoroark" },
-        549: { hisuian: "Hisuian Lilligant" },
-        628: { hisuian: "Hisuian Braviary" },
-        713: { hisuian: "Hisuian Avalugg" },
-        901: { hisuian: "Hisuian Ursaluna" }
+        384: { mega: "Mega Rayquaza" },
+        428: { mega: "Mega Lopunny" },
+        445: { mega: "Mega Garchomp" },
+        448: { mega: "Mega Lucario" },
+        460: { mega: "Mega Abomasnow" },
+        475: { mega: "Mega Gallade" },
+        531: { mega: "Mega Audino" },
+        719: { mega: "Mega Diancie" }
     };
     
     function toggleDarkMode() {
@@ -646,13 +265,14 @@
     
     function navigatePrev() {
         let newId = currentPokemonId - 1;
-        if (newId < 1) newId = 1025;
+        if (newId < 1) newId = 721;
+        if (newId > 721) newId = 721;
         window.location.href = `pokemon_detail.html?id=${newId}`;
     }
     
     function navigateNext() {
         let newId = currentPokemonId + 1;
-        if (newId > 1025) newId = 1;
+        if (newId > 721) newId = 1;
         window.location.href = `pokemon_detail.html?id=${newId}`;
     }
     
@@ -690,10 +310,7 @@
             else if (currentPokemonId <= 386) generation = 3;
             else if (currentPokemonId <= 493) generation = 4;
             else if (currentPokemonId <= 649) generation = 5;
-            else if (currentPokemonId <= 721) generation = 6;
-            else if (currentPokemonId <= 809) generation = 7;
-            else if (currentPokemonId <= 905) generation = 8;
-            else generation = 9;
+            else generation = 6;
             
             let dexEntry = "No Pokédex entry found.";
             try {
@@ -765,7 +382,6 @@
                         for (let i = 0; i < evolutionChain.length; i++) {
                             const evoName = evolutionChain[i];
                             let evoId = i + 1;
-                            // Einfache ID-Zuordnung für bekannte Pokémon
                             const knownIds = { "bulbasaur":1, "ivysaur":2, "venusaur":3, "charmander":4, "charmeleon":5, "charizard":6, "squirtle":7, "wartortle":8, "blastoise":9 };
                             if (knownIds[evoName]) evoId = knownIds[evoName];
                             
@@ -847,7 +463,7 @@
                 </div>
                 
                 <div style="text-align: center;">
-                    <a href="pokemon_list.html" class="back-button">← Back to Pokédex</a>
+                    <a href="pokemon_list.html" class="back-button">← Back to Pokédex (Gen 1-6)</a>
                     <a href="start.html" class="back-button" style="margin-left: 15px;">🏠 Home</a>
                 </div>
             `;
@@ -856,7 +472,6 @@
             console.error('Error:', error);
             container.innerHTML = `<div style="text-align: center; padding: 50px;">
                 <h2>❌ Pokémon #${currentPokemonId} not found!</h2>
-                <p>The Pokémon with ID ${currentPokemonId} does not exist in the Pokédex.</p>
                 <a href="pokemon_list.html" class="back-button">← Back to Pokédex</a>
             </div>`;
         }
