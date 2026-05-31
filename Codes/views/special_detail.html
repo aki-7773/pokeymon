@@ -362,11 +362,10 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const basePokemonId = parseInt(urlParams.get('pokemon')) || 6;
-    const formType = urlParams.get('type') || 'mega';
+    const formType = urlParams.get('form') || 'mega';
     const formName = urlParams.get('name') || 'Special Form';
     
     let currentLanguage = localStorage.getItem('language') || 'en';
-    let currentCryUrl = null;
     
     const typeColors = {
         normal: "#A8A77A", fire: "#EE8130", water: "#6390F0",
@@ -377,268 +376,65 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== KOMPLETTE SPEZIALFORMEN DATEN für ALLE Pokémon ==========
+    // ========== VOLLSTÄNDIGE SPEZIALFORMEN DATEN ==========
     const specialFormData = {
-        // === CHARIZARD ===
-        "6-mega-x": {
-            name: "Mega Charizard X",
-            types: ["fire", "dragon"],
-            ability: "Tough Claws",
-            hp: 78, attack: 130, defense: 111, spAttack: 130, spDefense: 85, speed: 100,
-            dex: "Mega Charizard X is a powerful Dragon-type form. Its blue flames burn hotter than ever before, and its physical strength is dramatically increased."
-        },
-        "6-mega-y": {
-            name: "Mega Charizard Y",
-            types: ["fire", "flying"],
-            ability: "Drought",
-            hp: 78, attack: 104, defense: 78, spAttack: 159, spDefense: 115, speed: 100,
-            dex: "Mega Charizard Y has immense special attack power. Its wings create intense heat that can melt anything around it."
-        },
-        "6-gigantamax": {
-            name: "Gigantamax Charizard",
-            types: ["fire", "flying"],
-            ability: "Blaze",
-            hp: 78, attack: 104, defense: 78, spAttack: 159, spDefense: 115, speed: 100,
-            dex: "Gigantamax Charizard's flames never go out. Its wings are covered in intense fire that can burn anything to ashes."
-        },
-        // === MEWTWO ===
-        "150-mega-x": {
-            name: "Mega Mewtwo X",
-            types: ["psychic", "fighting"],
-            ability: "Steadfast",
-            hp: 106, attack: 190, defense: 100, spAttack: 154, spDefense: 100, speed: 130,
-            dex: "Mega Mewtwo X focuses its immense psychic power into physical combat, making it a devastating fighter."
-        },
-        "150-mega-y": {
-            name: "Mega Mewtwo Y",
-            types: ["psychic"],
-            ability: "Insomnia",
-            hp: 106, attack: 150, defense: 70, spAttack: 194, spDefense: 120, speed: 140,
-            dex: "Mega Mewtwo Y has reached the peak of psychic ability. Its mental powers can bend reality itself."
-        },
-        // === GENGAR ===
-        "94-mega": {
-            name: "Mega Gengar",
-            types: ["ghost", "poison"],
-            ability: "Shadow Tag",
-            hp: 60, attack: 65, defense: 80, spAttack: 170, spDefense: 95, speed: 130,
-            dex: "Mega Gengar can trap opponents with its Shadow Tag ability, making escape impossible."
-        },
-        "94-gigantamax": {
-            name: "Gigantamax Gengar",
-            types: ["ghost", "poison"],
-            ability: "Cursed Body",
-            hp: 60, attack: 65, defense: 80, spAttack: 170, spDefense: 95, speed: 130,
-            dex: "Gigantamax Gengar's mouth stretches to the underworld, dragging anything nearby into the darkness."
-        },
-        // === PIKACHU ===
-        "25-gigantamax": {
-            name: "Gigantamax Pikachu",
-            types: ["electric"],
-            ability: "Static",
-            hp: 45, attack: 80, defense: 50, spAttack: 75, spDefense: 60, speed: 120,
-            dex: "Gigantamax Pikachu's tail grows enormously. It can generate enough electricity to power an entire city."
-        },
-        // === EEVE ===
-        "133-gigantamax": {
-            name: "Gigantamax Eevee",
-            types: ["normal"],
-            ability: "Run Away",
-            hp: 55, attack: 55, defense: 50, spAttack: 45, spDefense: 65, speed: 55,
-            dex: "Gigantamax Eevee's fluffy fur becomes even softer. Its playful personality makes it incredibly popular."
-        },
-        // === GYARADOS ===
-        "130-mega": {
-            name: "Mega Gyarados",
-            types: ["water", "dark"],
-            ability: "Mold Breaker",
-            hp: 95, attack: 155, defense: 109, spAttack: 70, spDefense: 130, speed: 81,
-            dex: "Mega Gyarados becomes a Dark-type. Its rage is so intense that it destroys everything in its path."
-        },
-        // === LUCARIO ===
-        "448-mega": {
-            name: "Mega Lucario",
-            types: ["fighting", "steel"],
-            ability: "Adaptability",
-            hp: 70, attack: 145, defense: 88, spAttack: 140, spDefense: 70, speed: 112,
-            dex: "Mega Lucario can read the aura of opponents perfectly, predicting their every move."
-        },
-        // === BLAZIKEN ===
-        "257-mega": {
-            name: "Mega Blaziken",
-            types: ["fire", "fighting"],
-            ability: "Speed Boost",
-            hp: 80, attack: 160, defense: 80, spAttack: 130, spDefense: 80, speed: 100,
-            dex: "Mega Blaziken's legs become even more powerful, allowing it to kick with incredible force."
-        },
-        // === GARCHOMP ===
-        "445-mega": {
-            name: "Mega Garchomp",
-            types: ["dragon", "ground"],
-            ability: "Sand Force",
-            hp: 108, attack: 170, defense: 115, spAttack: 120, spDefense: 95, speed: 92,
-            dex: "Mega Garchomp's arm blades become scythe-like, capable of cutting through steel."
-        },
-        // === TYRANITAR ===
-        "248-mega": {
-            name: "Mega Tyranitar",
-            types: ["rock", "dark"],
-            ability: "Sand Stream",
-            hp: 100, attack: 164, defense: 150, spAttack: 95, spDefense: 120, speed: 71,
-            dex: "Mega Tyranitar's body becomes more armored. Its destructive power is unmatched."
-        },
-        // === GARDEVOIR ===
-        "282-mega": {
-            name: "Mega Gardevoir",
-            types: ["psychic", "fairy"],
-            ability: "Pixilate",
-            hp: 68, attack: 85, defense: 65, spAttack: 165, spDefense: 135, speed: 100,
-            dex: "Mega Gardevoir can create small black holes to protect its trainer."
-        },
-        // === SABLEYE ===
-        "302-mega": {
-            name: "Mega Sableye",
-            types: ["dark", "ghost"],
-            ability: "Magic Bounce",
-            hp: 50, attack: 85, defense: 125, spAttack: 85, spDefense: 115, speed: 20,
-            dex: "Mega Sableye's jewel grows enormous, reflecting any special attacks back at the opponent."
-        },
-        // === AGGRON ===
-        "306-mega": {
-            name: "Mega Aggron",
-            types: ["steel"],
-            ability: "Filter",
-            hp: 70, attack: 140, defense: 230, spAttack: 60, spDefense: 80, speed: 50,
-            dex: "Mega Aggron loses its Rock typing but becomes incredibly durable with Filter ability."
-        },
-        // === RAYQUAZA ===
-        "384-mega": {
-            name: "Mega Rayquaza",
-            types: ["dragon", "flying"],
-            ability: "Delta Stream",
-            hp: 105, attack: 180, defense: 100, spAttack: 180, spDefense: 100, speed: 115,
-            dex: "Mega Rayquaza can calm the weather and create strong winds that protect Flying-types."
-        },
-        // === METAGROSS ===
-        "376-mega": {
-            name: "Mega Metagross",
-            types: ["steel", "psychic"],
-            ability: "Tough Claws",
-            hp: 80, attack: 145, defense: 150, spAttack: 105, spDefense: 110, speed: 110,
-            dex: "Mega Metagross folds its legs to become more aerodynamic, increasing its speed."
-        },
-        // === SALAMENCE ===
-        "373-mega": {
-            name: "Mega Salamence",
-            types: ["dragon", "flying"],
-            ability: "Aerilate",
-            hp: 95, attack: 145, defense: 130, spAttack: 120, spDefense: 90, speed: 120,
-            dex: "Mega Salamence's wings merge into a single crescent shape, allowing incredible flight."
-        },
-        // === AMPHAROS ===
-        "181-mega": {
-            name: "Mega Ampharos",
-            types: ["electric", "dragon"],
-            ability: "Mold Breaker",
-            hp: 90, attack: 95, defense: 105, spAttack: 165, spDefense: 110, speed: 45,
-            dex: "Mega Ampharos grows fabulous flowing hair and gains the Dragon type."
-        },
-        // === PRIMAL FORMS ===
-        "382-primal": {
-            name: "Primal Kyogre",
-            types: ["water"],
-            ability: "Primordial Sea",
-            hp: 100, attack: 150, defense: 90, spAttack: 180, spDefense: 160, speed: 90,
-            dex: "Primal Kyogre summons heavy rain that extinguishes all Fire-type moves."
-        },
-        "383-primal": {
-            name: "Primal Groudon",
-            types: ["ground", "fire"],
-            ability: "Desolate Land",
-            hp: 100, attack: 180, defense: 160, spAttack: 150, spDefense: 90, speed: 90,
-            dex: "Primal Groudon creates harsh sunlight that evaporates all Water-type moves."
-        },
-        // === REGIONAL FORMS ===
-        "26-alolan": {
-            name: "Alolan Raichu",
-            types: ["electric", "psychic"],
-            ability: "Surge Surfer",
-            hp: 60, attack: 85, defense: 50, spAttack: 95, spDefense: 85, speed: 110,
-            dex: "Alolan Raichu surfs on its tail using psychic power. It's very popular in Alola."
-        },
-        "105-alolan": {
-            name: "Alolan Marowak",
-            types: ["fire", "ghost"],
-            ability: "Cursed Body",
-            hp: 60, attack: 80, defense: 110, spAttack: 50, spDefense: 80, speed: 45,
-            dex: "Alolan Marowak uses its bone as a torch. The flames never go out."
-        },
-        "103-alolan": {
-            name: "Alolan Exeggutor",
-            types: ["grass", "dragon"],
-            ability: "Frisk",
-            hp: 95, attack: 105, defense: 85, spAttack: 125, spDefense: 75, speed: 45,
-            dex: "Alolan Exeggutor's tall neck helps it absorb more sunlight in the Alolan tropics."
-        },
-        "77-galarian": {
-            name: "Galarian Ponyta",
-            types: ["psychic"],
-            ability: "Pastel Veil",
-            hp: 50, attack: 85, defense: 55, spAttack: 65, spDefense: 65, speed: 90,
-            dex: "Galarian Ponyta's horn heals poison. It lives in the enchanted forests of Galar."
-        },
-        "78-galarian": {
-            name: "Galarian Rapidash",
-            types: ["psychic", "fairy"],
-            ability: "Pastel Veil",
-            hp: 65, attack: 100, defense: 70, spAttack: 80, spDefense: 80, speed: 105,
-            dex: "Galarian Rapidash can read the emotions of others through its horn."
-        },
-        // === HISUIAN FORMS ===
-        "58-hisuian": {
-            name: "Hisuian Growlithe",
-            types: ["fire", "rock"],
-            ability: "Intimidate",
-            hp: 60, attack: 75, defense: 45, spAttack: 65, spDefense: 50, speed: 55,
-            dex: "Hisuian Growlithe has a rocky horn and is more aggressive than its Kantonian counterpart."
-        },
-        "59-hisuian": {
-            name: "Hisuian Arcanine",
-            types: ["fire", "rock"],
-            ability: "Intimidate",
-            hp: 90, attack: 115, defense: 80, spAttack: 95, spDefense: 80, speed: 90,
-            dex: "Hisuian Arcanine's rocky fur provides excellent defense. It commands respect in Hisui."
-        },
-        "571-hisuian": {
-            name: "Hisuian Zoroark",
-            types: ["normal", "ghost"],
-            ability: "Illusion",
-            hp: 55, attack: 100, defense: 60, spAttack: 125, spDefense: 60, speed: 110,
-            dex: "Hisuian Zoroark's illusions are said to be powerful enough to create tangible copies."
-        }
+        // Charizard
+        "6-megaX": { types: ["fire", "dragon"], ability: "Tough Claws", hp: 78, attack: 130, defense: 111, spAttack: 130, spDefense: 85, speed: 100, dex: "Mega Charizard X is a powerful Dragon-type form. Its blue flames burn hotter than ever before, and its physical strength is dramatically increased." },
+        "6-megaY": { types: ["fire", "flying"], ability: "Drought", hp: 78, attack: 104, defense: 78, spAttack: 159, spDefense: 115, speed: 100, dex: "Mega Charizard Y has immense special attack power. Its wings create intense heat that can melt anything around it." },
+        "6-gmax": { types: ["fire", "flying"], ability: "Blaze", hp: 78, attack: 104, defense: 78, spAttack: 159, spDefense: 115, speed: 100, dex: "Gigantamax Charizard's flames never go out. Its wings are covered in intense fire that can burn anything to ashes." },
+        // Mewtwo
+        "150-megaX": { types: ["psychic", "fighting"], ability: "Steadfast", hp: 106, attack: 190, defense: 100, spAttack: 154, spDefense: 100, speed: 130, dex: "Mega Mewtwo X focuses its immense psychic power into physical combat, making it a devastating fighter." },
+        "150-megaY": { types: ["psychic"], ability: "Insomnia", hp: 106, attack: 150, defense: 70, spAttack: 194, spDefense: 120, speed: 140, dex: "Mega Mewtwo Y has reached the peak of psychic ability. Its mental powers can bend reality itself." },
+        // Gengar
+        "94-mega": { types: ["ghost", "poison"], ability: "Shadow Tag", hp: 60, attack: 65, defense: 80, spAttack: 170, spDefense: 95, speed: 130, dex: "Mega Gengar can trap opponents with its Shadow Tag ability, making escape impossible." },
+        "94-gmax": { types: ["ghost", "poison"], ability: "Cursed Body", hp: 60, attack: 65, defense: 80, spAttack: 170, spDefense: 95, speed: 130, dex: "Gigantamax Gengar's mouth stretches to the underworld, dragging anything nearby into the darkness." },
+        // Venusaur
+        "3-gmax": { types: ["grass", "poison"], ability: "Overgrow", hp: 80, attack: 82, defense: 83, spAttack: 100, spDefense: 100, speed: 80, dex: "Gigantamax Venusaur's flower blooms even larger. The petals release a sweet scent that can put opponents to sleep." },
+        // Blastoise
+        "9-gmax": { types: ["water"], ability: "Torrent", hp: 79, attack: 83, defense: 100, spAttack: 85, spDefense: 105, speed: 78, dex: "Gigantamax Blastoise's cannons grow enormous, capable of firing water at tremendous pressure." },
+        // Pikachu
+        "25-gmax": { types: ["electric"], ability: "Static", hp: 45, attack: 80, defense: 50, spAttack: 75, spDefense: 60, speed: 120, dex: "Gigantamax Pikachu's tail grows enormously. It can generate enough electricity to power an entire city." },
+        // Eevee
+        "133-gmax": { types: ["normal"], ability: "Run Away", hp: 55, attack: 55, defense: 50, spAttack: 45, spDefense: 65, speed: 55, dex: "Gigantamax Eevee's fluffy fur becomes even softer. Its playful personality makes it incredibly popular." },
+        // Gyarados
+        "130-mega": { types: ["water", "dark"], ability: "Mold Breaker", hp: 95, attack: 155, defense: 109, spAttack: 70, spDefense: 130, speed: 81, dex: "Mega Gyarados becomes a Dark-type. Its rage is so intense that it destroys everything in its path." },
+        // Lucario
+        "448-mega": { types: ["fighting", "steel"], ability: "Adaptability", hp: 70, attack: 145, defense: 88, spAttack: 140, spDefense: 70, speed: 112, dex: "Mega Lucario can read the aura of opponents perfectly, predicting their every move." },
+        // Blaziken
+        "257-mega": { types: ["fire", "fighting"], ability: "Speed Boost", hp: 80, attack: 160, defense: 80, spAttack: 130, spDefense: 80, speed: 100, dex: "Mega Blaziken's legs become even more powerful, allowing it to kick with incredible force." },
+        // Garchomp
+        "445-mega": { types: ["dragon", "ground"], ability: "Sand Force", hp: 108, attack: 170, defense: 115, spAttack: 120, spDefense: 95, speed: 92, dex: "Mega Garchomp's arm blades become scythe-like, capable of cutting through steel." },
+        // Tyranitar
+        "248-mega": { types: ["rock", "dark"], ability: "Sand Stream", hp: 100, attack: 164, defense: 150, spAttack: 95, spDefense: 120, speed: 71, dex: "Mega Tyranitar's body becomes more armored. Its destructive power is unmatched." },
+        // Gardevoir
+        "282-mega": { types: ["psychic", "fairy"], ability: "Pixilate", hp: 68, attack: 85, defense: 65, spAttack: 165, spDefense: 135, speed: 100, dex: "Mega Gardevoir can create small black holes to protect its trainer." },
+        // Rayquaza
+        "384-mega": { types: ["dragon", "flying"], ability: "Delta Stream", hp: 105, attack: 180, defense: 100, spAttack: 180, spDefense: 100, speed: 115, dex: "Mega Rayquaza can calm the weather and create strong winds that protect Flying-types." },
+        // Metagross
+        "376-mega": { types: ["steel", "psychic"], ability: "Tough Claws", hp: 80, attack: 145, defense: 150, spAttack: 105, spDefense: 110, speed: 110, dex: "Mega Metagross folds its legs to become more aerodynamic, increasing its speed." },
+        // Primal Kyogre
+        "382-primal": { types: ["water"], ability: "Primordial Sea", hp: 100, attack: 150, defense: 90, spAttack: 180, spDefense: 160, speed: 90, dex: "Primal Kyogre summons heavy rain that extinguishes all Fire-type moves." },
+        // Primal Groudon
+        "383-primal": { types: ["ground", "fire"], ability: "Desolate Land", hp: 100, attack: 180, defense: 160, spAttack: 150, spDefense: 90, speed: 90, dex: "Primal Groudon creates harsh sunlight that evaporates all Water-type moves." },
+        // Alolan Forms
+        "26-alolan": { types: ["electric", "psychic"], ability: "Surge Surfer", hp: 60, attack: 85, defense: 50, spAttack: 95, spDefense: 85, speed: 110, dex: "Alolan Raichu surfs on its tail using psychic power. It's very popular in Alola." },
+        "105-alolan": { types: ["fire", "ghost"], ability: "Cursed Body", hp: 60, attack: 80, defense: 110, spAttack: 50, spDefense: 80, speed: 45, dex: "Alolan Marowak uses its bone as a torch. The flames never go out." },
+        // Galarian Forms
+        "77-galarian": { types: ["psychic"], ability: "Pastel Veil", hp: 50, attack: 85, defense: 55, spAttack: 65, spDefense: 65, speed: 90, dex: "Galarian Ponyta's horn heals poison. It lives in the enchanted forests of Galar." },
+        "78-galarian": { types: ["psychic", "fairy"], ability: "Pastel Veil", hp: 65, attack: 100, defense: 70, spAttack: 80, spDefense: 80, speed: 105, dex: "Galarian Rapidash can read the emotions of others through its horn." },
+        // Hisuian Forms
+        "58-hisuian": { types: ["fire", "rock"], ability: "Intimidate", hp: 60, attack: 75, defense: 45, spAttack: 65, spDefense: 50, speed: 55, dex: "Hisuian Growlithe has a rocky horn and is more aggressive than its Kantonian counterpart." },
+        "59-hisuian": { types: ["fire", "rock"], ability: "Intimidate", hp: 90, attack: 115, defense: 80, spAttack: 95, spDefense: 80, speed: 90, dex: "Hisuian Arcanine's rocky fur provides excellent defense. It commands respect in Hisui." },
+        "571-hisuian": { types: ["normal", "ghost"], ability: "Illusion", hp: 55, attack: 100, defense: 60, spAttack: 125, spDefense: 60, speed: 110, dex: "Hisuian Zoroark's illusions are said to be powerful enough to create tangible copies." }
     };
     
-    // Bestimme den korrekten FormKey basierend auf basePokemonId und formType
+    // Bestimme den korrekten FormKey
     let formKey = `${basePokemonId}-${formType}`;
     let formData = specialFormData[formKey];
-    
-    // Fallback: Versuche verschiedene Kombinationen
-    if (!formData) {
-        if (formType === 'megaX') formKey = `${basePokemonId}-mega-x`;
-        else if (formType === 'megaY') formKey = `${basePokemonId}-mega-y`;
-        else if (formType === 'mega') formKey = `${basePokemonId}-mega`;
-        else if (formType === 'gmax') formKey = `${basePokemonId}-gigantamax`;
-        else if (formType === 'primal') formKey = `${basePokemonId}-primal`;
-        else if (formType === 'alolan') formKey = `${basePokemonId}-alolan`;
-        else if (formType === 'galarian') formKey = `${basePokemonId}-galarian`;
-        else if (formType === 'hisuian') formKey = `${basePokemonId}-hisuian`;
-        formData = specialFormData[formKey];
-    }
     
     // Fallback für nicht definierte Spezialformen
     if (!formData) {
         formData = {
-            name: formName,
             types: ["normal"],
             ability: "Unknown",
             hp: 100, attack: 100, defense: 100, spAttack: 100, spDefense: 100, speed: 100,
@@ -646,14 +442,12 @@
         };
     }
     
-    currentCryUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${basePokemonId}.ogg`;
+    const cryUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${basePokemonId}.ogg`;
     
     function playCry() {
-        if (currentCryUrl) {
-            const audio = new Audio(currentCryUrl);
-            audio.volume = 0.3;
-            audio.play().catch(e => console.log('Cry playback failed'));
-        }
+        const audio = new Audio(cryUrl);
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log('Cry playback failed'));
     }
     
     function toggleDarkMode() {
@@ -681,31 +475,20 @@
         
         let badgeClass = 'type-badge-mega';
         let badgeText = '⚡ MEGA EVOLUTION';
-        
-        if (formType === 'gmax' || formKey.includes('gigantamax')) {
-            badgeClass = 'type-badge-gmax';
-            badgeText = '💥 GIGANTAMAX';
-        } else if (formType === 'primal' || formKey.includes('primal')) {
-            badgeClass = 'type-badge-primal';
-            badgeText = '🌊 PRIMAL REVERSION';
-        } else if (formType === 'alolan' || formType === 'galarian' || formType === 'hisuian' || formKey.includes('alolan') || formKey.includes('galarian') || formKey.includes('hisuian')) {
-            badgeClass = 'type-badge-regional';
-            badgeText = '🌍 REGIONAL FORM';
-        } else if (formType === 'megaX' || formType === 'megaY' || formType === 'mega' || formKey.includes('mega')) {
-            badgeClass = 'type-badge-mega';
-            badgeText = '⚡ MEGA EVOLUTION';
-        }
+        if (formType === 'gmax') { badgeClass = 'type-badge-gmax'; badgeText = '💥 GIGANTAMAX'; }
+        else if (formType === 'primal') { badgeClass = 'type-badge-primal'; badgeText = '🌊 PRIMAL REVERSION'; }
+        else if (formType === 'alolan' || formType === 'galarian' || formType === 'hisuian') { badgeClass = 'type-badge-regional'; badgeText = '🌍 REGIONAL FORM'; }
         
         const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${basePokemonId}.png`;
         
         container.innerHTML = `
             <div class="pokemon-header">
-                <h1>${formData.name} <span class="${badgeClass}">${badgeText}</span></h1>
+                <h1>${formName} <span class="${badgeClass}">${badgeText}</span></h1>
             </div>
             
             <div class="pokemon-image-container">
                 <img class="pokemon-image" src="${imageUrl}" 
-                     alt="${formData.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${basePokemonId}.png'">
+                     alt="${formName}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${basePokemonId}.png'">
             </div>
             
             <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
