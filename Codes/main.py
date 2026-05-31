@@ -62,15 +62,14 @@ def api_pokemon(id):
     except:
         return {"error": "Not found"}
 
-@route("/api/pokemon-species/<id:int>")
-def api_pokemon_species(id):
-    """Proxy für Pokémon Species API"""
+@route("/api/pokemon-species/<name>")
+def api_pokemon_species(name):
     import requests
     try:
-        r = requests.get(f"https://pokeapi.co/api/v2/pokemon-species/{id}", timeout=10)
+        r = requests.get(f"https://pokeapi.co/api/v2/pokemon-species/{name}", timeout=10)
         return r.json()
     except:
-        return {"error": "Not found"}
+        return {"error": "not found"}
 
 @route("/api/search")
 def api_search():
