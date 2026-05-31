@@ -13,9 +13,7 @@ body{
     text-align:center;
 }
 
-body.dark{
-    background:#1a1a2e;
-}
+body.dark{ background:#1a1a2e; }
 
 .topbar{
     position:fixed;
@@ -35,22 +33,19 @@ body.dark{
     border-radius:20px;
 }
 
-img{ width:220px; }
-
-.headerRow{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:15px;
-    flex-wrap:wrap;
+/* NAME DESIGN FIX */
+.title{
+    font-size:34px;
+    font-weight:900;
+    letter-spacing:2px;
 }
 
-.printBtn{
-    display:flex;
-    align-items:center;
-    gap:6px;
+.sub{
+    opacity:0.8;
+    margin-bottom:5px;
 }
 
+/* NAV */
 .navRow{
     display:flex;
     justify-content:space-between;
@@ -59,25 +54,27 @@ img{ width:220px; }
 }
 
 .navBtn{
-    font-size:34px;
-    padding:10px 20px;
+    font-size:36px;
+    padding:12px 22px;
+    font-weight:bold;
 }
 
 .centerCol{
     display:flex;
     flex-direction:column;
     align-items:center;
+    gap:8px;
+}
+
+/* BUTTON ROW UNDER IMAGE */
+.actionRow{
+    display:flex;
     gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
 }
 
-.section{
-    margin-top:15px;
-    padding:12px;
-    background:rgba(255,255,255,0.08);
-    border-radius:12px;
-}
-
-/* TYPES */
+/* TYPE */
 .typeBadge{
     padding:6px 10px;
     border-radius:20px;
@@ -87,14 +84,15 @@ img{ width:220px; }
     color:white;
 }
 
-/* STAT + ABILITY ROWS */
+/* COSMETIC ROWS */
 .row{
     display:flex;
     justify-content:space-between;
-    padding:8px 12px;
+    padding:10px 14px;
     border-radius:999px;
-    background:rgba(255,255,255,0.12);
-    margin:5px 0;
+    background:rgba(255,255,255,0.14);
+    margin:6px 0;
+    font-weight:bold;
 }
 
 /* REGION */
@@ -103,6 +101,7 @@ img{ width:220px; }
     border-radius:12px;
     background:rgba(255,255,255,0.15);
     cursor:pointer;
+    font-weight:bold;
 }
 
 /* EVO */
@@ -122,14 +121,7 @@ img{ width:220px; }
     width:100px;
 }
 
-.footer{
-    margin-top:20px;
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
+/* BUTTON STYLE */
 button,a,select{
     padding:10px 12px;
     border-radius:10px;
@@ -138,6 +130,7 @@ button,a,select{
     background:#ffcb05;
     color:black;
     text-decoration:none;
+    font-weight:bold;
 }
 </style>
 </head>
@@ -151,6 +144,7 @@ button,a,select{
         <option value="fr">FR</option>
         <option value="ja">JP</option>
     </select>
+
     <button onclick="toggleDark()">🌙</button>
 </div>
 
@@ -166,7 +160,6 @@ if(id > 721){
     throw new Error();
 }
 
-/* TYPE COLORS FIX */
 const typeColors = {
  normal:"#A8A878", fire:"#F08030", water:"#6890F0",
  electric:"#F8D030", grass:"#78C850", ice:"#98D8D8",
@@ -215,36 +208,40 @@ function region(id){
     return "Kalos";
 }
 
-/* EVOLUTION FIXED (NO STUCK LOADING) */
+/* SHINY TOGGLE */
+let isShiny = false;
+function toggleShiny(){
+    isShiny = !isShiny;
+    load();
+}
+
+/* EVOLUTION FIX (HARD STABLE) */
 async function loadEvolution(species){
     try{
         const s = await fetch(`/api/pokemon-species/${species}`).then(r=>r.json());
         const evo = await fetch(s.evolution_chain.url).then(r=>r.json());
 
         let list = [];
-
         function walk(node){
             list.push(node.species.name);
             node.evolves_to.forEach(walk);
         }
-
         walk(evo.chain);
 
         if(list.length <= 1){
             const p = await fetch(`/api/pokemon/${species}`).then(r=>r.json());
+
             document.getElementById("evo").innerHTML = `
-                <div class="section">
-                    <h3>Evolution Tree</h3>
-                    <img src="${p.sprites.front_default}">
-                    <p>This Pokémon does not evolve.</p>
-                </div>
-            `;
+            <div class="section">
+                <h3>Evolution Tree</h3>
+                <img src="${p.sprites.front_default}">
+                <p>This Pokémon does not evolve.</p>
+            </div>`;
             return;
         }
 
         const html = await Promise.all(list.map(async name=>{
             const p = await fetch(`/api/pokemon/${name}`).then(r=>r.json());
-
             return `
             <div class="evoItem" onclick="location.href='?id=${p.id}'">
                 <img src="${p.sprites.front_default}">
@@ -253,15 +250,14 @@ async function loadEvolution(species){
         }));
 
         document.getElementById("evo").innerHTML = `
-            <div class="section">
-                <h3>Evolution Tree</h3>
-                <div class="evoBox">${html.join("")}</div>
-            </div>
-        `;
+        <div class="section">
+            <h3>Evolution Tree</h3>
+            <div class="evoBox">${html.join("")}</div>
+        </div>`;
 
     } catch(e){
         document.getElementById("evo").innerHTML =
-            "<div class='section'>Evolution failed to load</div>";
+            "<div class='section'>Evolution could not load</div>";
     }
 }
 
@@ -276,6 +272,11 @@ async function load(){
 
     const entry = fix(entryObj?.flavor_text);
 
+    const sprite =
+        isShiny
+        ? p.sprites.front_shiny
+        : p.sprites.other?.["official-artwork"]?.front_default || p.sprites.front_default;
+
     const types = p.types.map(t=>
         `<span class="typeBadge" style="background:${typeColors[t.type.name]}">
             ${t.type.name.toUpperCase()}
@@ -283,11 +284,11 @@ async function load(){
     ).join("");
 
     const abilities = p.abilities.map(a=>
-        `<div class="row"><b>Ability</b><span>${a.ability.name.toUpperCase()}</span></div>`
+        `<div class="row"><span>Ability</span><span>${a.ability.name.toUpperCase()}</span></div>`
     ).join("");
 
     const stats = p.stats.map(x=>
-        `<div class="row"><b>${x.stat.name.toUpperCase()}</b><span>${x.base_stat}</span></div>`
+        `<div class="row"><span>${x.stat.name.toUpperCase()}</span><span>${x.base_stat}</span></div>`
     ).join("");
 
     const cry = p.cries?.latest || p.cries?.legacy;
@@ -295,19 +296,20 @@ async function load(){
     document.getElementById("content").innerHTML = `
     <div class="container">
 
-        <div class="headerRow">
-            <div class="title">${p.name.toUpperCase()}</div>
-            <button class="printBtn" onclick="window.print()">🖨 Print</button>
-        </div>
-
-        <div>#${p.id}</div>
+        <div class="title">${p.name.toUpperCase()}</div>
+        <div class="sub">#${p.id}</div>
 
         <div class="navRow">
             <button class="navBtn" onclick="nav(-1)">⬅</button>
 
             <div class="centerCol">
-                <img src="${p.sprites.other?.["official-artwork"]?.front_default || p.sprites.front_default}">
-                <button onclick="playCry('${cry}')">🔊 Cry</button>
+                <img src="${sprite}">
+
+                <div class="actionRow">
+                    <button onclick="playCry('${cry}')">🔊 Cry</button>
+                    <button onclick="window.print()">🖨 Print</button>
+                    <button onclick="toggleShiny()">✨ Shiny</button>
+                </div>
             </div>
 
             <button class="navBtn" onclick="nav(1)">➡</button>
@@ -335,17 +337,12 @@ async function load(){
 
         <div class="section">
             <h3>Region</h3>
-            <div class="regionBtn" onclick="alert('Region page not implemented yet')">
+            <div class="regionBtn" onclick="alert('Region system coming soon')">
                 ${region(p.id)}
             </div>
         </div>
 
         <div id="evo">Loading...</div>
-
-        <div class="footer">
-            <a href="/pokemon_list.html">Back to List</a>
-            <a href="/start.html">Home</a>
-        </div>
 
     </div>
     `;
