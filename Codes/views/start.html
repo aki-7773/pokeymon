@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Pokémon Website</title>
     <style>
-        /* ========== DEINE BESTEHENDEN STYLES ========== */
+        /* ========== DEINE BESTEHENDEN STYLES (bleiben alle erhalten) ========== */
         * {
             margin: 0;
             padding: 0;
@@ -44,14 +44,12 @@
             z-index: 1;
         }
         
-        /* ========== HEADER MIT LOGO - ZENTRIERT ========== */
         .header {
             text-align: center;
             margin: 20px 0 10px 0;
             position: relative;
         }
         
-        /* Profil-Button absolut positioniert (links oben) */
         .profile-btn-fixed {
             position: fixed;
             top: 20px;
@@ -110,7 +108,6 @@
             font-weight: bold;
         }
         
-        /* Control Buttons (rechts oben) */
         .control-buttons {
             position: fixed;
             top: 20px;
@@ -140,7 +137,6 @@
             transform: scale(1.03);
         }
         
-        /* API Status */
         .api-status {
             position: fixed;
             bottom: 20px;
@@ -167,7 +163,6 @@
             color: white;
         }
         
-        /* Willkommens-Text */
         .welcome {
             text-align: center;
             margin: 30px 0;
@@ -211,7 +206,6 @@
             color: #ff9800;
         }
         
-        /* Search Box */
         .search-container {
             background: rgba(255,255,255,0.95);
             border-radius: 60px;
@@ -258,7 +252,6 @@
             transform: scale(1.05);
         }
         
-        /* Main Navigation */
         .main-nav {
             display: flex;
             justify-content: center;
@@ -285,7 +278,6 @@
             transform: translateY(-3px);
         }
         
-        /* Secondary Navigation */
         .secondary-nav {
             display: flex;
             justify-content: center;
@@ -312,7 +304,6 @@
             transform: translateY(-2px);
         }
         
-        /* Stats */
         .stats {
             display: flex;
             justify-content: center;
@@ -354,7 +345,6 @@
             color: #ccc;
         }
         
-        /* Featured Box */
         .featured-box {
             background: rgba(255,255,255,0.95);
             border-radius: 25px;
@@ -448,7 +438,6 @@
             margin-top: 8px;
         }
         
-        /* Regions Quick Access */
         .regions-quick {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -491,7 +480,6 @@
             color: #ffcb05;
         }
         
-        /* Random Box */
         .random-box {
             background: rgba(255,255,255,0.95);
             border-radius: 25px;
@@ -578,7 +566,6 @@
             padding: 50px;
         }
         
-        /* Daily & Weekly */
         .daily-weekly-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -586,7 +573,6 @@
             margin: 30px 0;
         }
         
-        /* Info Card */
         .info-card {
             background: rgba(255,255,255,0.95);
             border-radius: 25px;
@@ -607,43 +593,6 @@
         }
         
         body.dark-mode .info-card h3 {
-            color: #ffcb05;
-        }
-        
-        .team-members {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin: 15px 0;
-        }
-        
-        .team-member {
-            background: rgba(0,0,0,0.05);
-            padding: 8px 18px;
-            border-radius: 30px;
-        }
-        
-        body.dark-mode .team-member {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        /* Footer */
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            padding: 20px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 20px;
-        }
-        
-        .footer-text {
-            color: rgba(255,255,255,0.7);
-            font-size: 12px;
-            line-height: 1.6;
-        }
-        
-        .footer-text a {
             color: #ffcb05;
         }
         
@@ -680,7 +629,6 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Warning Popup */
         .warning-overlay {
             position: fixed;
             top: 0;
@@ -736,75 +684,21 @@
             color: white;
         }
         
-        /* Mobile */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .profile-btn-fixed {
-                top: 10px;
-                left: 10px;
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-            
-            .control-buttons {
-                top: 10px;
-                right: 10px;
-            }
-            
-            .dark-mode-toggle, .language-select {
-                padding: 6px 12px;
-                font-size: 11px;
-            }
-            
-            .pokemon-showcase {
-                flex-direction: column;
-            }
-            
-            .pokemon-card {
-                width: 100%;
-            }
-            
-            .random-pokemon img {
-                width: 100px;
-                height: 100px;
-            }
-            
-            .stat-card {
-                padding: 10px 20px;
-            }
-            
-            .stat-number {
-                font-size: 24px;
-            }
-            
-            .regions-quick {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
-            
-            .daily-weekly-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .main-nav {
-                margin-top: 60px;
-                gap: 8px;
-            }
-            
-            .nav-btn, .secondary-btn {
-                padding: 8px 12px;
-                font-size: 12px;
-            }
-            
-            .logo {
-                max-width: 180px;
-            }
-            
-            h1 {
-                font-size: 28px;
-            }
+            .container { padding: 15px; }
+            .profile-btn-fixed { top: 10px; left: 10px; padding: 6px 12px; font-size: 12px; }
+            .control-buttons { top: 10px; right: 10px; }
+            .dark-mode-toggle, .language-select { padding: 6px 12px; font-size: 11px; }
+            .pokemon-showcase { flex-direction: column; }
+            .pokemon-card { width: 100%; }
+            .random-pokemon img { width: 100px; height: 100px; }
+            .stat-card { padding: 10px 20px; }
+            .stat-number { font-size: 24px; }
+            .regions-quick { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .daily-weekly-container { grid-template-columns: 1fr; }
+            .main-nav { margin-top: 60px; gap: 8px; }
+            .nav-btn, .secondary-btn { padding: 8px 12px; font-size: 12px; }
+            .logo { max-width: 180px; }
         }
     </style>
 </head>
@@ -961,7 +855,8 @@
             Made by Reinaldo and Petr
         </p>
     </div>
-    
+</div>
+
 <script>
     // Dark Mode
     function toggleDarkMode() {
