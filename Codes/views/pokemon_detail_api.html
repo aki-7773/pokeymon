@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Pokémon Special Form - Complete Info</title>
     <style>
-        /* ========== DEINE BESTEHENDEN STYLES (bleiben exakt gleich) ========== */
+        /* ========== ALLE STYLES (bleiben exakt wie zuvor) ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
@@ -183,15 +183,18 @@
     let currentPokemonId = parseInt(urlParams.get('id')) || 10034;
     let currentLanguage = localStorage.getItem('language') || 'en';
 
-    // ========== KOMPLETTE MANUELLE DATENBANK FÜR SPEZIELLE FORMEN ==========
-    // Alle Daten sind korrekt und unabhängig von der fehlerhaften PokeAPI.
+    // ========== MANUELLE DATENBANK FÜR ALLE SPEZIELLEN FORMEN ==========
+    // Jede Form hat eigene korrekte Daten: Typen, Fähigkeiten, Stats, Höhe, Gewicht, etc.
+    // Bild-URLs werden aus den offiziellen PokeAPI-Sprites übernommen (existieren für diese IDs)
+    // Pokédex-Texte sind angepasst (können später leicht geändert werden)
     const specialFormsData = {
-        // Ash-Greninja (ID 10003)
+        // ------------------------------------------------------------------
+        // ASH-GRENINJA
+        // ------------------------------------------------------------------
         10003: {
             name: "Ash-Greninja",
             category: "ash",
             region: "Kalos",
-            regionId: 6,
             height: 1.5,
             weight: 40.0,
             baseExp: 270,
@@ -202,12 +205,13 @@
             pokedex: "Ash-Greninja is a unique form that Greninja can achieve when its bond with its Trainer reaches its peak. Its Speed and offensive power increase dramatically, and it gains the ability Battle Bond.",
             evolutionBaseId: 658
         },
-        // Mega Charizard X (ID 10034)
+        // ------------------------------------------------------------------
+        // MEGA CHARIZARD X & Y
+        // ------------------------------------------------------------------
         10034: {
             name: "Mega Charizard X",
             category: "mega",
             region: "Kalos",
-            regionId: 6,
             height: 1.7,
             weight: 110.5,
             baseExp: 285,
@@ -218,12 +222,10 @@
             pokedex: "Mega Charizard X's body turns black with blue flames. It becomes a Fire/Dragon type and its Attack and Special Attack are greatly increased. The flames on its tail burn with intense heat.",
             evolutionBaseId: 6
         },
-        // Mega Charizard Y (ID 10035)
         10035: {
             name: "Mega Charizard Y",
             category: "mega",
             region: "Kalos",
-            regionId: 6,
             height: 1.7,
             weight: 100.5,
             baseExp: 285,
@@ -234,12 +236,13 @@
             pokedex: "Mega Charizard Y has larger wings and a sleeker body. It gains the Drought ability, which summons harsh sunlight. Its Special Attack reaches incredible heights.",
             evolutionBaseId: 6
         },
-        // Mega Mewtwo X (ID 10036)
+        // ------------------------------------------------------------------
+        // MEGA MEWTWO X & Y
+        // ------------------------------------------------------------------
         10036: {
             name: "Mega Mewtwo X",
             category: "mega",
             region: "Kalos",
-            regionId: 6,
             height: 2.3,
             weight: 127.0,
             baseExp: 351,
@@ -250,12 +253,10 @@
             pokedex: "Mega Mewtwo X focuses on physical combat. Its muscles swell, and it gains the Fighting type. It can overwhelm opponents with brute force.",
             evolutionBaseId: 150
         },
-        // Mega Mewtwo Y (ID 10037)
         10037: {
             name: "Mega Mewtwo Y",
             category: "mega",
             region: "Kalos",
-            regionId: 6,
             height: 1.5,
             weight: 33.0,
             baseExp: 351,
@@ -266,12 +267,13 @@
             pokedex: "Mega Mewtwo Y's psychic powers are amplified to their maximum. It floats gracefully and can control its foes' minds with ease.",
             evolutionBaseId: 150
         },
-        // Mega Gengar (ID 10038)
+        // ------------------------------------------------------------------
+        // MEGA GENGAR
+        // ------------------------------------------------------------------
         10038: {
             name: "Mega Gengar",
             category: "mega",
             region: "Kalos",
-            regionId: 6,
             height: 1.4,
             weight: 40.5,
             baseExp: 270,
@@ -282,44 +284,44 @@
             pokedex: "Mega Gengar's body melts into the shadows, becoming partially intangible. It can trap opponents with the Shadow Tag ability, preventing escape.",
             evolutionBaseId: 94
         },
-        // Primal Kyogre (ID 10080)
+        // ------------------------------------------------------------------
+        // PRIMAL KYOGRE & GROUDON
+        // ------------------------------------------------------------------
         10080: {
             name: "Primal Kyogre",
             category: "primal",
             region: "Hoenn",
-            regionId: 3,
             height: 9.8,
             weight: 430.0,
             baseExp: 347,
             types: ["water"],
             abilities: ["Primordial Sea"],
             hp: 100, attack: 150, defense: 90, spAttack: 180, spDefense: 160, speed: 90,
-            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/382.png",
+            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10080.png", // fallback: 382
             pokedex: "Primal Kyogre has awakened its full power. It summons heavy rain that never stops. The sea around it rages uncontrollably.",
             evolutionBaseId: 382
         },
-        // Primal Groudon (ID 10081)
         10081: {
             name: "Primal Groudon",
             category: "primal",
             region: "Hoenn",
-            regionId: 3,
             height: 5.0,
             weight: 999.7,
             baseExp: 347,
             types: ["ground", "fire"],
             abilities: ["Desolate Land"],
             hp: 100, attack: 180, defense: 160, spAttack: 150, spDefense: 90, speed: 90,
-            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/383.png",
+            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10081.png", // fallback: 383
             pokedex: "Primal Groudon's body is covered in glowing magma. Its Desolate Land ability eliminates all water, making Fire-type moves incredibly powerful.",
             evolutionBaseId: 383
         },
-        // Gigantamax Charizard (ID 10072)
+        // ------------------------------------------------------------------
+        // GIGANTAMAX FORMS (Gen 8 - Galar)
+        // ------------------------------------------------------------------
         10072: {
             name: "Gigantamax Charizard",
             category: "gmax",
             region: "Galar",
-            regionId: 8,
             height: 28.0,
             weight: 1000.0,
             baseExp: 285,
@@ -330,12 +332,10 @@
             pokedex: "Gigantamax Charizard's wings become enormous blades of fire. Its signature G-Max move, G-Max Wildfire, deals continuous fire damage to non-Fire-type opponents.",
             evolutionBaseId: 6
         },
-        // Gigantamax Pikachu (ID 10073)
         10073: {
             name: "Gigantamax Pikachu",
             category: "gmax",
             region: "Galar",
-            regionId: 8,
             height: 21.0,
             weight: 1000.0,
             baseExp: 205,
@@ -346,12 +346,10 @@
             pokedex: "Gigantamax Pikachu's tail becomes a massive lightning bolt. Its G-Max move paralyzes all opponents.",
             evolutionBaseId: 25
         },
-        // Gigantamax Eevee (ID 10074)
         10074: {
             name: "Gigantamax Eevee",
             category: "gmax",
             region: "Galar",
-            regionId: 8,
             height: 18.0,
             weight: 1000.0,
             baseExp: 205,
@@ -362,12 +360,24 @@
             pokedex: "Gigantamax Eevee's fluffy fur becomes a majestic mane. Its G-Max move, G-Max Cuddle, charms opponents.",
             evolutionBaseId: 133
         },
-        // Gigantamax Gengar (ID 10076)
+        10075: {
+            name: "Gigantamax Meowth",
+            category: "gmax",
+            region: "Galar",
+            height: 33.0,
+            weight: 1000.0,
+            baseExp: 205,
+            types: ["normal"],
+            abilities: ["Pickup"],
+            hp: 40, attack: 45, defense: 35, spAttack: 40, spDefense: 40, speed: 90,
+            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10075.png",
+            pokedex: "Gigantamax Meowth's body elongates like a coin. Its G-Max move scatters gold coins.",
+            evolutionBaseId: 52
+        },
         10076: {
             name: "Gigantamax Gengar",
             category: "gmax",
             region: "Galar",
-            regionId: 8,
             height: 20.0,
             weight: 1000.0,
             baseExp: 270,
@@ -377,6 +387,48 @@
             imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png",
             pokedex: "Gigantamax Gengar's mouth opens to a dimension. Its G-Max move, G-Max Terror, traps opponents in a nightmare.",
             evolutionBaseId: 94
+        },
+        10077: {
+            name: "Gigantamax Lapras",
+            category: "gmax",
+            region: "Galar",
+            height: 24.0,
+            weight: 1000.0,
+            baseExp: 270,
+            types: ["water", "ice"],
+            abilities: ["Water Absorb", "Shell Armor", "Hydration"],
+            hp: 130, attack: 85, defense: 80, spAttack: 85, spDefense: 95, speed: 60,
+            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10077.png",
+            pokedex: "Gigantamax Lapras's shell becomes a musical stage. Its G-Max move heals allies.",
+            evolutionBaseId: 131
+        },
+        10078: {
+            name: "Gigantamax Snorlax",
+            category: "gmax",
+            region: "Galar",
+            height: 35.0,
+            weight: 1000.0,
+            baseExp: 270,
+            types: ["normal"],
+            abilities: ["Immunity", "Thick Fat", "Gluttony"],
+            hp: 160, attack: 110, defense: 65, spAttack: 65, spDefense: 110, speed: 30,
+            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10078.png",
+            pokedex: "Gigantamax Snorlax's belly becomes a mountain. Its G-Max move restores HP.",
+            evolutionBaseId: 143
+        },
+        10079: {
+            name: "Gigantamax Machamp",
+            category: "gmax",
+            region: "Galar",
+            height: 25.0,
+            weight: 1000.0,
+            baseExp: 270,
+            types: ["fighting"],
+            abilities: ["Guts", "No Guard", "Steadfast"],
+            hp: 90, attack: 130, defense: 80, spAttack: 65, spDefense: 85, speed: 55,
+            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10079.png",
+            pokedex: "Gigantamax Machamp's four arms swell to massive size. Its G-Max move throws opponents.",
+            evolutionBaseId: 68
         }
     };
 
@@ -388,7 +440,6 @@
             name: "Special Pokémon",
             category: "special",
             region: "Unknown",
-            regionId: 0,
             height: 0,
             weight: 0,
             baseExp: 0,
