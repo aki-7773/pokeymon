@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>Pokémon Detail - Complete Information</title>
     <style>
-        /* ========== BASIS-STYLES ========== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ========== GLOBALE STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -14,7 +19,11 @@
             padding: 20px;
             position: relative;
         }
-        body.dark-mode { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
         body::before {
             content: "";
             position: fixed;
@@ -26,6 +35,7 @@
             background-size: 40px 40px;
             pointer-events: none;
         }
+        
         .container {
             max-width: 700px;
             margin: 0 auto;
@@ -38,7 +48,12 @@
             backdrop-filter: blur(2px);
             transition: all 0.3s;
         }
-        body.dark-mode .container { background: rgba(0,0,0,0.88); color: #e0e0e0; }
+        
+        body.dark-mode .container {
+            background: rgba(0,0,0,0.88);
+            color: #e0e0e0;
+        }
+        
         .nav-prev, .nav-next {
             position: fixed;
             top: 50%;
@@ -59,9 +74,22 @@
             backdrop-filter: blur(5px);
             font-weight: bold;
         }
-        .nav-prev { left: 20px; }
-        .nav-next { right: 20px; }
-        .nav-prev:hover, .nav-next:hover { background: #ffcb05; color: #2a75bb; transform: translateY(-50%) scale(1.05); width: 60px; }
+        
+        .nav-prev {
+            left: 20px;
+        }
+        
+        .nav-next {
+            right: 20px;
+        }
+        
+        .nav-prev:hover, .nav-next:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-50%) scale(1.05);
+            width: 60px;
+        }
+        
         .control-buttons {
             position: fixed;
             top: 20px;
@@ -70,6 +98,7 @@
             gap: 12px;
             z-index: 100;
         }
+        
         .dark-mode-toggle, .language-select {
             background: rgba(42,117,187,0.9);
             color: white;
@@ -82,15 +111,59 @@
             backdrop-filter: blur(5px);
             font-size: 14px;
         }
-        .dark-mode-toggle:hover, .language-select:hover { background: #ffcb05; color: #2a75bb; transform: scale(1.03); }
-        .pokemon-header { text-align: center; margin-bottom: 25px; }
-        .pokemon-header h1 { color: #2a75bb; font-size: 38px; margin-bottom: 8px; }
-        body.dark-mode .pokemon-header h1 { color: #ffcb05; }
-        .pokemon-id { font-size: 16px; color: #777; font-weight: 500; }
-        .pokemon-image-container { text-align: center; margin: 15px 0; }
-        .pokemon-image { width: 260px; height: 260px; object-fit: contain; filter: drop-shadow(8px 12px 20px rgba(0,0,0,0.2)); transition: transform 0.3s; }
-        .pokemon-image:hover { transform: scale(1.03); }
-        .action-buttons { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
+        
+        .dark-mode-toggle:hover, .language-select:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: scale(1.03);
+        }
+        
+        .pokemon-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .pokemon-header h1 {
+            color: #2a75bb;
+            font-size: 38px;
+            margin-bottom: 8px;
+        }
+        
+        body.dark-mode .pokemon-header h1 {
+            color: #ffcb05;
+        }
+        
+        .pokemon-id {
+            font-size: 16px;
+            color: #777;
+            font-weight: 500;
+        }
+        
+        .pokemon-image-container {
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .pokemon-image {
+            width: 260px;
+            height: 260px;
+            object-fit: contain;
+            filter: drop-shadow(8px 12px 20px rgba(0,0,0,0.2));
+            transition: transform 0.3s;
+        }
+        
+        .pokemon-image:hover {
+            transform: scale(1.03);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
         .cry-button, .print-btn {
             background: #2a75bb;
             color: white;
@@ -102,7 +175,13 @@
             transition: all 0.3s;
             font-size: 15px;
         }
-        .cry-button:hover, .print-btn:hover { background: #ffcb05; color: #2a75bb; transform: scale(1.03); }
+        
+        .cry-button:hover, .print-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: scale(1.03);
+        }
+        
         .info-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -112,51 +191,271 @@
             padding: 18px;
             border-radius: 24px;
         }
-        body.dark-mode .info-grid { background: rgba(255,255,255,0.05); }
-        .info-card { background: white; padding: 14px; border-radius: 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        body.dark-mode .info-card { background: rgba(30,30,40,0.9); }
-        .info-label { font-weight: bold; color: #2a75bb; margin-bottom: 6px; font-size: 14px; }
-        body.dark-mode .info-label { color: #ffcb05; }
-        .info-value { font-size: 18px; font-weight: 600; }
-        .section-title { font-size: 20px; font-weight: bold; color: #2a75bb; margin-bottom: 12px; border-left: 4px solid #ffcb05; padding-left: 15px; }
-        body.dark-mode .section-title { color: #ffcb05; }
-        .type-badge-list, .ability-list { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; padding: 0; margin: 15px 0 20px; }
-        .type-badge { display: inline-block; padding: 8px 20px; border-radius: 40px; color: white; font-weight: bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .ability-item { background: #e8e8e8; padding: 8px 18px; border-radius: 40px; font-weight: 500; }
-        body.dark-mode .ability-item { background: #3a3a4a; color: #eee; }
-        .stats-container { margin: 25px 0; }
-        .stat-row { margin: 14px 0; }
-        .stat-name { font-weight: bold; margin-bottom: 5px; display: inline-block; width: 100px; }
-        .stat-bar-bg { background: #e0e0e0; border-radius: 20px; height: 28px; overflow: hidden; margin-top: 5px; }
-        body.dark-mode .stat-bar-bg { background: #3a3a4a; }
-        .stat-bar-fill { background: linear-gradient(90deg, #2a75bb, #4a95db); height: 100%; color: white; line-height: 28px; padding-left: 12px; font-weight: bold; border-radius: 20px; transition: width 0.5s ease; }
-        .dex-entry { background: #f5f0e8; padding: 20px; border-radius: 24px; margin: 25px 0; font-style: italic; line-height: 1.6; border-left: 5px solid #ffcb05; }
-        body.dark-mode .dex-entry { background: #2a2a3a; color: #ddd; }
-        .evolution-section { margin: 25px 0; padding: 20px; background: #f0f0f0; border-radius: 24px; }
-        body.dark-mode .evolution-section { background: #2a2a3a; }
-        .evolution-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; text-align: center; }
-        .evolution-chain { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px; }
-        .evolution-node { text-align: center; min-width: 110px; }
-        .evolution-node img { width: 85px; height: 85px; border-radius: 50%; background: white; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .evolution-node a { display: block; margin-top: 8px; text-decoration: none; color: #2a75bb; font-weight: bold; font-size: 13px; }
-        body.dark-mode .evolution-node a { color: #ffcb05; }
-        .evolution-arrow { font-size: 28px; color: #2a75bb; font-weight: bold; }
-        .special-badge { background: #ff9800; color: white; font-size: 11px; padding: 2px 8px; border-radius: 20px; margin-left: 10px; display: inline-block; }
-        .loader-small { border: 3px solid #f3f3f3; border-top: 3px solid #ffcb05; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-        .back-button { display: inline-block; margin-top: 20px; padding: 12px 30px; background: #ffcb05; color: #2a75bb; text-decoration: none; border-radius: 40px; font-weight: bold; transition: all 0.3s; text-align: center; }
-        .back-button:hover { background: #f5b700; transform: translateY(-2px); }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        body.dark-mode .info-grid {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .info-card {
+            background: white;
+            padding: 14px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        body.dark-mode .info-card {
+            background: rgba(30,30,40,0.9);
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #2a75bb;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        body.dark-mode .info-label {
+            color: #ffcb05;
+        }
+        
+        .info-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2a75bb;
+            margin-bottom: 12px;
+            border-left: 4px solid #ffcb05;
+            padding-left: 15px;
+        }
+        
+        body.dark-mode .section-title {
+            color: #ffcb05;
+        }
+        
+        .type-badge-list, .ability-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            list-style: none;
+            padding: 0;
+            margin: 15px 0 20px;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .ability-item {
+            background: #e8e8e8;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+        }
+        
+        body.dark-mode .ability-item {
+            background: #3a3a4a;
+            color: #eee;
+        }
+        
+        .stats-container {
+            margin: 25px 0;
+        }
+        
+        .stat-row {
+            margin: 14px 0;
+        }
+        
+        .stat-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: inline-block;
+            width: 100px;
+        }
+        
+        .stat-bar-bg {
+            background: #e0e0e0;
+            border-radius: 20px;
+            height: 28px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        body.dark-mode .stat-bar-bg {
+            background: #3a3a4a;
+        }
+        
+        .stat-bar-fill {
+            background: linear-gradient(90deg, #2a75bb, #4a95db);
+            height: 100%;
+            color: white;
+            line-height: 28px;
+            padding-left: 12px;
+            font-weight: bold;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+        
+        .dex-entry {
+            background: #f5f0e8;
+            padding: 20px;
+            border-radius: 24px;
+            margin: 25px 0;
+            font-style: italic;
+            line-height: 1.6;
+            border-left: 5px solid #ffcb05;
+        }
+        
+        body.dark-mode .dex-entry {
+            background: #2a2a3a;
+            color: #ddd;
+        }
+        
+        .evolution-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 24px;
+        }
+        
+        body.dark-mode .evolution-section {
+            background: #2a2a3a;
+        }
+        
+        .evolution-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .evolution-chain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .evolution-node {
+            text-align: center;
+            min-width: 110px;
+        }
+        
+        .evolution-node img {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: white;
+            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .evolution-node a {
+            display: block;
+            margin-top: 8px;
+            text-decoration: none;
+            color: #2a75bb;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        body.dark-mode .evolution-node a {
+            color: #ffcb05;
+        }
+        
+        .evolution-arrow {
+            font-size: 28px;
+            color: #2a75bb;
+            font-weight: bold;
+        }
+        
+        .special-badge {
+            background: #ff9800;
+            color: white;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 10px;
+            display: inline-block;
+        }
+        
+        .loader-small {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ffcb05;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #ffcb05;
+            color: #2a75bb;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .back-button:hover {
+            background: #f5b700;
+            transform: translateY(-2px);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            .container { padding: 20px; }
-            .nav-prev, .nav-next { width: 45px; height: 70px; font-size: 32px; }
+            body {
+                padding: 15px;
+            }
+            .container {
+                padding: 20px;
+            }
+            .nav-prev, .nav-next {
+                width: 45px;
+                height: 70px;
+                font-size: 32px;
+            }
             .nav-prev { left: 5px; }
             .nav-next { right: 5px; }
-            .pokemon-image { width: 200px; height: 200px; }
-            .info-grid { grid-template-columns: 1fr; gap: 12px; }
-            .evolution-chain { gap: 12px; }
-            .evolution-node img { width: 65px; height: 65px; }
-            .evolution-arrow { font-size: 20px; }
+            .pokemon-image {
+                width: 200px;
+                height: 200px;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .evolution-chain {
+                gap: 12px;
+            }
+            .evolution-node img {
+                width: 65px;
+                height: 65px;
+            }
+            .evolution-arrow {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -196,17 +495,61 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    const specialFormBase = {
-        10003: { baseId: 658, baseName: "greninja", displayName: "Ash-Greninja" },
-        10034: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard X" },
-        10035: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard Y" },
-        10036: { baseId: 150, baseName: "mewtwo", displayName: "Mega Mewtwo X" },
-        10037: { baseId: 150, baseName: "mewtwo", displayName: "Mega Mewtwo Y" },
-        10038: { baseId: 94, baseName: "gengar", displayName: "Mega Gengar" },
-        10080: { baseId: 382, baseName: "kyogre", displayName: "Primal Kyogre" },
-        10081: { baseId: 383, baseName: "groudon", displayName: "Primal Groudon" },
-        10072: { baseId: 6, baseName: "charizard", displayName: "Gigantamax Charizard" },
-        10100: { baseId: 26, baseName: "raichu", displayName: "Alolan Raichu" }
+    // Vollständiges Mapping für alle speziellen Formen (mit Regionszuordnung)
+    const specialFormMapping = {
+        // Ash-Greninja (Gen 6 - Kalos)
+        10003: { baseId: 658, baseName: "greninja", displayName: "Ash-Greninja", region: "Kalos", regionId: 6, category: "ash" },
+        // Megas (Gen 6 - Kalos)
+        10034: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard X", region: "Kalos", regionId: 6, category: "mega" },
+        10035: { baseId: 6, baseName: "charizard", displayName: "Mega Charizard Y", region: "Kalos", regionId: 6, category: "mega" },
+        10036: { baseId: 150, baseName: "mewtwo", displayName: "Mega Mewtwo X", region: "Kalos", regionId: 6, category: "mega" },
+        10037: { baseId: 150, baseName: "mewtwo", displayName: "Mega Mewtwo Y", region: "Kalos", regionId: 6, category: "mega" },
+        10038: { baseId: 94, baseName: "gengar", displayName: "Mega Gengar", region: "Kalos", regionId: 6, category: "mega" },
+        10039: { baseId: 130, baseName: "gyarados", displayName: "Mega Gyarados", region: "Kalos", regionId: 6, category: "mega" },
+        10040: { baseId: 142, baseName: "aerodactyl", displayName: "Mega Aerodactyl", region: "Kalos", regionId: 6, category: "mega" },
+        10041: { baseId: 181, baseName: "ampharos", displayName: "Mega Ampharos", region: "Kalos", regionId: 6, category: "mega" },
+        10042: { baseId: 208, baseName: "steelix", displayName: "Mega Steelix", region: "Kalos", regionId: 6, category: "mega" },
+        10043: { baseId: 212, baseName: "scizor", displayName: "Mega Scizor", region: "Kalos", regionId: 6, category: "mega" },
+        10044: { baseId: 214, baseName: "heracross", displayName: "Mega Heracross", region: "Kalos", regionId: 6, category: "mega" },
+        10045: { baseId: 229, baseName: "houndoom", displayName: "Mega Houndoom", region: "Kalos", regionId: 6, category: "mega" },
+        10046: { baseId: 248, baseName: "tyranitar", displayName: "Mega Tyranitar", region: "Kalos", regionId: 6, category: "mega" },
+        10047: { baseId: 257, baseName: "blaziken", displayName: "Mega Blaziken", region: "Kalos", regionId: 6, category: "mega" },
+        10048: { baseId: 282, baseName: "gardevoir", displayName: "Mega Gardevoir", region: "Kalos", regionId: 6, category: "mega" },
+        10049: { baseId: 302, baseName: "sableye", displayName: "Mega Sableye", region: "Kalos", regionId: 6, category: "mega" },
+        10050: { baseId: 303, baseName: "mawile", displayName: "Mega Mawile", region: "Kalos", regionId: 6, category: "mega" },
+        10051: { baseId: 306, baseName: "aggron", displayName: "Mega Aggron", region: "Kalos", regionId: 6, category: "mega" },
+        10052: { baseId: 308, baseName: "medicham", displayName: "Mega Medicham", region: "Kalos", regionId: 6, category: "mega" },
+        10053: { baseId: 310, baseName: "manectric", displayName: "Mega Manectric", region: "Kalos", regionId: 6, category: "mega" },
+        10054: { baseId: 319, baseName: "sharpedo", displayName: "Mega Sharpedo", region: "Kalos", regionId: 6, category: "mega" },
+        10055: { baseId: 323, baseName: "camerupt", displayName: "Mega Camerupt", region: "Kalos", regionId: 6, category: "mega" },
+        10056: { baseId: 334, baseName: "altaria", displayName: "Mega Altaria", region: "Kalos", regionId: 6, category: "mega" },
+        10057: { baseId: 354, baseName: "banette", displayName: "Mega Banette", region: "Kalos", regionId: 6, category: "mega" },
+        10058: { baseId: 359, baseName: "absol", displayName: "Mega Absol", region: "Kalos", regionId: 6, category: "mega" },
+        10059: { baseId: 362, baseName: "glalie", displayName: "Mega Glalie", region: "Kalos", regionId: 6, category: "mega" },
+        10060: { baseId: 373, baseName: "salamence", displayName: "Mega Salamence", region: "Kalos", regionId: 6, category: "mega" },
+        10061: { baseId: 376, baseName: "metagross", displayName: "Mega Metagross", region: "Kalos", regionId: 6, category: "mega" },
+        10062: { baseId: 380, baseName: "latias", displayName: "Mega Latias", region: "Kalos", regionId: 6, category: "mega" },
+        10063: { baseId: 381, baseName: "latios", displayName: "Mega Latios", region: "Kalos", regionId: 6, category: "mega" },
+        10064: { baseId: 384, baseName: "rayquaza", displayName: "Mega Rayquaza", region: "Kalos", regionId: 6, category: "mega" },
+        10065: { baseId: 428, baseName: "lopunny", displayName: "Mega Lopunny", region: "Kalos", regionId: 6, category: "mega" },
+        10066: { baseId: 445, baseName: "garchomp", displayName: "Mega Garchomp", region: "Kalos", regionId: 6, category: "mega" },
+        10067: { baseId: 448, baseName: "lucario", displayName: "Mega Lucario", region: "Kalos", regionId: 6, category: "mega" },
+        10068: { baseId: 460, baseName: "abomasnow", displayName: "Mega Abomasnow", region: "Kalos", regionId: 6, category: "mega" },
+        10069: { baseId: 475, baseName: "gallade", displayName: "Mega Gallade", region: "Kalos", regionId: 6, category: "mega" },
+        10070: { baseId: 531, baseName: "audino", displayName: "Mega Audino", region: "Kalos", regionId: 6, category: "mega" },
+        10071: { baseId: 719, baseName: "diancie", displayName: "Mega Diancie", region: "Kalos", regionId: 6, category: "mega" },
+        // Primals (Gen 3 - Hoenn)
+        10080: { baseId: 382, baseName: "kyogre", displayName: "Primal Kyogre", region: "Hoenn", regionId: 3, category: "primal" },
+        10081: { baseId: 383, baseName: "groudon", displayName: "Primal Groudon", region: "Hoenn", regionId: 3, category: "primal" },
+        // Gigantamax (Gen 8 - Galar)
+        10072: { baseId: 6, baseName: "charizard", displayName: "Gigantamax Charizard", region: "Galar", regionId: 8, category: "gmax" },
+        10073: { baseId: 25, baseName: "pikachu", displayName: "Gigantamax Pikachu", region: "Galar", regionId: 8, category: "gmax" },
+        10074: { baseId: 133, baseName: "eevee", displayName: "Gigantamax Eevee", region: "Galar", regionId: 8, category: "gmax" },
+        10075: { baseId: 52, baseName: "meowth", displayName: "Gigantamax Meowth", region: "Galar", regionId: 8, category: "gmax" },
+        10076: { baseId: 94, baseName: "gengar", displayName: "Gigantamax Gengar", region: "Galar", regionId: 8, category: "gmax" },
+        10077: { baseId: 131, baseName: "lapras", displayName: "Gigantamax Lapras", region: "Galar", regionId: 8, category: "gmax" },
+        10078: { baseId: 143, baseName: "snorlax", displayName: "Gigantamax Snorlax", region: "Galar", regionId: 8, category: "gmax" },
+        10079: { baseId: 68, baseName: "machamp", displayName: "Gigantamax Machamp", region: "Galar", regionId: 8, category: "gmax" }
     };
     
     function toggleDarkMode() {
@@ -243,11 +586,15 @@
         if (!pokemonData) return;
         try {
             const cryUrl = pokemonData.cries?.latest || pokemonData.cries?.legacy;
-            if (cryUrl) { const audio = new Audio(cryUrl); audio.volume = 0.3; await audio.play(); }
+            if (cryUrl) {
+                const audio = new Audio(cryUrl);
+                audio.volume = 0.3;
+                await audio.play();
+            }
         } catch(e) { console.log('Cry playback failed:', e); }
     }
     
-    async function loadEvolutionTree(baseId) {
+    async function loadEvolutionTree(baseId, specialInfo = null) {
         const evolutionContainer = document.getElementById('evolutionTree');
         if (!evolutionContainer) return;
         evolutionContainer.innerHTML = '<div class="loader-small"></div><p style="text-align:center;">Loading evolution chain...</p>';
@@ -285,8 +632,13 @@
                 html += `<div class="evolution-node"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evo.id}.png'"><a href="pokemon_detail.html?id=${evo.id}">${evo.name}</a></div>`;
                 if (i < evolutionDetails.length - 1) html += '<div class="evolution-arrow">→</div>';
             }
+            // Falls es sich um eine spezielle Form handelt, hänge diese am Ende an
+            if (specialInfo && currentPokemonId > 10000) {
+                html += `<div class="evolution-arrow">→</div>`;
+                html += `<div class="evolution-node"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${currentPokemonId}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'"><div><strong>${specialInfo.displayName}</strong></div><div class="special-badge">Special Form</div></div>`;
+            }
             html += '</div>';
-            if (evolutionDetails.length === 0) html = '<p>No evolution data available for this Pokémon.</p>';
+            if (evolutionDetails.length === 0 && !specialInfo) html = '<p>No evolution data available for this Pokémon.</p>';
             evolutionContainer.innerHTML = html;
         } catch(error) {
             evolutionContainer.innerHTML = '<p>⚠️ Evolution data could not be loaded.</p>';
@@ -325,26 +677,32 @@
             const isSpecial = currentPokemonId > 10000;
             let displayName = pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
             let baseSpeciesId = currentPokemonId;
-            let specialDisplay = null;
+            let specialInfo = null;
             let specialBadge = "";
-            
-            if (isSpecial && specialFormBase[currentPokemonId]) {
-                displayName = specialFormBase[currentPokemonId].displayName;
-                baseSpeciesId = specialFormBase[currentPokemonId].baseId;
-                specialDisplay = displayName;
-                specialBadge = `<span class="special-badge">Special Form</span>`;
-            }
-            
             let region = "Unknown";
-            if (pokemonData.id <= 151) region = "Kanto";
-            else if (pokemonData.id <= 251) region = "Johto";
-            else if (pokemonData.id <= 386) region = "Hoenn";
-            else if (pokemonData.id <= 493) region = "Sinnoh";
-            else if (pokemonData.id <= 649) region = "Unova";
-            else if (pokemonData.id <= 721) region = "Kalos";
-            else if (pokemonData.id <= 809) region = "Alola";
-            else if (pokemonData.id <= 905) region = "Galar";
-            else region = "Paldea";
+            
+            if (isSpecial && specialFormMapping[currentPokemonId]) {
+                specialInfo = specialFormMapping[currentPokemonId];
+                displayName = specialInfo.displayName;
+                baseSpeciesId = specialInfo.baseId;
+                region = specialInfo.region;
+                if (specialInfo.category === "mega") specialBadge = '<span class="special-badge">Mega Evolution</span>';
+                else if (specialInfo.category === "primal") specialBadge = '<span class="special-badge">Primal Reversion</span>';
+                else if (specialInfo.category === "gmax") specialBadge = '<span class="special-badge">Gigantamax</span>';
+                else if (specialInfo.category === "ash") specialBadge = '<span class="special-badge">Bond Phenomenon</span>';
+                else specialBadge = '<span class="special-badge">Special Form</span>';
+            } else {
+                // Normale Region bestimmen
+                if (pokemonData.id <= 151) region = "Kanto";
+                else if (pokemonData.id <= 251) region = "Johto";
+                else if (pokemonData.id <= 386) region = "Hoenn";
+                else if (pokemonData.id <= 493) region = "Sinnoh";
+                else if (pokemonData.id <= 649) region = "Unova";
+                else if (pokemonData.id <= 721) region = "Kalos";
+                else if (pokemonData.id <= 809) region = "Alola";
+                else if (pokemonData.id <= 905) region = "Galar";
+                else region = "Paldea";
+            }
             
             const pokedexText = await loadPokedexEntry(baseSpeciesId, isSpecial ? displayName : null);
             
@@ -364,7 +722,7 @@
                     <div class="pokemon-id">#${String(pokemonData.id).padStart(isSpecial ? 5 : 3, '0')}${isSpecial ? ' ⭐ Special Form' : ''}</div>
                 </div>
                 <div class="pokemon-image-container">
-                    <img class="pokemon-image" src="${pokemonData.sprites.other['official-artwork'].front_default || pokemonData.sprites.front_default}" 
+                    <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonData.id}.png" 
                          alt="${displayName}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
                 </div>
                 <div class="action-buttons">
@@ -396,7 +754,7 @@
                 <div style="text-align: center;"><a href="pokemon_list.html" class="back-button">← Back to Pokédex</a> <a href="start.html" class="back-button" style="margin-left: 15px;">🏠 Home</a></div>
             `;
             
-            await loadEvolutionTree(baseSpeciesId);
+            await loadEvolutionTree(baseSpeciesId, specialInfo);
             
         } catch(error) {
             console.error('Error loading Pokémon:', error);
