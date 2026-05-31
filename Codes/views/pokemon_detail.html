@@ -136,7 +136,6 @@
             filter: drop-shadow(8px 12px 20px rgba(0,0,0,0.2));
         }
         
-        /* SPECIAL FORMS BUTTONS */
         .special-forms-section {
             margin: 20px 0;
             padding: 15px;
@@ -493,170 +492,6 @@
     let pokemonData = null;
     let currentLanguage = localStorage.getItem('language') || 'en';
     
-    // ========== KOMPLETTE SPEZIALFORMEN LISTE für ALLE Pokémon ==========
-    const specialFormsMap = {
-        // === MEGA EVOLUTIONS ===
-        6: {   // Charizard
-            megaX: { id: "mega-x", name: "Mega Charizard X", type: "mega" },
-            megaY: { id: "mega-y", name: "Mega Charizard Y", type: "mega" },
-            gmax: { id: "gigantamax", name: "Gigantamax Charizard", type: "gmax" }
-        },
-        150: { // Mewtwo
-            megaX: { id: "mega-x", name: "Mega Mewtwo X", type: "mega" },
-            megaY: { id: "mega-y", name: "Mega Mewtwo Y", type: "mega" }
-        },
-        94: {  // Gengar
-            mega: { id: "mega", name: "Mega Gengar", type: "mega" },
-            gmax: { id: "gigantamax", name: "Gigantamax Gengar", type: "gmax" }
-        },
-        130: { // Gyarados
-            mega: { id: "mega", name: "Mega Gyarados", type: "mega" }
-        },
-        248: { // Tyranitar
-            mega: { id: "mega", name: "Mega Tyranitar", type: "mega" }
-        },
-        257: { // Blaziken
-            mega: { id: "mega", name: "Mega Blaziken", type: "mega" }
-        },
-        282: { // Gardevoir
-            mega: { id: "mega", name: "Mega Gardevoir", type: "mega" }
-        },
-        302: { // Sableye
-            mega: { id: "mega", name: "Mega Sableye", type: "mega" }
-        },
-        306: { // Aggron
-            mega: { id: "mega", name: "Mega Aggron", type: "mega" }
-        },
-        308: { // Medicham
-            mega: { id: "mega", name: "Mega Medicham", type: "mega" }
-        },
-        310: { // Manectric
-            mega: { id: "mega", name: "Mega Manectric", type: "mega" }
-        },
-        319: { // Sharpedo
-            mega: { id: "mega", name: "Mega Sharpedo", type: "mega" }
-        },
-        323: { // Camerupt
-            mega: { id: "mega", name: "Mega Camerupt", type: "mega" }
-        },
-        334: { // Altaria
-            mega: { id: "mega", name: "Mega Altaria", type: "mega" }
-        },
-        354: { // Banette
-            mega: { id: "mega", name: "Mega Banette", type: "mega" }
-        },
-        359: { // Absol
-            mega: { id: "mega", name: "Mega Absol", type: "mega" }
-        },
-        362: { // Glalie
-            mega: { id: "mega", name: "Mega Glalie", type: "mega" }
-        },
-        373: { // Salamence
-            mega: { id: "mega", name: "Mega Salamence", type: "mega" }
-        },
-        376: { // Metagross
-            mega: { id: "mega", name: "Mega Metagross", type: "mega" }
-        },
-        380: { // Latias
-            mega: { id: "mega", name: "Mega Latias", type: "mega" }
-        },
-        381: { // Latios
-            mega: { id: "mega", name: "Mega Latios", type: "mega" }
-        },
-        384: { // Rayquaza
-            mega: { id: "mega", name: "Mega Rayquaza", type: "mega" }
-        },
-        428: { // Lopunny
-            mega: { id: "mega", name: "Mega Lopunny", type: "mega" }
-        },
-        445: { // Garchomp
-            mega: { id: "mega", name: "Mega Garchomp", type: "mega" }
-        },
-        448: { // Lucario
-            mega: { id: "mega", name: "Mega Lucario", type: "mega" }
-        },
-        460: { // Abomasnow
-            mega: { id: "mega", name: "Mega Abomasnow", type: "mega" }
-        },
-        475: { // Gallade
-            mega: { id: "mega", name: "Mega Gallade", type: "mega" }
-        },
-        531: { // Audino
-            mega: { id: "mega", name: "Mega Audino", type: "mega" }
-        },
-        719: { // Diancie
-            mega: { id: "mega", name: "Mega Diancie", type: "mega" }
-        },
-        // === PRIMAL FORMS ===
-        382: { // Kyogre
-            primal: { id: "primal", name: "Primal Kyogre", type: "primal" }
-        },
-        383: { // Groudon
-            primal: { id: "primal", name: "Primal Groudon", type: "primal" }
-        },
-        // === GIGANTAMAX FORMS ===
-        25: {  // Pikachu
-            gmax: { id: "gigantamax", name: "Gigantamax Pikachu", type: "gmax" }
-        },
-        52: {  // Meowth
-            gmax: { id: "gigantamax", name: "Gigantamax Meowth", type: "gmax" }
-        133: { // Eevee
-            gmax: { id: "gigantamax", name: "Gigantamax Eevee", type: "gmax" }
-        },
-        143: { // Snorlax
-            gmax: { id: "gigantamax", name: "Gigantamax Snorlax", type: "gmax" }
-        },
-        68: {  // Machamp
-            gmax: { id: "gigantamax", name: "Gigantamax Machamp", type: "gmax" }
-        },
-        131: { // Lapras
-            gmax: { id: "gigantamax", name: "Gigantamax Lapras", type: "gmax" }
-        },
-        99: {  // Kingler
-            gmax: { id: "gigantamax", name: "Gigantamax Kingler", type: "gmax" }
-        },
-        823: { // Corviknight
-            gmax: { id: "gigantamax", name: "Gigantamax Corviknight", type: "gmax" }
-        },
-        812: { // Rillaboom
-            gmax: { id: "gigantamax", name: "Gigantamax Rillaboom", type: "gmax" }
-        },
-        815: { // Cinderace
-            gmax: { id: "gigantamax", name: "Gigantamax Cinderace", type: "gmax" }
-        },
-        818: { // Inteleon
-            gmax: { id: "gigantamax", name: "Gigantamax Inteleon", type: "gmax" }
-        },
-        809: { // Melmetal
-            gmax: { id: "gigantamax", name: "Gigantamax Melmetal", type: "gmax" }
-        },
-        // === REGIONAL FORMS (werden auf der normalen Seite mit Buttons angezeigt) ===
-        26: {  // Raichu
-            alolan: { id: "alolan", name: "Alolan Raichu", type: "regional" }
-        },
-        105: { // Marowak
-            alolan: { id: "alolan", name: "Alolan Marowak", type: "regional" }
-        },
-        103: { // Exeggutor
-            alolan: { id: "alolan", name: "Alolan Exeggutor", type: "regional" }
-        },
-        77: {  // Ponyta
-            galarian: { id: "galarian", name: "Galarian Ponyta", type: "regional" }
-        },
-        78: {  // Rapidash
-            galarian: { id: "galarian", name: "Galarian Rapidash", type: "regional" }
-        },
-        58: {  // Growlithe
-            hisuian: { id: "hisuian", name: "Hisuian Growlithe", type: "regional" }
-        },
-        59: {  // Arcanine
-            hisuian: { id: "hisuian", name: "Hisuian Arcanine", type: "regional" }
-        },
-        571: { // Zoroark
-            hisuian: { id: "hisuian", name: "Hisuian Zoroark", type: "regional" }
-        }
-    };
-    
     const typeColors = {
         normal: "#A8A77A", fire: "#EE8130", water: "#6390F0",
         electric: "#F7D02C", grass: "#7AC74C", ice: "#96D9D6",
@@ -664,6 +499,61 @@
         flying: "#A98FF3", psychic: "#F95587", bug: "#A6B91A",
         rock: "#B6A136", ghost: "#735797", dragon: "#6F35FC",
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
+    };
+    
+    // Spezialformen Mapping
+    const specialFormsMap = {
+        6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard" },
+        150: { megaX: "Mega Mewtwo X", megaY: "Mega Mewtwo Y" },
+        94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar" },
+        130: { mega: "Mega Gyarados" },
+        248: { mega: "Mega Tyranitar" },
+        257: { mega: "Mega Blaziken" },
+        282: { mega: "Mega Gardevoir" },
+        302: { mega: "Mega Sableye" },
+        306: { mega: "Mega Aggron" },
+        308: { mega: "Mega Medicham" },
+        310: { mega: "Mega Manectric" },
+        319: { mega: "Mega Sharpedo" },
+        323: { mega: "Mega Camerupt" },
+        334: { mega: "Mega Altaria" },
+        354: { mega: "Mega Banette" },
+        359: { mega: "Mega Absol" },
+        362: { mega: "Mega Glalie" },
+        373: { mega: "Mega Salamence" },
+        376: { mega: "Mega Metagross" },
+        380: { mega: "Mega Latias" },
+        381: { mega: "Mega Latios" },
+        384: { mega: "Mega Rayquaza" },
+        428: { mega: "Mega Lopunny" },
+        445: { mega: "Mega Garchomp" },
+        448: { mega: "Mega Lucario" },
+        460: { mega: "Mega Abomasnow" },
+        475: { mega: "Mega Gallade" },
+        531: { mega: "Mega Audino" },
+        719: { mega: "Mega Diancie" },
+        25: { gmax: "Gigantamax Pikachu" },
+        52: { gmax: "Gigantamax Meowth" },
+        133: { gmax: "Gigantamax Eevee" },
+        143: { gmax: "Gigantamax Snorlax" },
+        68: { gmax: "Gigantamax Machamp" },
+        131: { gmax: "Gigantamax Lapras" },
+        99: { gmax: "Gigantamax Kingler" },
+        823: { gmax: "Gigantamax Corviknight" },
+        812: { gmax: "Gigantamax Rillaboom" },
+        815: { gmax: "Gigantamax Cinderace" },
+        818: { gmax: "Gigantamax Inteleon" },
+        809: { gmax: "Gigantamax Melmetal" },
+        382: { primal: "Primal Kyogre" },
+        383: { primal: "Primal Groudon" },
+        26: { alolan: "Alolan Raichu" },
+        105: { alolan: "Alolan Marowak" },
+        103: { alolan: "Alolan Exeggutor" },
+        77: { galarian: "Galarian Ponyta" },
+        78: { galarian: "Galarian Rapidash" },
+        58: { hisuian: "Hisuian Growlithe" },
+        59: { hisuian: "Hisuian Arcanine" },
+        571: { hisuian: "Hisuian Zoroark" }
     };
     
     function toggleDarkMode() {
@@ -696,8 +586,8 @@
         window.location.href = `pokemon_detail.html?id=${newId}`;
     }
     
-    function goToSpecialForm(formKey, formName, type) {
-        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}&type=${type}`;
+    function goToSpecialForm(formKey, formName) {
+        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}`;
     }
     
     async function playCry() {
@@ -712,67 +602,12 @@
         } catch(e) { console.log('Cry playback failed'); }
     }
     
-    async function loadEvolutionTree(pokemonId) {
-        const evolutionContainer = document.getElementById('evolutionTree');
-        if (!evolutionContainer) return;
-        evolutionContainer.innerHTML = '<div class="loader-small"></div>';
-        
-        try {
-            const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`);
-            if (!speciesRes.ok) throw new Error();
-            const speciesData = await speciesRes.json();
-            const chainRes = await fetch(speciesData.evolution_chain.url);
-            const chainData = await chainRes.json();
-            
-            let evolutionChain = [];
-            let current = chainData.chain;
-            
-            function collectEvolutions(chain, list) {
-                list.push(chain.species.name);
-                if (chain.evolves_to && chain.evolves_to.length > 0) {
-                    for (let evo of chain.evolves_to) collectEvolutions(evo, list);
-                }
-            }
-            collectEvolutions(current, evolutionChain);
-            evolutionChain = [...new Set(evolutionChain)];
-            
-            async function getPokemonDetails(name) {
-                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-                const data = await response.json();
-                return { id: data.id, name: data.name };
-            }
-            
-            let html = '<div class="evolution-title">🌳 Evolution Tree</div><div class="evolution-chain">';
-            for (let i = 0; i < evolutionChain.length; i++) {
-                const details = await getPokemonDetails(evolutionChain[i]);
-                const displayName = details.name.charAt(0).toUpperCase() + details.name.slice(1);
-                html += `
-                    <div class="evolution-node">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${details.id}.png" 
-                             onclick="location.href='pokemon_detail.html?id=${details.id}'"
-                             onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${details.id}.png'">
-                        <a href="pokemon_detail.html?id=${details.id}">${displayName}</a>
-                    </div>
-                `;
-                if (i < evolutionChain.length - 1) html += '<div class="evolution-arrow">→</div>';
-            }
-            html += '</div>';
-            
-            if (evolutionChain.length === 1) {
-                html = '<div class="evolution-title">🌳 Evolution Tree</div><p>This Pokémon does not evolve</p>';
-            }
-            
-            evolutionContainer.innerHTML = html;
-        } catch (error) {
-            evolutionContainer.innerHTML = '<div class="evolution-title">🌳 Evolution Tree</div><p>Evolution data not available</p>';
-        }
-    }
-    
     async function loadPokemonDetail() {
         const container = document.getElementById('mainContainer');
         container.innerHTML = '<div class="loader-small"></div><p style="text-align: center;">Loading Pokémon data...</p>';
         
         try {
+            // Lade Pokémon Daten
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${currentPokemonId}`);
             if (!response.ok) throw new Error('Pokémon not found');
             pokemonData = await response.json();
@@ -780,6 +615,7 @@
             
             const pokemonName = pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
             
+            // Generation bestimmen
             let generation = 1;
             if (currentPokemonId <= 151) generation = 1;
             else if (currentPokemonId <= 251) generation = 2;
@@ -791,6 +627,7 @@
             else if (currentPokemonId <= 905) generation = 8;
             else generation = 9;
             
+            // Pokédex Eintrag
             let dexEntry = "No Pokédex entry found.";
             try {
                 const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${currentPokemonId}`);
@@ -806,31 +643,79 @@
             } catch(e) {}
             
             const stats = {
-                hp: pokemonData.stats[0].base_stat,
-                attack: pokemonData.stats[1].base_stat,
-                defense: pokemonData.stats[2].base_stat,
-                spAttack: pokemonData.stats[3].base_stat,
-                spDefense: pokemonData.stats[4].base_stat,
-                speed: pokemonData.stats[5].base_stat
+                hp: pokemonData.stats[0]?.base_stat || 0,
+                attack: pokemonData.stats[1]?.base_stat || 0,
+                defense: pokemonData.stats[2]?.base_stat || 0,
+                spAttack: pokemonData.stats[3]?.base_stat || 0,
+                spDefense: pokemonData.stats[4]?.base_stat || 0,
+                speed: pokemonData.stats[5]?.base_stat || 0
             };
             const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
             
-            // Spezialformen Buttons generieren
+            // Spezialformen Buttons
             let specialButtonsHtml = '';
             const specials = specialFormsMap[currentPokemonId];
             if (specials) {
                 specialButtonsHtml = '<div class="special-forms-section"><div class="special-forms-title">⭐ Special Forms Available ⭐</div><div class="special-buttons">';
                 
-                for (let [key, form] of Object.entries(specials)) {
+                for (let [key, name] of Object.entries(specials)) {
                     let btnClass = 'special-btn';
-                    if (form.type === 'mega') btnClass += ' mega';
-                    else if (form.type === 'gmax') btnClass += ' gmax';
-                    else if (form.type === 'primal') btnClass += ' mega';
+                    if (key.includes('mega')) btnClass += ' mega';
+                    else if (key === 'gmax') btnClass += ' gmax';
+                    else if (key === 'primal') btnClass += ' mega';
                     else btnClass += ' regional';
                     
-                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${form.name}', '${form.type}')">✨ ${form.name}</button>`;
+                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${name}')">✨ ${name}</button>`;
                 }
                 specialButtonsHtml += '</div></div>';
+            }
+            
+            // Evolution Tree laden
+            let evolutionHtml = '<div class="evolution-title">🌳 Evolution Tree</div><div class="loader-small"></div>';
+            try {
+                const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${currentPokemonId}`);
+                if (speciesRes.ok) {
+                    const speciesData = await speciesRes.json();
+                    const chainRes = await fetch(speciesData.evolution_chain.url);
+                    const chainData = await chainRes.json();
+                    
+                    let evolutionChain = [];
+                    let current = chainData.chain;
+                    
+                    function collectEvolutions(chain, list) {
+                        list.push(chain.species.name);
+                        if (chain.evolves_to && chain.evolves_to.length > 0) {
+                            for (let evo of chain.evolves_to) collectEvolutions(evo, list);
+                        }
+                    }
+                    collectEvolutions(current, evolutionChain);
+                    evolutionChain = [...new Set(evolutionChain)];
+                    
+                    if (evolutionChain.length === 1) {
+                        evolutionHtml = '<div class="evolution-title">🌳 Evolution Tree</div><p>This Pokémon does not evolve</p>';
+                    } else {
+                        let html = '<div class="evolution-title">🌳 Evolution Tree</div><div class="evolution-chain">';
+                        for (let i = 0; i < Math.min(evolutionChain.length, 5); i++) {
+                            const evoName = evolutionChain[i];
+                            const evoId = evoName === pokemonData.name ? currentPokemonId : 
+                                (evolutionChain[i+1] ? (evolutionChain[i+1] === pokemonData.name ? currentPokemonId : i+1) : i+1);
+                            
+                            html += `
+                                <div class="evolution-node">
+                                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i+1}.png" 
+                                         onclick="location.href='pokemon_detail.html?id=${i+1}'"
+                                         onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i+1}.png'">
+                                    <a href="pokemon_detail.html?id=${i+1}">${evoName.charAt(0).toUpperCase() + evoName.slice(1)}</a>
+                                </div>
+                            `;
+                            if (i < evolutionChain.length - 1) html += '<div class="evolution-arrow">→</div>';
+                        }
+                        html += '</div>';
+                        evolutionHtml = html;
+                    }
+                }
+            } catch(e) {
+                evolutionHtml = '<div class="evolution-title">🌳 Evolution Tree</div><p>Evolution data not available</p>';
             }
             
             container.innerHTML = `
@@ -888,8 +773,7 @@
                 </div>
                 
                 <div class="evolution-section" id="evolutionTree">
-                    <div class="evolution-title">🌳 Evolution Tree</div>
-                    <div class="loader-small"></div>
+                    ${evolutionHtml}
                 </div>
                 
                 <div style="text-align: center;">
@@ -898,10 +782,13 @@
                 </div>
             `;
             
-            await loadEvolutionTree(currentPokemonId);
-            
         } catch(error) {
-            container.innerHTML = `<div style="text-align: center; padding: 50px;"><h2>❌ Pokémon not found!</h2><a href="pokemon_list.html" class="back-button">← Back to Pokédex</a></div>`;
+            console.error('Error:', error);
+            container.innerHTML = `<div style="text-align: center; padding: 50px;">
+                <h2>❌ Pokémon #${currentPokemonId} not found!</h2>
+                <p>The Pokémon with ID ${currentPokemonId} does not exist in the Pokédex.</p>
+                <a href="pokemon_list.html" class="back-button">← Back to Pokédex</a>
+            </div>`;
         }
     }
     
