@@ -13,36 +13,32 @@ body{
     text-align:center;
 }
 
-body.dark{ background:#1a1a2e; }
+body.dark{
+    background:#1a1a2e;
+}
 
+/* TOPBAR */
 .topbar{
     position:fixed;
     top:10px;
-    right:10px;
+    left:10px;
     display:flex;
     gap:8px;
     z-index:1000;
 }
 
+.topbar button, .topbar select{
+    font-weight:bold;
+}
+
+/* MAIN CONTAINER */
 .container{
     max-width:900px;
     margin:auto;
     margin-top:70px;
     background:rgba(0,0,0,0.4);
-    padding:25px;
+    padding:20px;
     border-radius:20px;
-}
-
-/* NAME DESIGN FIX */
-.title{
-    font-size:34px;
-    font-weight:900;
-    letter-spacing:2px;
-}
-
-.sub{
-    opacity:0.8;
-    margin-bottom:5px;
 }
 
 /* NAV */
@@ -50,57 +46,76 @@ body.dark{ background:#1a1a2e; }
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin:15px 0;
+    margin:10px 0;
 }
 
 .navBtn{
-    font-size:36px;
-    padding:12px 22px;
+    font-size:28px;
+    padding:10px 18px;
     font-weight:bold;
 }
 
+/* CENTER IMAGE */
 .centerCol{
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:8px;
 }
 
-/* BUTTON ROW UNDER IMAGE */
-.actionRow{
-    display:flex;
-    gap:10px;
-    justify-content:center;
-    flex-wrap:wrap;
+/* IMAGE */
+img{
+    width:220px;
 }
 
-/* TYPE */
-.typeBadge{
+/* SHINY BIG FIX */
+.shinyImg{
+    width:220px;
+}
+
+/* BADGES */
+.badge{
     padding:6px 10px;
     border-radius:20px;
     margin:3px;
     display:inline-block;
     font-size:12px;
+    font-weight:bold;
     color:white;
 }
 
-/* COSMETIC ROWS */
-.row{
-    display:flex;
-    justify-content:space-between;
-    padding:10px 14px;
-    border-radius:999px;
-    background:rgba(255,255,255,0.14);
-    margin:6px 0;
-    font-weight:bold;
+/* SECTION */
+.section{
+    margin-top:15px;
+    padding:12px;
+    background:rgba(255,255,255,0.08);
+    border-radius:12px;
 }
 
-/* REGION */
-.regionBtn{
-    padding:10px 14px;
+/* CARDS (abilities/stats) */
+.cardGrid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+}
+
+.card{
+    background:rgba(255,255,255,0.12);
+    padding:8px 12px;
     border-radius:12px;
-    background:rgba(255,255,255,0.15);
+    font-weight:bold;
+    min-width:120px;
+}
+
+/* BUTTONS */
+button,a,select{
+    padding:10px 12px;
+    border-radius:10px;
+    border:none;
     cursor:pointer;
+    background:#ffcb05;
+    color:black;
+    text-decoration:none;
     font-weight:bold;
 }
 
@@ -115,28 +130,27 @@ body.dark{ background:#1a1a2e; }
 .evoItem{
     cursor:pointer;
     text-align:center;
+    padding:8px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.1);
 }
 
 .evoItem img{
-    width:100px;
+    width:110px;
 }
 
-/* BUTTON STYLE */
-button,a,select{
-    padding:10px 12px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-    background:#ffcb05;
-    color:black;
-    text-decoration:none;
-    font-weight:bold;
+.smallLinks{
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
     <select onchange="setLang(this.value)">
         <option value="en">EN</option>
@@ -154,10 +168,11 @@ button,a,select{
 
 const id = Number(new URLSearchParams(location.search).get("id")) || 1;
 
+/* LIMIT (Gen 1–6) */
 if(id > 721){
     document.getElementById("content").innerHTML =
         "<h2>Only Gen 1–6 supported</h2>";
-    throw new Error();
+    throw new Error("Gen limit");
 }
 
 const typeColors = {
@@ -169,13 +184,16 @@ const typeColors = {
  dark:"#705848", steel:"#B8B8D0", fairy:"#EE99AC"
 };
 
+/* LANG */
 let lang = localStorage.getItem("lang") || "en";
+
 function setLang(l){
     lang = l;
     localStorage.setItem("lang", l);
     load();
 }
 
+/* DARK */
 if(localStorage.getItem("dark")==="true")
     document.body.classList.add("dark");
 
@@ -184,6 +202,7 @@ function toggleDark(){
     localStorage.setItem("dark", document.body.classList.contains("dark"));
 }
 
+/* NAV */
 function nav(x){
     let newId = id + x;
     if(newId < 1) newId = 721;
@@ -191,57 +210,52 @@ function nav(x){
     location.href = `?id=${newId}`;
 }
 
+/* CRY */
 function playCry(url){
     if(url) new Audio(url).play();
 }
 
+/* FIX TEXT */
 function fix(t){
     return t ? t.replace(/\f/g," ").replace(/\n/g," ") : "No entry";
 }
 
-function region(id){
-    if(id<=151) return "Kanto";
-    if(id<=251) return "Johto";
-    if(id<=386) return "Hoenn";
-    if(id<=493) return "Sinnoh";
-    if(id<=649) return "Unova";
-    return "Kalos";
+/* REGION LINK FIX */
+function openRegion(){
+    location.href = "regions_detail.html?id=" + id;
 }
 
 /* SHINY TOGGLE */
 let isShiny = false;
-function toggleShiny(){
+
+function toggleShiny(p){
     isShiny = !isShiny;
-    load();
+    const img = document.getElementById("pokeImg");
+
+    img.src = isShiny
+        ? p.sprites.front_shiny
+        : (p.sprites.other?.["official-artwork"]?.front_default || p.sprites.front_default);
 }
 
-/* EVOLUTION FIX (HARD STABLE) */
+/* EVOLUTION FIX (ROBUST) */
 async function loadEvolution(species){
     try{
         const s = await fetch(`/api/pokemon-species/${species}`).then(r=>r.json());
-        const evo = await fetch(s.evolution_chain.url).then(r=>r.json());
+        const chain = await fetch(s.evolution_chain.url).then(r=>r.json());
 
         let list = [];
-        function walk(node){
-            list.push(node.species.name);
-            node.evolves_to.forEach(walk);
-        }
-        walk(evo.chain);
 
-        if(list.length <= 1){
-            const p = await fetch(`/api/pokemon/${species}`).then(r=>r.json());
-
-            document.getElementById("evo").innerHTML = `
-            <div class="section">
-                <h3>Evolution Tree</h3>
-                <img src="${p.sprites.front_default}">
-                <p>This Pokémon does not evolve.</p>
-            </div>`;
-            return;
+        function walk(c){
+            if(!c) return;
+            list.push(c.species.name);
+            c.evolves_to.forEach(walk);
         }
+
+        walk(chain.chain);
 
         const html = await Promise.all(list.map(async name=>{
             const p = await fetch(`/api/pokemon/${name}`).then(r=>r.json());
+
             return `
             <div class="evoItem" onclick="location.href='?id=${p.id}'">
                 <img src="${p.sprites.front_default}">
@@ -249,105 +263,109 @@ async function loadEvolution(species){
             </div>`;
         }));
 
-        document.getElementById("evo").innerHTML = `
-        <div class="section">
-            <h3>Evolution Tree</h3>
-            <div class="evoBox">${html.join("")}</div>
-        </div>`;
+        document.getElementById("evo").innerHTML =
+            `<div class="evoBox">${html.join("")}</div>`;
 
     } catch(e){
         document.getElementById("evo").innerHTML =
-            "<div class='section'>Evolution could not load</div>";
+            "<p>Evolution data not available</p>";
     }
 }
 
+/* MAIN */
 async function load(){
+    try{
 
-    const p = await fetch(`/api/pokemon/${id}`).then(r=>r.json());
-    const s = await fetch(`/api/pokemon-species/${p.species.name}`).then(r=>r.json());
+        const p = await fetch(`/api/pokemon/${id}`).then(r=>r.json());
+        const s = await fetch(`/api/pokemon-species/${p.species.name}`).then(r=>r.json());
 
-    const entryObj =
-        s.flavor_text_entries.find(e=>e.language.name===lang)
-        || s.flavor_text_entries.find(e=>e.language.name==="en");
+        const entryObj = s.flavor_text_entries.find(e=>e.language.name===lang)
+            || s.flavor_text_entries.find(e=>e.language.name==="en");
 
-    const entry = fix(entryObj?.flavor_text);
+        const entry = fix(entryObj?.flavor_text);
 
-    const sprite =
-        isShiny
-        ? p.sprites.front_shiny
-        : p.sprites.other?.["official-artwork"]?.front_default || p.sprites.front_default;
+        const types = p.types.map(t=>
+            `<span class="badge" style="background:${typeColors[t.type.name]}">
+                ${t.type.name.toUpperCase()}
+            </span>`
+        ).join("");
 
-    const types = p.types.map(t=>
-        `<span class="typeBadge" style="background:${typeColors[t.type.name]}">
-            ${t.type.name.toUpperCase()}
-        </span>`
-    ).join("");
+        const abilities = p.abilities.map(a=>
+            `<div class="card">${a.ability.name.toUpperCase()}</div>`
+        ).join("");
 
-    const abilities = p.abilities.map(a=>
-        `<div class="row"><span>Ability</span><span>${a.ability.name.toUpperCase()}</span></div>`
-    ).join("");
+        const stats = p.stats.map(x=>
+            `<div class="card">${x.stat.name.toUpperCase()}: ${x.base_stat}</div>`
+        ).join("");
 
-    const stats = p.stats.map(x=>
-        `<div class="row"><span>${x.stat.name.toUpperCase()}</span><span>${x.base_stat}</span></div>`
-    ).join("");
+        const cry = p.cries?.latest || p.cries?.legacy;
 
-    const cry = p.cries?.latest || p.cries?.legacy;
+        const image =
+            p.sprites.other?.["official-artwork"]?.front_default ||
+            p.sprites.front_default;
 
-    document.getElementById("content").innerHTML = `
-    <div class="container">
+        document.getElementById("content").innerHTML = `
+        <div class="container">
 
-        <div class="title">${p.name.toUpperCase()}</div>
-        <div class="sub">#${p.id}</div>
+            <h1>${p.name.toUpperCase()}</h1>
+            <h3>#${p.id}</h3>
 
-        <div class="navRow">
-            <button class="navBtn" onclick="nav(-1)">⬅</button>
+            <div class="navRow">
+                <button class="navBtn" onclick="nav(-1)">⬅</button>
 
-            <div class="centerCol">
-                <img src="${sprite}">
-
-                <div class="actionRow">
-                    <button onclick="playCry('${cry}')">🔊 Cry</button>
-                    <button onclick="window.print()">🖨 Print</button>
-                    <button onclick="toggleShiny()">✨ Shiny</button>
+                <div class="centerCol">
+                    <img id="pokeImg" src="${image}">
+                    <button onclick="playCry('${cry}')"><b>🔊 Cry</b></button>
+                    <button onclick="toggleShiny(${JSON.stringify(p).replace(/"/g,'&quot;')})"><b>✨ Shiny</b></button>
                 </div>
+
+                <button class="navBtn" onclick="nav(1)">➡</button>
             </div>
 
-            <button class="navBtn" onclick="nav(1)">➡</button>
-        </div>
-
-        <div class="section">
-            <h3>Types</h3>
-            ${types}
-        </div>
-
-        <div class="section">
-            <h3>Abilities</h3>
-            ${abilities}
-        </div>
-
-        <div class="section">
-            <h3>Stats</h3>
-            ${stats}
-        </div>
-
-        <div class="section">
-            <h3>Pokédex Entry</h3>
-            <p>${entry}</p>
-        </div>
-
-        <div class="section">
-            <h3>Region</h3>
-            <div class="regionBtn" onclick="alert('Region system coming soon')">
-                ${region(p.id)}
+            <div class="section">
+                <h3>Types</h3>
+                ${types}
             </div>
-        </div>
 
-        <div id="evo">Loading...</div>
+            <div class="section">
+                <h3>Abilities</h3>
+                <div class="cardGrid">${abilities}</div>
+            </div>
 
-    </div>
-    `;
+            <div class="section">
+                <h3>Stats</h3>
+                <div class="cardGrid">${stats}</div>
+            </div>
 
-    loadEvolution(p.species.name);
+            <div class="section">
+                <h3>Pokédex Entry</h3>
+                <p>${entry}</p>
+            </div>
+
+            <div class="section">
+                <h3>Region</h3>
+                <button onclick="openRegion()"><b>View Region</b></button>
+            </div>
+
+            <div class="section">
+                <h3>🌳 Evolution Tree</h3>
+                <div id="evo">Loading...</div>
+            </div>
+
+            <div class="smallLinks">
+                <a href="pokemon_list.html"><b>Back to List</b></a>
+                <a href="start.html"><b>Home</b></a>
+            </div>
+
+        </div>`;
+
+        loadEvolution(p.species.name);
+
+    } catch(e){
+        console.error(e);
+        document.getElementById("content").innerHTML =
+            "<h2>Error loading Pokémon</h2>";
+    }
 }
 
 load();
