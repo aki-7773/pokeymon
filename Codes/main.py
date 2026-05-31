@@ -31,7 +31,7 @@ def index():
     return static_file("start.html", root="./views")
 
 # --------------------------------------------------
-# STATIC FILES für GitHub Pages (wichtig!)
+# STATIC FILES
 # --------------------------------------------------
 @route("/views/<filename>")
 def serve_views(filename):
@@ -43,18 +43,16 @@ def serve_static(filename):
 
 @route("/<filename>")
 def serve_pages(filename):
-    # Für direkte HTML-Dateien (ohne views/ Pfad)
     import os
     if os.path.exists(f"./views/{filename}"):
         return static_file(filename, root="./views")
     return "Not found", 404
 
 # --------------------------------------------------
-# API für Pokémon-Daten (für die Frontend-JavaScript)
+# API für Pokémon-Daten
 # --------------------------------------------------
 @route("/api/pokemon/<id:int>")
 def api_pokemon(id):
-    """Proxy für Pokémon API - vermeidet CORS-Probleme"""
     import requests
     try:
         r = requests.get(f"https://pokeapi.co/api/v2/pokemon/{id}", timeout=10)
@@ -62,18 +60,17 @@ def api_pokemon(id):
     except:
         return {"error": "Not found"}
 
-@route("/api/pokemon-species/<name>")
-def api_pokemon_species(name):
+@route("/api/pokemon-species/<id:int>")
+def api_pokemon_species(id):
     import requests
     try:
-        r = requests.get(f"https://pokeapi.co/api/v2/pokemon-species/{name}", timeout=10)
+        r = requests.get(f"https://pokeapi.co/api/v2/pokemon-species/{id}", timeout=10)
         return r.json()
     except:
-        return {"error": "not found"}
+        return {"error": "Not found"}
 
 @route("/api/search")
 def api_search():
-    """JSON API für Live-Suche"""
     query = request.query.q.lower()
     if not query or len(query) < 2:
         return {"results": []}
@@ -100,6 +97,107 @@ def api_search():
 @route('/favicon.ico')
 def favicon():
     return static_file('favicon.ico', root='./static')
+
+# --------------------------------------------------
+# NORMALE POKÉMON ROUTES
+# --------------------------------------------------
+@route("/pokemon")
+def pokemon_list():
+    return template("pokemon_list.html")
+
+@route("/pokemon/<id:int>")
+def pokemon_detail(id):
+    return template("pokemon_detail.html", id=id)
+
+# --------------------------------------------------
+# SPEZIELLE FORMEN ROUTES (NEU)
+# --------------------------------------------------
+@route("/specials-list")
+def specials_list():
+    """Zeigt alle speziellen Formen (Megas, Gmax, Primals, Regionale)"""
+    return template("specials_list.html")
+
+@route("/special-detail")
+def special_detail():
+    """Detailansicht für spezielle Formen"""
+    return template("special_detail.html")
+
+@route("/special/<id:int>")
+def special_detail_id(id):
+    """Detailansicht für spezielle Formen mit ID"""
+    return template("special_detail.html", id=id)
+
+# --------------------------------------------------
+# WEITERE ROUTES
+# --------------------------------------------------
+@route("/team")
+def team_page():
+    return template("team.html")
+
+@route("/compare")
+def compare_page():
+    return template("compare.html")
+
+@route("/type-chart")
+def type_chart():
+    return template("type_chart.html")
+
+@route("/gallery")
+def gallery():
+    return template("gallery.html")
+
+@route("/top-10")
+def top_10():
+    return template("top_10.html")
+
+@route("/generation-stats")
+def generation_stats():
+    return template("generation_stats.html")
+
+@route("/advanced-compare")
+def advanced_compare():
+    return template("advanced_compare.html")
+
+@route("/profile")
+def profile():
+    return template("profile.html")
+
+@route("/quiz")
+def quiz():
+    return template("quiz.html")
+
+@route("/weather")
+def weather_pokemon():
+    return template("weather_pokemon.html")
+
+@route("/share-team")
+def share_team():
+    return template("share_team.html")
+
+@route("/regions")
+def regions_list():
+    return template("regions_list.html")
+
+@route("/region/<id:int>")
+def region_detail(id):
+    return template("region_detail.html", id=id)
+
+@route("/search")
+def search():
+    return template("search_results.html")
+
+@route("/print")
+def print_pokemon():
+    return template("print_pokemon.html")
+
+@route("/offline")
+def offline():
+    return template("offline.html")
+
+@route("/sound-test")
+def sound_test():
+    return template("sound_test.html")
+
 # --------------------------------------------------
 # RUN 
 # --------------------------------------------------
