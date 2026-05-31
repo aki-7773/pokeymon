@@ -2,18 +2,27 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Pokémon List - Normal Pokédex</title>
     <style>
-        /* ========== Gleiche Styles wie bisher, aber ohne spezielle Formen ========== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s;
             position: relative;
         }
-        body.dark-mode { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
         body::before {
             content: "";
             position: fixed;
@@ -26,6 +35,7 @@
             pointer-events: none;
             z-index: 0;
         }
+        
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -33,14 +43,15 @@
             position: relative;
             z-index: 1;
         }
+        
         h1 {
             text-align: center;
             color: white;
             font-size: 48px;
             margin: 25px 0;
             text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
-            letter-spacing: 2px;
         }
+        
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -51,8 +62,8 @@
             background: rgba(0,0,0,0.2);
             padding: 12px 20px;
             border-radius: 50px;
-            backdrop-filter: blur(5px);
         }
+        
         .back-link {
             display: inline-block;
             padding: 10px 22px;
@@ -62,21 +73,38 @@
             border-radius: 40px;
             font-weight: bold;
             transition: all 0.3s;
-            font-size: 15px;
-            border: 1px solid rgba(255,255,255,0.2);
         }
+        
         .back-link:hover {
             background: #ffcb05;
             color: #2a75bb;
-            transform: translateY(-2px);
-            border-color: #ffcb05;
         }
+        
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(42,117,187,0.9);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .profile-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+        }
+        
         .search-suggestions {
             position: relative;
             display: inline-block;
             flex: 1;
             max-width: 350px;
         }
+        
         .search-suggestions input {
             width: 100%;
             padding: 12px 20px;
@@ -84,14 +112,8 @@
             border: none;
             font-size: 15px;
             background: rgba(255,255,255,0.95);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
         }
-        .search-suggestions input:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px #ffcb05;
-            background: white;
-        }
+        
         .suggestions-box {
             position: absolute;
             top: 100%;
@@ -99,30 +121,30 @@
             right: 0;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             max-height: 350px;
             overflow-y: auto;
             z-index: 1000;
             display: none;
             margin-top: 8px;
         }
+        
         .suggestions-box div {
             padding: 12px 18px;
             cursor: pointer;
-            transition: all 0.2s;
             border-bottom: 1px solid #f0f0f0;
-            font-weight: 500;
-            color: #333;
         }
+        
         .suggestions-box div:hover {
             background: #ffcb05;
             color: #2a75bb;
         }
+        
         .control-buttons {
             display: flex;
             gap: 12px;
             align-items: center;
         }
+        
         .dark-mode-toggle, .language-select {
             background: #2a75bb;
             color: white;
@@ -131,21 +153,14 @@
             border-radius: 40px;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s;
-            font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.2);
         }
-        .dark-mode-toggle:hover, .language-select:hover {
-            background: #ffcb05;
-            color: #2a75bb;
-            transform: scale(1.03);
-            border-color: #ffcb05;
-        }
+        
         .nav-buttons {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
+        
         .nav-btn {
             display: inline-block;
             padding: 10px 18px;
@@ -154,16 +169,32 @@
             text-decoration: none;
             border-radius: 40px;
             font-weight: bold;
-            transition: all 0.3s;
-            font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.15);
         }
+        
         .nav-btn:hover {
             background: #ffcb05;
             color: #2a75bb;
-            transform: translateY(-2px);
-            border-color: #ffcb05;
         }
+        
+        /* SPECIAL INFO BOX */
+        .special-info-box {
+            background: linear-gradient(135deg, rgba(255,152,0,0.2), rgba(255,152,0,0.1));
+            border: 2px solid #ff9800;
+            border-radius: 20px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .special-info-box p {
+            color: white;
+            font-size: 14px;
+        }
+        
+        .special-info-box strong {
+            color: #ffcb05;
+        }
+        
         .type-filters {
             display: flex;
             flex-wrap: wrap;
@@ -173,11 +204,12 @@
             padding: 18px;
             background: rgba(255,255,255,0.92);
             border-radius: 50px;
-            backdrop-filter: blur(4px);
         }
+        
         body.dark-mode .type-filters {
             background: rgba(0,0,0,0.75);
         }
+        
         .type-btn {
             padding: 8px 18px;
             border: none;
@@ -188,90 +220,74 @@
             color: white;
             font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
+        
         .type-btn:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+            transform: translateY(-2px);
         }
+        
         .type-btn.active {
             box-shadow: 0 0 0 3px white, 0 0 0 5px #2a75bb;
-            transform: scale(1.02);
         }
+        
         .type-btn.all {
             background: #2a75bb;
         }
-        .special-info {
-            background: rgba(255,152,0,0.2);
-            border-radius: 20px;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: center;
-            border: 1px solid #ff9800;
-        }
-        .special-info p {
-            color: white;
-            font-size: 14px;
-        }
-        .special-info a {
-            color: #ffcb05;
-            font-weight: bold;
-        }
+        
         .pokemon-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
             gap: 25px;
             margin-top: 25px;
         }
+        
         .pokemon-card {
             background: rgba(255,255,255,0.96);
             border-radius: 24px;
             padding: 18px 15px 20px;
             text-align: center;
-            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transition: all 0.35s;
             cursor: pointer;
             position: relative;
             box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-            backdrop-filter: blur(2px);
-            border: 1px solid rgba(255,255,255,0.3);
         }
+        
         body.dark-mode .pokemon-card {
             background: rgba(0,0,0,0.85);
             color: #f0f0f0;
-            border-color: rgba(255,255,255,0.1);
         }
+        
         .pokemon-card:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 20px 35px rgba(0,0,0,0.2);
         }
+        
         .pokemon-card img {
             width: 130px;
             height: 130px;
             transition: transform 0.3s;
-            filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.15));
         }
+        
         .pokemon-card:hover img {
             transform: scale(1.08);
         }
+        
         .pokemon-card h3 {
             color: #2a75bb;
             margin: 12px 0 6px;
             font-size: 20px;
-            font-weight: 700;
         }
+        
         body.dark-mode .pokemon-card h3 {
             color: #ffcb05;
         }
+        
         .pokemon-number {
             color: #777;
             font-size: 13px;
-            font-weight: 500;
             margin-bottom: 8px;
         }
-        body.dark-mode .pokemon-number {
-            color: #aaa;
-        }
+        
         .type-badges {
             display: flex;
             justify-content: center;
@@ -279,6 +295,7 @@
             margin: 12px 0 8px;
             flex-wrap: wrap;
         }
+        
         .type-badge {
             display: inline-block;
             padding: 4px 14px;
@@ -286,10 +303,8 @@
             color: white;
             font-size: 11px;
             font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
+        
         .favorite-btn {
             position: absolute;
             top: 12px;
@@ -298,8 +313,6 @@
             border: none;
             font-size: 26px;
             cursor: pointer;
-            transition: all 0.2s;
-            z-index: 10;
             color: #ddd;
             width: 40px;
             height: 40px;
@@ -307,17 +320,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(4px);
         }
-        .favorite-btn:hover {
-            transform: scale(1.15);
-            background: rgba(0,0,0,0.7);
-        }
+        
         .favorite-btn.favorited {
             color: gold;
-            text-shadow: 0 0 5px orange;
-            background: rgba(0,0,0,0.5);
         }
+        
         .gen-badge {
             display: inline-block;
             background: linear-gradient(135deg, #4caf50, #388e3c);
@@ -326,15 +334,14 @@
             padding: 4px 10px;
             border-radius: 20px;
             margin-top: 8px;
-            font-weight: bold;
         }
+        
         .loading {
             text-align: center;
             padding: 70px;
-            font-size: 20px;
             color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
+        
         .loader {
             border: 4px solid rgba(255,255,255,0.3);
             border-top: 4px solid #ffcb05;
@@ -344,49 +351,44 @@
             animation: spin 1s linear infinite;
             margin: 20px auto;
         }
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
         .stats-info {
             text-align: center;
             margin: 15px 0;
             color: rgba(255,255,255,0.9);
-            font-size: 15px;
-            font-weight: 500;
             background: rgba(0,0,0,0.2);
             display: inline-block;
             padding: 6px 20px;
             border-radius: 40px;
-            backdrop-filter: blur(4px);
         }
+        
         .stats-wrapper {
             text-align: center;
         }
+        
         @media (max-width: 768px) {
             .container { padding: 15px; }
             h1 { font-size: 32px; }
-            .pokemon-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
-            .type-filters { gap: 8px; padding: 12px; border-radius: 30px; }
+            .pokemon-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+            .type-filters { gap: 8px; padding: 12px; }
             .type-btn { padding: 6px 12px; font-size: 11px; }
-            .top-bar { flex-direction: column; align-items: stretch; border-radius: 30px; }
+            .top-bar { flex-direction: column; align-items: stretch; }
             .search-suggestions { max-width: 100%; }
-            .control-buttons { justify-content: center; }
-            .nav-buttons { justify-content: center; }
-        }
-        @media (max-width: 480px) {
-            .pokemon-card img { width: 100px; height: 100px; }
-            .pokemon-card h3 { font-size: 17px; }
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>🌟 Normal Pokémon List 🌟</h1>
+    <h1>🌟 Pokémon Database 🌟</h1>
     
     <div class="top-bar">
         <a href="start.html" class="back-link">🏠 Home</a>
-        <a href="specials_list.html" class="back-link">⭐ Special Forms</a>
+        <a href="profile.html" class="profile-btn">👤 Profile</a>
         
         <div class="search-suggestions">
             <input type="text" id="searchInput" placeholder="🔍 Search Pokémon...">
@@ -398,10 +400,6 @@
             <select class="language-select" id="languageSelect" onchange="changeLanguage(this.value)">
                 <option value="en">🇬🇧 English</option>
                 <option value="de">🇩🇪 Deutsch</option>
-                <option value="fr">🇫🇷 Français</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="zh">🇨🇳 中文</option>
             </select>
         </div>
         
@@ -409,14 +407,15 @@
             <a href="team.html" class="nav-btn">⭐ My Team</a>
             <a href="compare.html" class="nav-btn">📊 Compare</a>
             <a href="type_chart.html" class="nav-btn">⚔️ Type Chart</a>
-            <a href="gallery.html" class="nav-btn">🎨 Gallery</a>
             <a href="quiz.html" class="nav-btn">🎮 Quiz</a>
         </div>
     </div>
     
-    <div class="special-info">
-        <p>💡 <strong>Looking for Mega Evolutions, Gigantamax, Primal Forms, or Regional Variants?</strong><br>
-        ➡️ <a href="specials_list.html">Click here to browse all Special Forms!</a> ⬅️</p>
+    <!-- HINWEIS AUF SPEZIALFORMEN -->
+    <div class="special-info-box">
+        <p>✨ <strong>Special Forms (Mega Evolution, Gigantamax, Regional Forms)</strong> ✨</p>
+        <p>➡️ Diese Spezialformen findest du auf den <strong>Detailseiten der normalen Pokémon</strong>!<br>
+        Klicke auf ein Pokémon und dann auf die Buttons für Mega/Gigantamax/Regional.</p>
     </div>
     
     <div class="type-filters" id="typeFilters">
@@ -428,7 +427,7 @@
     </div>
     
     <div id="pokemonGrid" class="pokemon-grid">
-        <div class="loading"><div class="loader"></div><p>Loading Pokédex data...</p></div>
+        <div class="loading"><div class="loader"></div><p>Loading Pokédex...</p></div>
     </div>
 </div>
 
@@ -462,7 +461,7 @@
     
     async function loadPokemon() {
         const gridContainer = document.getElementById('pokemonGrid');
-        gridContainer.innerHTML = '<div class="loading"><div class="loader"></div><p>Loading Pokédex data...</p></div>';
+        gridContainer.innerHTML = '<div class="loading"><div class="loader"></div><p>Loading Pokédex...</p></div>';
         
         try {
             const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=2000');
@@ -470,7 +469,6 @@
             
             const tempPokemonList = [];
             
-            // Nur normale Pokémon (IDs 1-1025, keine speziellen Formen > 10000)
             for (const item of data.results) {
                 const pokeId = parseInt(item.url.split('/').slice(-2)[0]);
                 if (pokeId <= 1025 && pokeId < 10000) {
@@ -493,8 +491,7 @@
                             name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
                             rawName: item.name,
                             generation: generation,
-                            types: details.types.map(t => t.type.name),
-                            isSpecial: false
+                            types: details.types.map(t => t.type.name)
                         });
                     } catch (err) {
                         tempPokemonList.push({
@@ -502,8 +499,7 @@
                             name: item.name.charAt(0).toUpperCase() + item.name.slice(1),
                             rawName: item.name,
                             generation: generation,
-                            types: [],
-                            isSpecial: false
+                            types: []
                         });
                     }
                 }
@@ -511,19 +507,18 @@
             
             tempPokemonList.sort((a, b) => a.id - b.id);
             allPokemon = tempPokemonList;
-            
-            updateStatistics();
-            renderPokemonGrid();
+            updateStats();
+            renderGrid();
         } catch (error) {
-            gridContainer.innerHTML = '<div class="loading"><p>❌ Error loading Pokémon data. Please refresh the page.</p></div>';
+            gridContainer.innerHTML = '<div class="loading"><p>❌ Error loading Pokémon data.</p></div>';
         }
     }
     
-    function updateStatistics() {
+    function updateStats() {
         document.getElementById('statsInfo').innerHTML = `📊 Total: ${allPokemon.length} Pokémon | ⭐ Favorites: ${favoritePokemon.filter(id => id < 10000).length}/6`;
     }
     
-    function renderPokemonGrid() {
+    function renderGrid() {
         const gridContainer = document.getElementById('pokemonGrid');
         let filteredList = [...allPokemon];
         
@@ -537,22 +532,22 @@
         }
         
         if (filteredList.length === 0) {
-            gridContainer.innerHTML = '<div class="loading"><p>⚠️ No Pokémon match your search or filter.</p></div>';
+            gridContainer.innerHTML = '<div class="loading"><p>⚠️ No Pokémon match your search.</p></div>';
             return;
         }
         
         gridContainer.innerHTML = filteredList.map(pokemon => `
             <div class="pokemon-card" onclick="navigateToDetail(${pokemon.id})">
                 <button class="favorite-btn ${favoritePokemon.includes(pokemon.id) ? 'favorited' : ''}" 
-                        onclick="event.stopPropagation(); toggleFavoritePokemon(${pokemon.id})">
+                        onclick="event.stopPropagation(); toggleFavorite(${pokemon.id})">
                     ${favoritePokemon.includes(pokemon.id) ? '★' : '☆'}
                 </button>
                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png" 
-                     alt="${pokemon.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
+                     alt="${pokemon.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png'">
                 <h3>${pokemon.name}</h3>
                 <div class="pokemon-number">#${String(pokemon.id).padStart(3, '0')}</div>
                 <div class="type-badges">
-                    ${pokemon.types ? pokemon.types.map(t => `<span class="type-badge" style="background: ${typeColorMap[t]}">${t.toUpperCase()}</span>`).join('') : ''}
+                    ${pokemon.types.map(t => `<span class="type-badge" style="background: ${typeColorMap[t]}">${t.toUpperCase()}</span>`).join('')}
                 </div>
                 <div class="gen-badge">Gen ${pokemon.generation}</div>
             </div>
@@ -565,21 +560,21 @@
             btn.classList.remove('active');
             if (btn.getAttribute('data-type') === type) btn.classList.add('active');
         });
-        renderPokemonGrid();
+        renderGrid();
     }
     
-    function toggleFavoritePokemon(pokemonId) {
+    function toggleFavorite(pokemonId) {
         if (favoritePokemon.includes(pokemonId)) {
             favoritePokemon = favoritePokemon.filter(id => id !== pokemonId);
         } else if (favoritePokemon.length < 6) {
             favoritePokemon.push(pokemonId);
         } else {
-            alert('You can only have 6 Pokémon in your team! Remove one first.');
+            alert('You can only have 6 Pokémon in your team!');
             return;
         }
         localStorage.setItem('favorites', JSON.stringify(favoritePokemon));
-        updateStatistics();
-        renderPokemonGrid();
+        updateStats();
+        renderGrid();
     }
     
     function navigateToDetail(pokemonId) {
@@ -605,7 +600,7 @@
         
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
-            renderPokemonGrid();
+            renderGrid();
             if (query.length < 2) { suggestionsBox.style.display = 'none'; return; }
             const matches = allPokemon.filter(p => p.name.toLowerCase().includes(query)).slice(0, 12);
             if (matches.length > 0) {
@@ -618,17 +613,13 @@
         });
     }
     
-    function initialize() {
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
-        }
-        document.getElementById('languageSelect').value = currentLanguage;
-        setupSearchSuggestions();
-        loadPokemon();
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
     }
-    
-    initialize();
+    document.getElementById('languageSelect').value = currentLanguage;
+    setupSearchSuggestions();
+    loadPokemon();
 </script>
 </body>
 </html>
