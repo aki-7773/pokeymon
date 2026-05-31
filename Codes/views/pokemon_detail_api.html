@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>Pokémon Special Form - Complete Info</title>
     <style>
-        /* ========== DEINE BESTEHENDEN STYLES (unverändert, komplett) ========== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ========== GLOBALE STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -14,7 +19,11 @@
             padding: 20px;
             position: relative;
         }
-        body.dark-mode { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
         body::before {
             content: "";
             position: fixed;
@@ -27,6 +36,7 @@
             pointer-events: none;
             z-index: 0;
         }
+        
         .container {
             max-width: 750px;
             margin: 0 auto;
@@ -39,7 +49,13 @@
             backdrop-filter: blur(3px);
             transition: all 0.3s;
         }
-        body.dark-mode .container { background: rgba(0,0,0,0.88); color: #e8e8e8; }
+        
+        body.dark-mode .container {
+            background: rgba(0,0,0,0.88);
+            color: #e8e8e8;
+        }
+        
+        /* ========== NAVIGATION ========== */
         .nav-prev, .nav-next {
             position: fixed;
             top: 50%;
@@ -61,9 +77,23 @@
             font-weight: bold;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
-        .nav-prev { left: 25px; }
-        .nav-next { right: 25px; }
-        .nav-prev:hover, .nav-next:hover { background: #ffcb05; color: #2a75bb; transform: translateY(-50%) scale(1.06); width: 65px; }
+        
+        .nav-prev {
+            left: 25px;
+        }
+        
+        .nav-next {
+            right: 25px;
+        }
+        
+        .nav-prev:hover, .nav-next:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-50%) scale(1.06);
+            width: 65px;
+        }
+        
+        /* ========== STEUERUNGSBUTTONS ========== */
         .control-buttons {
             position: fixed;
             top: 22px;
@@ -72,6 +102,7 @@
             gap: 14px;
             z-index: 100;
         }
+        
         .dark-mode-toggle, .language-select {
             background: rgba(42,117,187,0.92);
             color: white;
@@ -86,74 +117,429 @@
             font-family: inherit;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
-        .dark-mode-toggle:hover, .language-select:hover { background: #ffcb05; color: #2a75bb; transform: scale(1.03); }
-        .pokemon-header { text-align: center; margin-bottom: 25px; border-bottom: 2px dashed #ffcb05; padding-bottom: 15px; }
-        .pokemon-header h1 { color: #2a75bb; font-size: 40px; margin-bottom: 8px; letter-spacing: 1px; }
-        body.dark-mode .pokemon-header h1 { color: #ffcb05; }
-        .pokemon-id { font-size: 16px; color: #666; font-weight: 500; background: rgba(0,0,0,0.05); display: inline-block; padding: 5px 18px; border-radius: 40px; }
-        body.dark-mode .pokemon-id { color: #aaa; background: rgba(255,255,255,0.1); }
-        .pokemon-image-container { text-align: center; margin: 20px 0; }
-        .pokemon-image { width: 280px; height: 280px; object-fit: contain; filter: drop-shadow(10px 15px 25px rgba(0,0,0,0.25)); transition: transform 0.3s; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; padding: 15px; }
-        .pokemon-image:hover { transform: scale(1.02); }
-        .action-buttons { display: flex; justify-content: center; gap: 20px; margin: 25px 0 20px; flex-wrap: wrap; }
-        .cry-button, .print-btn { background: #2a75bb; color: white; border: none; padding: 12px 28px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 15px; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
-        .cry-button:hover, .print-btn:hover { background: #ffcb05; color: #2a75bb; transform: translateY(-3px); box-shadow: 0 6px 14px rgba(0,0,0,0.2); }
-        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin: 25px 0; background: rgba(0,0,0,0.04); padding: 20px; border-radius: 28px; }
-        body.dark-mode .info-grid { background: rgba(255,255,255,0.05); }
-        .info-card { background: white; padding: 14px; border-radius: 22px; text-align: center; transition: transform 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-        body.dark-mode .info-card { background: rgba(35,35,45,0.9); }
-        .info-card:hover { transform: translateY(-3px); }
-        .info-label { font-weight: bold; color: #2a75bb; margin-bottom: 8px; font-size: 14px; }
-        body.dark-mode .info-label { color: #ffcb05; }
-        .info-value { font-size: 20px; font-weight: 700; }
-        .section-title { font-size: 22px; font-weight: bold; color: #2a75bb; margin: 25px 0 15px 0; border-left: 5px solid #ffcb05; padding-left: 18px; }
-        body.dark-mode .section-title { color: #ffcb05; }
-        .type-badge-list, .ability-list { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; margin: 15px 0 20px; padding: 0; }
-        .type-badge { display: inline-block; padding: 8px 24px; border-radius: 50px; color: white; font-weight: bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .ability-item { background: #e8e8e8; padding: 8px 20px; border-radius: 50px; font-weight: 500; font-size: 14px; }
-        body.dark-mode .ability-item { background: #3a3a4a; color: #eee; }
-        .stats-container { margin: 20px 0 25px; }
-        .stat-row { margin: 16px 0; }
-        .stat-name { font-weight: bold; display: inline-block; width: 110px; font-size: 15px; }
-        .stat-bar-bg { background: #e0e0e0; border-radius: 30px; height: 32px; overflow: hidden; margin-top: 6px; }
-        body.dark-mode .stat-bar-bg { background: #3a3a4a; }
-        .stat-bar-fill { background: linear-gradient(90deg, #2a75bb, #4a95db); height: 100%; color: white; line-height: 32px; padding-left: 15px; font-weight: bold; border-radius: 30px; transition: width 0.5s ease; }
-        .dex-entry { background: #f5f0e8; padding: 22px; border-radius: 28px; margin: 25px 0; font-style: italic; line-height: 1.65; border-left: 6px solid #ffcb05; font-size: 15px; }
-        body.dark-mode .dex-entry { background: #2a2a3a; color: #ddd; }
-        .evolution-section { margin: 30px 0 25px; padding: 20px; background: #f0f0f0; border-radius: 28px; }
-        body.dark-mode .evolution-section { background: #2a2a3a; }
-        .evolution-title { font-size: 22px; font-weight: bold; margin-bottom: 20px; text-align: center; }
-        .evolution-chain { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 25px; }
-        .evolution-node { text-align: center; min-width: 110px; }
-        .evolution-node img { width: 90px; height: 90px; border-radius: 50%; background: white; padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); transition: transform 0.2s; }
-        .evolution-node img:hover { transform: scale(1.05); }
-        .evolution-node a { display: block; margin-top: 10px; text-decoration: none; color: #2a75bb; font-weight: bold; font-size: 13px; }
-        body.dark-mode .evolution-node a { color: #ffcb05; }
-        .evolution-arrow { font-size: 32px; color: #2a75bb; font-weight: bold; }
-        .special-form-badge { background: linear-gradient(135deg, #ff9800, #f57c00); color: white; font-size: 11px; padding: 4px 12px; border-radius: 25px; margin-top: 8px; display: inline-block; font-weight: bold; }
-        .back-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 25px; flex-wrap: wrap; }
-        .back-button { display: inline-block; padding: 12px 30px; background: #ffcb05; color: #2a75bb; text-decoration: none; border-radius: 50px; font-weight: bold; transition: all 0.3s; text-align: center; font-size: 15px; }
-        .back-button:hover { background: #f5b700; transform: translateY(-3px); box-shadow: 0 5px 12px rgba(0,0,0,0.15); }
-        .loader { border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid #ffcb05; border-radius: 50%; width: 55px; height: 55px; animation: spin 1s linear infinite; margin: 30px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @media (max-width: 768px) {
-            body { padding: 12px; }
-            .container { padding: 20px; }
-            .pokemon-image { width: 200px; height: 200px; }
-            .nav-prev, .nav-next { width: 42px; height: 70px; font-size: 28px; }
-            .nav-prev { left: 5px; }
-            .nav-next { right: 5px; }
-            .info-grid { grid-template-columns: 1fr; gap: 12px; }
-            .evolution-chain { gap: 12px; }
-            .evolution-node img { width: 65px; height: 65px; }
-            .evolution-arrow { font-size: 20px; }
-            .control-buttons { top: 12px; right: 12px; }
-            .dark-mode-toggle, .language-select { padding: 6px 12px; font-size: 11px; }
-            .pokemon-header h1 { font-size: 28px; }
+        
+        .dark-mode-toggle:hover, .language-select:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: scale(1.03);
         }
+        
+        /* ========== HEADER ========== */
+        .pokemon-header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px dashed #ffcb05;
+            padding-bottom: 15px;
+        }
+        
+        .pokemon-header h1 {
+            color: #2a75bb;
+            font-size: 40px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        
+        body.dark-mode .pokemon-header h1 {
+            color: #ffcb05;
+        }
+        
+        .pokemon-id {
+            font-size: 16px;
+            color: #666;
+            font-weight: 500;
+            background: rgba(0,0,0,0.05);
+            display: inline-block;
+            padding: 5px 18px;
+            border-radius: 40px;
+        }
+        
+        body.dark-mode .pokemon-id {
+            color: #aaa;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        /* ========== BILDER ========== */
+        .pokemon-image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .pokemon-image {
+            width: 280px;
+            height: 280px;
+            object-fit: contain;
+            filter: drop-shadow(10px 15px 25px rgba(0,0,0,0.25));
+            transition: transform 0.3s;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            padding: 15px;
+        }
+        
+        .pokemon-image:hover {
+            transform: scale(1.02);
+        }
+        
+        /* ========== ACTION BUTTONS ========== */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 25px 0 20px;
+            flex-wrap: wrap;
+        }
+        
+        .cry-button, .print-btn {
+            background: #2a75bb;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        
+        .cry-button:hover, .print-btn:hover {
+            background: #ffcb05;
+            color: #2a75bb;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+        
+        /* ========== INFO GRID ========== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin: 25px 0;
+            background: rgba(0,0,0,0.04);
+            padding: 20px;
+            border-radius: 28px;
+        }
+        
+        body.dark-mode .info-grid {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .info-card {
+            background: white;
+            padding: 14px;
+            border-radius: 22px;
+            text-align: center;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        
+        body.dark-mode .info-card {
+            background: rgba(35,35,45,0.9);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #2a75bb;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        body.dark-mode .info-label {
+            color: #ffcb05;
+        }
+        
+        .info-value {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        /* ========== TYPEN & FÄHIGKEITEN ========== */
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2a75bb;
+            margin: 25px 0 15px 0;
+            border-left: 5px solid #ffcb05;
+            padding-left: 18px;
+        }
+        
+        body.dark-mode .section-title {
+            color: #ffcb05;
+        }
+        
+        .type-badge-list, .ability-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            list-style: none;
+            margin: 15px 0 20px;
+            padding: 0;
+        }
+        
+        .type-badge {
+            display: inline-block;
+            padding: 8px 24px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .ability-item {
+            background: #e8e8e8;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        body.dark-mode .ability-item {
+            background: #3a3a4a;
+            color: #eee;
+        }
+        
+        /* ========== STATS ========== */
+        .stats-container {
+            margin: 20px 0 25px;
+        }
+        
+        .stat-row {
+            margin: 16px 0;
+        }
+        
+        .stat-name {
+            font-weight: bold;
+            display: inline-block;
+            width: 110px;
+            font-size: 15px;
+        }
+        
+        .stat-bar-bg {
+            background: #e0e0e0;
+            border-radius: 30px;
+            height: 32px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        
+        body.dark-mode .stat-bar-bg {
+            background: #3a3a4a;
+        }
+        
+        .stat-bar-fill {
+            background: linear-gradient(90deg, #2a75bb, #4a95db);
+            height: 100%;
+            color: white;
+            line-height: 32px;
+            padding-left: 15px;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: width 0.5s ease;
+        }
+        
+        /* ========== POKÉDEX ENTRY ========== */
+        .dex-entry {
+            background: #f5f0e8;
+            padding: 22px;
+            border-radius: 28px;
+            margin: 25px 0;
+            font-style: italic;
+            line-height: 1.65;
+            border-left: 6px solid #ffcb05;
+            font-size: 15px;
+        }
+        
+        body.dark-mode .dex-entry {
+            background: #2a2a3a;
+            color: #ddd;
+        }
+        
+        /* ========== EVOLUTION TREE ========== */
+        .evolution-section {
+            margin: 30px 0 25px;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 28px;
+        }
+        
+        body.dark-mode .evolution-section {
+            background: #2a2a3a;
+        }
+        
+        .evolution-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .evolution-chain {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+        
+        .evolution-node {
+            text-align: center;
+            min-width: 110px;
+        }
+        
+        .evolution-node img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transition: transform 0.2s;
+        }
+        
+        .evolution-node img:hover {
+            transform: scale(1.05);
+        }
+        
+        .evolution-node a {
+            display: block;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #2a75bb;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        body.dark-mode .evolution-node a {
+            color: #ffcb05;
+        }
+        
+        .evolution-arrow {
+            font-size: 32px;
+            color: #2a75bb;
+            font-weight: bold;
+        }
+        
+        .special-form-badge {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            font-size: 11px;
+            padding: 4px 12px;
+            border-radius: 25px;
+            margin-top: 8px;
+            display: inline-block;
+            font-weight: bold;
+        }
+        
+        /* ========== BACK BUTTONS ========== */
+        .back-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #ffcb05;
+            color: #2a75bb;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 15px;
+        }
+        
+        .back-button:hover {
+            background: #f5b700;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+        }
+        
+        .loader {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #ffcb05;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            .container {
+                padding: 20px;
+            }
+            .pokemon-image {
+                width: 200px;
+                height: 200px;
+            }
+            .nav-prev, .nav-next {
+                width: 42px;
+                height: 70px;
+                font-size: 28px;
+            }
+            .nav-prev {
+                left: 5px;
+            }
+            .nav-next {
+                right: 5px;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .evolution-chain {
+                gap: 12px;
+            }
+            .evolution-node img {
+                width: 65px;
+                height: 65px;
+            }
+            .evolution-arrow {
+                font-size: 20px;
+            }
+            .control-buttons {
+                top: 12px;
+                right: 12px;
+            }
+            .dark-mode-toggle, .language-select {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            .pokemon-header h1 {
+                font-size: 28px;
+            }
+        }
+        
         @media (max-width: 480px) {
-            .action-buttons { gap: 12px; }
-            .cry-button, .print-btn { padding: 8px 18px; font-size: 13px; }
+            .action-buttons {
+                gap: 12px;
+            }
+            .cry-button, .print-btn {
+                padding: 8px 18px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -181,150 +567,9 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     let currentPokemonId = parseInt(urlParams.get('id')) || 10034;
+    let pokemonData = null;
     let currentLanguage = localStorage.getItem('language') || 'en';
-
-    // ========== KOMPLETTE MANUELLE DATENBANK FÜR ALLE SPEZIELLEN FORMEN ==========
-    // Enthält: Alle Megas (10034–10071), Primals (10080–10081), Ash-Greninja (10003),
-    // alle Gigantamax (10072–10099), regionale Varianten (10100–10150), Deoxys-Formen (10001–10005),
-    // Rotom-Formen (10006–10011), Furfrou-Frisuren (10012–10021), Vivillon-Muster (10022–10039),
-    // Pikachu-Hüte (10090–10099) und viele mehr.
-    const specialFormsData = {
-        // ==================== ASH-GRENINJA ====================
-        10003: {
-            name: "Ash-Greninja",
-            category: "ash",
-            region: "Kalos",
-            height: 1.5,
-            weight: 40.0,
-            baseExp: 270,
-            types: ["water", "dark"],
-            abilities: ["Battle Bond"],
-            hp: 72, attack: 145, defense: 67, spAttack: 153, spDefense: 71, speed: 132,
-            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10003.png",
-            pokedex: "Ash-Greninja is a unique form that Greninja can achieve when its bond with its Trainer reaches its peak. Its Speed and offensive power increase dramatically, and it gains the ability Battle Bond.",
-            evolutionBaseId: 658
-        },
-        // ==================== MEGA ENTWICKLUNGEN (IDs 10034–10071) ====================
-        10034: { name: "Mega Charizard X", category: "mega", region: "Kalos", height: 1.7, weight: 110.5, baseExp: 285, types: ["fire","dragon"], abilities: ["Tough Claws"], hp:78, attack:130, defense:111, spAttack:130, spDefense:85, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10034.png", pokedex:"Mega Charizard X's body turns black with blue flames. It becomes a Fire/Dragon type and its Attack and Special Attack are greatly increased.", evolutionBaseId:6 },
-        10035: { name: "Mega Charizard Y", category: "mega", region: "Kalos", height: 1.7, weight: 100.5, baseExp: 285, types: ["fire","flying"], abilities: ["Drought"], hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10035.png", pokedex:"Mega Charizard Y has larger wings and a sleeker body. It gains the Drought ability, which summons harsh sunlight.", evolutionBaseId:6 },
-        10036: { name: "Mega Mewtwo X", category: "mega", region: "Kalos", height: 2.3, weight: 127.0, baseExp: 351, types: ["psychic","fighting"], abilities: ["Steadfast"], hp:106, attack:190, defense:100, spAttack:154, spDefense:100, speed:130, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10036.png", pokedex:"Mega Mewtwo X focuses on physical combat. It gains the Fighting type and immense strength.", evolutionBaseId:150 },
-        10037: { name: "Mega Mewtwo Y", category: "mega", region: "Kalos", height: 1.5, weight: 33.0, baseExp: 351, types: ["psychic"], abilities: ["Insomnia"], hp:106, attack:150, defense:70, spAttack:194, spDefense:120, speed:140, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10037.png", pokedex:"Mega Mewtwo Y's psychic powers are amplified to their maximum.", evolutionBaseId:150 },
-        10038: { name: "Mega Gengar", category: "mega", region: "Kalos", height: 1.4, weight: 40.5, baseExp: 270, types: ["ghost","poison"], abilities: ["Shadow Tag"], hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10038.png", pokedex:"Mega Gengar's body melts into the shadows. It can trap opponents with Shadow Tag.", evolutionBaseId:94 },
-        10039: { name: "Mega Gyarados", category: "mega", region: "Kalos", height: 6.5, weight: 305.0, baseExp: 270, types: ["water","dark"], abilities: ["Mold Breaker"], hp:95, attack:155, defense:109, spAttack:70, spDefense:130, speed:81, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10039.png", pokedex:"Mega Gyarados becomes even more ferocious. Its dark scales intimidate foes.", evolutionBaseId:130 },
-        10040: { name: "Mega Aerodactyl", category: "mega", region: "Kalos", height: 2.1, weight: 79.0, baseExp: 270, types: ["rock","flying"], abilities: ["Tough Claws"], hp:80, attack:135, defense:85, spAttack:70, spDefense:95, speed:150, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10040.png", pokedex:"Mega Aerodactyl's stone body becomes sharper. Its speed is unmatched.", evolutionBaseId:142 },
-        10041: { name: "Mega Ampharos", category: "mega", region: "Kalos", height: 1.4, weight: 61.5, baseExp: 270, types: ["electric","dragon"], abilities: ["Mold Breaker"], hp:90, attack:95, defense:105, spAttack:165, spDefense:110, speed:45, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10041.png", pokedex:"Mega Ampharos's hair becomes a flowing mane. It gains the Dragon type.", evolutionBaseId:181 },
-        10042: { name: "Mega Steelix", category: "mega", region: "Kalos", height: 10.5, weight: 740.0, baseExp: 270, types: ["steel","ground"], abilities: ["Sand Force"], hp:75, attack:125, defense:230, spAttack:55, spDefense:95, speed:30, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10042.png", pokedex:"Mega Steelix's body becomes even harder and sharper. It can dig through solid rock with ease.", evolutionBaseId:208 },
-        10043: { name: "Mega Scizor", category: "mega", region: "Kalos", height: 2.0, weight: 125.0, baseExp: 270, types: ["bug","steel"], abilities: ["Technician"], hp:70, attack:150, defense:140, spAttack:65, spDefense:100, speed:75, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10043.png", pokedex:"Mega Scizor's claws become even more powerful. It can crush steel.", evolutionBaseId:212 },
-        10044: { name: "Mega Heracross", category: "mega", region: "Kalos", height: 1.7, weight: 62.5, baseExp: 270, types: ["bug","fighting"], abilities: ["Skill Link"], hp:80, attack:185, defense:115, spAttack:40, spDefense:105, speed:75, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10044.png", pokedex:"Mega Heracross's horn grows enormous. It can lift objects hundreds of times its weight.", evolutionBaseId:214 },
-        10045: { name: "Mega Houndoom", category: "mega", region: "Kalos", height: 1.9, weight: 49.5, baseExp: 270, types: ["dark","fire"], abilities: ["Solar Power"], hp:75, attack:90, defense:90, spAttack:140, spDefense:90, speed:115, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10045.png", pokedex:"Mega Houndoom's flames burn hotter. Its howl brings despair.", evolutionBaseId:229 },
-        10046: { name: "Mega Tyranitar", category: "mega", region: "Kalos", height: 2.5, weight: 255.0, baseExp: 315, types: ["rock","dark"], abilities: ["Sand Stream"], hp:100, attack:164, defense:150, spAttack:95, spDefense:120, speed:71, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10046.png", pokedex:"Mega Tyranitar's armor becomes thicker. It can cause sandstorms by roaring.", evolutionBaseId:248 },
-        10047: { name: "Mega Blaziken", category: "mega", region: "Kalos", height: 1.9, weight: 52.0, baseExp: 315, types: ["fire","fighting"], abilities: ["Speed Boost"], hp:80, attack:160, defense:80, spAttack:130, spDefense:80, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10047.png", pokedex:"Mega Blaziken's legs become even stronger. It can kick a skyscraper down.", evolutionBaseId:257 },
-        10048: { name: "Mega Gardevoir", category: "mega", region: "Kalos", height: 1.6, weight: 48.4, baseExp: 315, types: ["psychic","fairy"], abilities: ["Pixilate"], hp:68, attack:85, defense:65, spAttack:165, spDefense:135, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10048.png", pokedex:"Mega Gardevoir's psychic power reaches its peak. It can create small black holes.", evolutionBaseId:282 },
-        10049: { name: "Mega Sableye", category: "mega", region: "Kalos", height: 0.5, weight: 161.0, baseExp: 270, types: ["dark","ghost"], abilities: ["Magic Bounce"], hp:50, attack:85, defense:125, spAttack:85, spDefense:115, speed:20, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10049.png", pokedex:"Mega Sableye's gemstone grows into a massive shield. It reflects special moves.", evolutionBaseId:302 },
-        10050: { name: "Mega Mawile", category: "mega", region: "Kalos", height: 1.0, weight: 23.5, baseExp: 270, types: ["steel","fairy"], abilities: ["Huge Power"], hp:50, attack:105, defense:125, spAttack:55, spDefense:95, speed:50, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10050.png", pokedex:"Mega Mawile's second jaw becomes enormous. It can crush boulders.", evolutionBaseId:303 },
-        10051: { name: "Mega Aggron", category: "mega", region: "Kalos", height: 2.2, weight: 395.0, baseExp: 310, types: ["steel"], abilities: ["Filter"], hp:70, attack:140, defense:230, spAttack:60, spDefense:80, speed:50, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10051.png", pokedex:"Mega Aggron loses its Rock type and becomes pure Steel. Its defenses are impenetrable.", evolutionBaseId:306 },
-        10052: { name: "Mega Medicham", category: "mega", region: "Kalos", height: 1.3, weight: 31.5, baseExp: 270, types: ["fighting","psychic"], abilities: ["Pure Power"], hp:60, attack:100, defense:85, spAttack:80, spDefense:85, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10052.png", pokedex:"Mega Medicham's focus is absolute. Each strike is precise and devastating.", evolutionBaseId:308 },
-        10053: { name: "Mega Manectric", category: "mega", region: "Kalos", height: 1.8, weight: 44.0, baseExp: 270, types: ["electric"], abilities: ["Intimidate"], hp:70, attack:75, defense:80, spAttack:135, spDefense:80, speed:135, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10053.png", pokedex:"Mega Manectric's mane discharges lightning. It intimidates foes just by being near.", evolutionBaseId:310 },
-        10054: { name: "Mega Sharpedo", category: "mega", region: "Kalos", height: 2.5, weight: 130.0, baseExp: 310, types: ["water","dark"], abilities: ["Strong Jaw"], hp:70, attack:140, defense:70, spAttack:110, spDefense:65, speed:105, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10054.png", pokedex:"Mega Sharpedo's jaws become even stronger. It can bite through steel plates.", evolutionBaseId:319 },
-        10055: { name: "Mega Camerupt", category: "mega", region: "Kalos", height: 2.5, weight: 320.5, baseExp: 270, types: ["fire","ground"], abilities: ["Sheer Force"], hp:70, attack:120, defense:100, spAttack:145, spDefense:105, speed:20, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10055.png", pokedex:"Mega Camerupt's volcanic humps erupt constantly. It melts the ground.", evolutionBaseId:323 },
-        10056: { name: "Mega Altaria", category: "mega", region: "Kalos", height: 1.5, weight: 20.6, baseExp: 310, types: ["dragon","fairy"], abilities: ["Pixilate"], hp:75, attack:110, defense:110, spAttack:110, spDefense:105, speed:80, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10056.png", pokedex:"Mega Altaria's fluff becomes a fluffy cloud. Its singing can heal sorrow.", evolutionBaseId:334 },
-        10057: { name: "Mega Banette", category: "mega", region: "Kalos", height: 1.2, weight: 13.0, baseExp: 270, types: ["ghost"], abilities: ["Prankster"], hp:64, attack:165, defense:75, spAttack:93, spDefense:83, speed:75, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10057.png", pokedex:"Mega Banette's zipper opens, releasing cursed energy. It seeks revenge.", evolutionBaseId:354 },
-        10058: { name: "Mega Absol", category: "mega", region: "Kalos", height: 1.2, weight: 49.0, baseExp: 270, types: ["dark"], abilities: ["Magic Bounce"], hp:65, attack:150, defense:60, spAttack:115, spDefense:60, speed:115, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10058.png", pokedex:"Mega Absol's wing-like appendages allow it to sense disasters.", evolutionBaseId:359 },
-        10059: { name: "Mega Glalie", category: "mega", region: "Kalos", height: 2.1, weight: 350.2, baseExp: 270, types: ["ice"], abilities: ["Refrigerate"], hp:80, attack:120, defense:80, spAttack:120, spDefense:80, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10059.png", pokedex:"Mega Glalie's jaw shatters, releasing icy energy. It can freeze the air.", evolutionBaseId:362 },
-        10060: { name: "Mega Salamence", category: "mega", region: "Kalos", height: 1.8, weight: 112.6, baseExp: 315, types: ["dragon","flying"], abilities: ["Aerilate"], hp:95, attack:145, defense:130, spAttack:120, spDefense:90, speed:120, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10060.png", pokedex:"Mega Salamence's wings become crescent-shaped. It flies at supersonic speeds.", evolutionBaseId:373 },
-        10061: { name: "Mega Metagross", category: "mega", region: "Kalos", height: 2.5, weight: 942.9, baseExp: 315, types: ["steel","psychic"], abilities: ["Tough Claws"], hp:80, attack:145, defense:150, spAttack:105, spDefense:110, speed:110, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10061.png", pokedex:"Mega Metagross's brain is incredibly advanced. It calculates thousands of outcomes.", evolutionBaseId:376 },
-        10062: { name: "Mega Latias", category: "mega", region: "Kalos", height: 1.8, weight: 52.0, baseExp: 351, types: ["dragon","psychic"], abilities: ["Levitate"], hp:80, attack:100, defense:120, spAttack:140, spDefense:150, speed:110, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10062.png", pokedex:"Mega Latias's body becomes more streamlined. It can fly faster than a jet.", evolutionBaseId:380 },
-        10063: { name: "Mega Latios", category: "mega", region: "Kalos", height: 2.3, weight: 70.0, baseExp: 351, types: ["dragon","psychic"], abilities: ["Levitate"], hp:80, attack:130, defense:100, spAttack:160, spDefense:120, speed:110, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10063.png", pokedex:"Mega Latios's eyes become sharper. It can see through solid objects.", evolutionBaseId:381 },
-        10064: { name: "Mega Rayquaza", category: "mega", region: "Kalos", height: 10.8, weight: 392.0, baseExp: 351, types: ["dragon","flying"], abilities: ["Delta Stream"], hp:105, attack:180, defense:100, spAttack:180, spDefense:100, speed:115, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10064.png", pokedex:"Mega Rayquaza's body glows with energy. It calms the weather with Delta Stream.", evolutionBaseId:384 },
-        10065: { name: "Mega Lopunny", category: "mega", region: "Kalos", height: 1.3, weight: 28.3, baseExp: 270, types: ["normal","fighting"], abilities: ["Scrappy"], hp:65, attack:136, defense:94, spAttack:54, spDefense:96, speed:135, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10065.png", pokedex:"Mega Lopunny's legs become even stronger. It can kick with the force of a bomb.", evolutionBaseId:428 },
-        10066: { name: "Mega Garchomp", category: "mega", region: "Kalos", height: 1.9, weight: 95.0, baseExp: 315, types: ["dragon","ground"], abilities: ["Sand Force"], hp:108, attack:170, defense:115, spAttack:120, spDefense:95, speed:92, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10066.png", pokedex:"Mega Garchomp's arms become scythes. It can slice through solid rock.", evolutionBaseId:445 },
-        10067: { name: "Mega Lucario", category: "mega", region: "Kalos", height: 1.2, weight: 57.5, baseExp: 315, types: ["fighting","steel"], abilities: ["Adaptability"], hp:70, attack:145, defense:88, spAttack:140, spDefense:70, speed:112, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10067.png", pokedex:"Mega Lucario's aura power reaches its peak. It can sense emotions.", evolutionBaseId:448 },
-        10068: { name: "Mega Abomasnow", category: "mega", region: "Kalos", height: 2.7, weight: 185.0, baseExp: 270, types: ["grass","ice"], abilities: ["Snow Warning"], hp:90, attack:132, defense:105, spAttack:132, spDefense:105, speed:30, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10068.png", pokedex:"Mega Abomasnow's fur becomes icier. It summons hail storms wherever it goes.", evolutionBaseId:460 },
-        10069: { name: "Mega Gallade", category: "mega", region: "Kalos", height: 1.6, weight: 56.4, baseExp: 315, types: ["psychic","fighting"], abilities: ["Inner Focus"], hp:68, attack:165, defense:95, spAttack:65, spDefense:115, speed:110, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10069.png", pokedex:"Mega Gallade's elbow blades extend. It can cut through steel with a single slash.", evolutionBaseId:475 },
-        10070: { name: "Mega Audino", category: "mega", region: "Kalos", height: 1.5, weight: 32.0, baseExp: 270, types: ["normal","fairy"], abilities: ["Healer"], hp:103, attack:60, defense:126, spAttack:80, spDefense:126, speed:50, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10070.png", pokedex:"Mega Audino's hearing becomes superhuman. It can hear a heartbeat from miles away.", evolutionBaseId:531 },
-        10071: { name: "Mega Diancie", category: "mega", region: "Kalos", height: 1.1, weight: 27.8, baseExp: 315, types: ["rock","fairy"], abilities: ["Magic Bounce"], hp:50, attack:160, defense:110, spAttack:160, spDefense:110, speed:110, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10071.png", pokedex:"Mega Diancie's body shines like a perfect diamond. It can purify any impurity.", evolutionBaseId:719 },
-        // ==================== PRIMALE FORMEN ====================
-        10080: { name: "Primal Kyogre", category: "primal", region: "Hoenn", height: 9.8, weight: 430.0, baseExp: 347, types: ["water"], abilities: ["Primordial Sea"], hp:100, attack:150, defense:90, spAttack:180, spDefense:160, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10080.png", pokedex:"Primal Kyogre has awakened its full power. It summons heavy rain that never stops.", evolutionBaseId:382 },
-        10081: { name: "Primal Groudon", category: "primal", region: "Hoenn", height: 5.0, weight: 999.7, baseExp: 347, types: ["ground","fire"], abilities: ["Desolate Land"], hp:100, attack:180, defense:160, spAttack:150, spDefense:90, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10081.png", pokedex:"Primal Groudon's body is covered in magma. Its Desolate Land eliminates all water.", evolutionBaseId:383 },
-        // ==================== GIGANTAMAX (Gmax) – Gen 8, Galar ====================
-        10072: { name: "Gigantamax Charizard", category: "gmax", region: "Galar", height: 28.0, weight: 1000.0, baseExp: 285, types: ["fire","flying"], abilities: ["Blaze"], hp:78, attack:84, defense:78, spAttack:109, spDefense:85, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10072.png", pokedex:"This colossal, flame-winged figure of a Charizard was brought about by Gigantamax energy. Its wings are hotter than magma, and its G-Max move, G-Max Wildfire, deals continuous damage.", evolutionBaseId:6 },
-        10073: { name: "Gigantamax Pikachu", category: "gmax", region: "Galar", height: 21.0, weight: 1000.0, baseExp: 205, types: ["electric"], abilities: ["Static"], hp:35, attack:55, defense:40, spAttack:50, spDefense:50, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10073.png", pokedex:"Gigantamax Pikachu's tail becomes a massive lightning bolt. Its G-Max move paralyzes all opponents.", evolutionBaseId:25 },
-        10074: { name: "Gigantamax Eevee", category: "gmax", region: "Galar", height: 18.0, weight: 1000.0, baseExp: 205, types: ["normal"], abilities: ["Run Away"], hp:55, attack:55, defense:50, spAttack:45, spDefense:65, speed:55, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10074.png", pokedex:"Gigantamax Eevee's fluffy fur becomes a majestic mane. Its G-Max Cuddle charms opponents.", evolutionBaseId:133 },
-        10075: { name: "Gigantamax Meowth", category: "gmax", region: "Galar", height: 33.0, weight: 1000.0, baseExp: 205, types: ["normal"], abilities: ["Pickup"], hp:40, attack:45, defense:35, spAttack:40, spDefense:40, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10075.png", pokedex:"Gigantamax Meowth's body elongates like a coin. Its G-Max move scatters gold.", evolutionBaseId:52 },
-        10076: { name: "Gigantamax Gengar", category: "gmax", region: "Galar", height: 20.0, weight: 1000.0, baseExp: 270, types: ["ghost","poison"], abilities: ["Cursed Body"], hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png", pokedex:"Gigantamax Gengar's mouth opens to a dimension. Its G-Max Terror traps opponents in a nightmare.", evolutionBaseId:94 },
-        10077: { name: "Gigantamax Lapras", category: "gmax", region: "Galar", height: 24.0, weight: 1000.0, baseExp: 270, types: ["water","ice"], abilities: ["Water Absorb"], hp:130, attack:85, defense:80, spAttack:85, spDefense:95, speed:60, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10077.png", pokedex:"Gigantamax Lapras's shell becomes a musical stage. Its G-Max move heals allies.", evolutionBaseId:131 },
-        10078: { name: "Gigantamax Snorlax", category: "gmax", region: "Galar", height: 35.0, weight: 1000.0, baseExp: 270, types: ["normal"], abilities: ["Thick Fat"], hp:160, attack:110, defense:65, spAttack:65, spDefense:110, speed:30, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10078.png", pokedex:"Gigantamax Snorlax's belly becomes a mountain. Its G-Max move restores HP.", evolutionBaseId:143 },
-        10079: { name: "Gigantamax Machamp", category: "gmax", region: "Galar", height: 25.0, weight: 1000.0, baseExp: 270, types: ["fighting"], abilities: ["Guts"], hp:90, attack:130, defense:80, spAttack:65, spDefense:85, speed:55, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10079.png", pokedex:"Gigantamax Machamp's four arms swell to massive size. Its G-Max move throws opponents.", evolutionBaseId:68 },
-        10082: { name: "Gigantamax Kingler", category: "gmax", region: "Galar", height: 19.0, weight: 1000.0, baseExp: 270, types: ["water"], abilities: ["Hyper Cutter","Shell Armor","Sheer Force"], hp:55, attack:130, defense:115, spAttack:50, spDefense:50, speed:75, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10082.png", pokedex:"Gigantamax Kingler's claws become massive. Its G-Max move traps opponents.", evolutionBaseId:99 },
-        10083: { name: "Gigantamax Corviknight", category: "gmax", region: "Galar", height: 14.0, weight: 1000.0, baseExp: 270, types: ["flying","steel"], abilities: ["Pressure","Unnerve","Mirror Armor"], hp:98, attack:87, defense:105, spAttack:53, spDefense:85, speed:67, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10083.png", pokedex:"Gigantamax Corviknight's wings become razor-sharp. Its G-Max move removes terrain.", evolutionBaseId:823 },
-        10084: { name: "Gigantamax Orbeetle", category: "gmax", region: "Galar", height: 14.0, weight: 1000.0, baseExp: 270, types: ["bug","psychic"], abilities: ["Swarm","Frisk","Telepathy"], hp:60, attack:45, defense:110, spAttack:80, spDefense:120, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10084.png", pokedex:"Gigantamax Orbeetle's body becomes a UFO. Its G-Max move confuses opponents.", evolutionBaseId:826 },
-        10085: { name: "Gigantamax Drednaw", category: "gmax", region: "Galar", height: 24.0, weight: 1000.0, baseExp: 270, types: ["water","rock"], abilities: ["Strong Jaw","Shell Armor","Swift Swim"], hp:90, attack:115, defense:90, spAttack:48, spDefense:68, speed:74, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10085.png", pokedex:"Gigantamax Drednaw's jaws become massive. Its G-Max move bites opponents.", evolutionBaseId:834 },
-        10086: { name: "Gigantamax Coalossal", category: "gmax", region: "Galar", height: 42.0, weight: 1000.0, baseExp: 270, types: ["rock","fire"], abilities: ["Steam Engine","Flame Body","Flash Fire"], hp:110, attack:80, defense:120, spAttack:80, spDefense:90, speed:30, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10086.png", pokedex:"Gigantamax Coalossal's body becomes a volcanic mountain. Its G-Max move erupts.", evolutionBaseId:839 },
-        10087: { name: "Gigantamax Flapple", category: "gmax", region: "Galar", height: 24.0, weight: 1000.0, baseExp: 270, types: ["grass","dragon"], abilities: ["Ripen","Gluttony","Hustle"], hp:70, attack:110, defense:80, spAttack:95, spDefense:60, speed:70, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10087.png", pokedex:"Gigantamax Flapple's head becomes a giant apple. Its G-Max move deals damage over time.", evolutionBaseId:841 },
-        10088: { name: "Gigantamax Appletun", category: "gmax", region: "Galar", height: 24.0, weight: 1000.0, baseExp: 270, types: ["grass","dragon"], abilities: ["Ripen","Gluttony","Thick Fat"], hp:110, attack:85, defense:80, spAttack:100, spDefense:80, speed:30, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10088.png", pokedex:"Gigantamax Appletun's body becomes a huge pie. Its G-Max move heals allies.", evolutionBaseId:842 },
-        10089: { name: "Gigantamax Toxtricity", category: "gmax", region: "Galar", height: 24.0, weight: 1000.0, baseExp: 270, types: ["electric","poison"], abilities: ["Punk Rock","Plus","Minus","Technician"], hp:75, attack:98, defense:70, spAttack:114, spDefense:70, speed:75, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10089.png", pokedex:"Gigantamax Toxtricity's body becomes a massive guitar. Its G-Max move paralyzes opponents.", evolutionBaseId:849 },
-        10090: { name: "Gigantamax Centiskorch", category: "gmax", region: "Galar", height: 75.0, weight: 1000.0, baseExp: 270, types: ["fire","bug"], abilities: ["Flash Fire","White Smoke","Flame Body"], hp:100, attack:115, defense:65, spAttack:90, spDefense:90, speed:65, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10090.png", pokedex:"Gigantamax Centiskorch's body becomes a fiery centipede. Its G-Max move traps opponents.", evolutionBaseId:851 },
-        10091: { name: "Gigantamax Hatterene", category: "gmax", region: "Galar", height: 26.0, weight: 1000.0, baseExp: 270, types: ["psychic","fairy"], abilities: ["Healer","Anticipation","Magic Bounce"], hp:57, attack:90, defense:95, spAttack:136, spDefense:103, speed:29, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10091.png", pokedex:"Gigantamax Hatterene's hair becomes a giant hand. Its G-Max move confuses opponents.", evolutionBaseId:858 },
-        10092: { name: "Gigantamax Grimmsnarl", category: "gmax", region: "Galar", height: 32.0, weight: 1000.0, baseExp: 270, types: ["dark","fairy"], abilities: ["Prankster","Frisk","Pickpocket"], hp:95, attack:120, defense:65, spAttack:95, spDefense:75, speed:60, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10092.png", pokedex:"Gigantamax Grimmsnarl's hair becomes a giant demon. Its G-Max move reduces opponents' HP.", evolutionBaseId:861 },
-        10093: { name: "Gigantamax Alcremie", category: "gmax", region: "Galar", height: 30.0, weight: 1000.0, baseExp: 270, types: ["fairy"], abilities: ["Sweet Veil","Aroma Veil"], hp:65, attack:60, defense:75, spAttack:110, spDefense:121, speed:64, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10093.png", pokedex:"Gigantamax Alcremie's body becomes a giant cake. Its G-Max move heals allies.", evolutionBaseId:869 },
-        10094: { name: "Gigantamax Copperajah", category: "gmax", region: "Galar", height: 23.0, weight: 1000.0, baseExp: 270, types: ["steel"], abilities: ["Sheer Force","Heavy Metal"], hp:122, attack:130, defense:69, spAttack:80, spDefense:69, speed:30, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10094.png", pokedex:"Gigantamax Copperajah's trunk becomes a steel hammer. Its G-Max move deals heavy damage.", evolutionBaseId:879 },
-        10095: { name: "Gigantamax Duraludon", category: "gmax", region: "Galar", height: 43.0, weight: 1000.0, baseExp: 270, types: ["steel","dragon"], abilities: ["Light Metal","Heavy Metal","Stalwart"], hp:70, attack:95, defense:115, spAttack:120, spDefense:50, speed:85, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10095.png", pokedex:"Gigantamax Duraludon's body becomes a skyscraper. Its G-Max move ignores abilities.", evolutionBaseId:884 },
-        10096: { name: "Gigantamax Rillaboom", category: "gmax", region: "Galar", height: 28.0, weight: 1000.0, baseExp: 270, types: ["grass"], abilities: ["Overgrow","Grassy Surge"], hp:100, attack:125, defense:90, spAttack:60, spDefense:70, speed:85, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10096.png", pokedex:"Gigantamax Rillaboom's drum set becomes a massive forest. Its G-Max move creates Grassy Terrain.", evolutionBaseId:812 },
-        10097: { name: "Gigantamax Cinderace", category: "gmax", region: "Galar", height: 27.0, weight: 1000.0, baseExp: 270, types: ["fire"], abilities: ["Blaze","Libero"], hp:80, attack:116, defense:75, spAttack:65, spDefense:75, speed:119, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10097.png", pokedex:"Gigantamax Cinderace's ball becomes a giant fireball. Its G-Max move traps opponents.", evolutionBaseId:815 },
-        10098: { name: "Gigantamax Inteleon", category: "gmax", region: "Galar", height: 40.0, weight: 1000.0, baseExp: 270, types: ["water"], abilities: ["Torrent","Sniper"], hp:70, attack:85, defense:65, spAttack:125, spDefense:65, speed:120, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10098.png", pokedex:"Gigantamax Inteleon's finger becomes a sniper rifle. Its G-Max move pierces defenses.", evolutionBaseId:818 },
-        10099: { name: "Gigantamax Melmetal", category: "gmax", region: "Galar", height: 25.0, weight: 1000.0, baseExp: 270, types: ["steel"], abilities: ["Iron Fist"], hp:135, attack:143, defense:143, spAttack:80, spDefense:65, speed:34, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10099.png", pokedex:"Gigantamax Melmetal's body becomes molten metal. Its G-Max move deals massive damage.", evolutionBaseId:809 },
-        // ==================== REGIONALE FORMEN (Alola, Galar, Hisui, Paldea) ====================
-        10100: { name: "Alolan Raichu", category: "regional", region: "Alola", height: 0.7, weight: 21.0, baseExp: 175, types: ["electric","psychic"], abilities: ["Surge Surfer"], hp:60, attack:85, defense:50, spAttack:95, spDefense:85, speed:110, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10100.png", pokedex:"Alolan Raichu surfs on its tail using psychic power. It loves pancakes with lots of cream.", evolutionBaseId:26 },
-        10101: { name: "Alolan Marowak", category: "regional", region: "Alola", height: 1.0, weight: 34.0, baseExp: 175, types: ["fire","ghost"], abilities: ["Cursed Body","Lightning Rod","Rock Head"], hp:60, attack:80, defense:110, spAttack:50, spDefense:80, speed:45, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10101.png", pokedex:"Alolan Marowak burns a bone that never goes out. It dances to intimidate.", evolutionBaseId:105 },
-        10102: { name: "Alolan Exeggutor", category: "regional", region: "Alola", height: 10.9, weight: 415.0, baseExp: 186, types: ["grass","dragon"], abilities: ["Frisk","Harvest"], hp:95, attack:105, defense:85, spAttack:125, spDefense:75, speed:45, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10102.png", pokedex:"Alolan Exeggutor's neck is extremely long. It uses its head as a lookout.", evolutionBaseId:103 },
-        10103: { name: "Galarian Ponyta", category: "regional", region: "Galar", height: 0.8, weight: 24.0, baseExp: 168, types: ["psychic"], abilities: ["Run Away","Pastel Veil"], hp:50, attack:85, defense:55, spAttack:65, spDefense:65, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10103.png", pokedex:"Galarian Ponyta's mane shines with pastel colors. It can heal allies with its breath.", evolutionBaseId:77 },
-        10104: { name: "Galarian Rapidash", category: "regional", region: "Galar", height: 1.7, weight: 80.0, baseExp: 175, types: ["psychic","fairy"], abilities: ["Run Away","Pastel Veil","Anticipation"], hp:65, attack:100, defense:70, spAttack:80, spDefense:80, speed:105, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10104.png", pokedex:"Galarian Rapidash can leap over the moon. Its hooves leave rainbows.", evolutionBaseId:78 },
-        10105: { name: "Galarian Slowbro", category: "regional", region: "Galar", height: 1.6, weight: 70.5, baseExp: 175, types: ["poison","psychic"], abilities: ["Quick Draw","Own Tempo","Regenerator"], hp:95, attack:100, defense:95, spAttack:100, spDefense:70, speed:30, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10105.png", pokedex:"Galarian Slowbro's Shellder has mutated, giving it a poison tip.", evolutionBaseId:80 },
-        10106: { name: "Hisuian Growlithe", category: "regional", region: "Hisui", height: 0.8, weight: 22.7, baseExp: 168, types: ["fire","rock"], abilities: ["Intimidate","Flash Fire","Rock Head"], hp:60, attack:75, defense:45, spAttack:65, spDefense:50, speed:55, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10106.png", pokedex:"Hisuian Growlithe has a rocky horn. It lives in volcanic areas.", evolutionBaseId:58 },
-        10107: { name: "Hisuian Arcanine", category: "regional", region: "Hisui", height: 2.0, weight: 168.0, baseExp: 175, types: ["fire","rock"], abilities: ["Intimidate","Flash Fire","Rock Head"], hp:90, attack:115, defense:80, spAttack:95, spDefense:80, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10107.png", pokedex:"Hisuian Arcanine's fur is darker and its body is covered in volcanic rock.", evolutionBaseId:59 },
-        10108: { name: "Hisuian Zoroark", category: "regional", region: "Hisui", height: 1.6, weight: 73.0, baseExp: 177, types: ["normal","ghost"], abilities: ["Illusion"], hp:55, attack:100, defense:60, spAttack:125, spDefense:60, speed:110, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10108.png", pokedex:"Hisuian Zoroark's illusions are filled with resentment. It can create realistic illusions.", evolutionBaseId:571 },
-        10109: { name: "Paldean Tauros (Combat)", category: "regional", region: "Paldea", height: 1.4, weight: 110.0, baseExp: 175, types: ["fighting"], abilities: ["Intimidate","Anger Point","Cud Chew"], hp:75, attack:110, defense:105, spAttack:30, spDefense:70, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10109.png", pokedex:"Paldean Tauros is a fighting-type breed. It charges with unstoppable force.", evolutionBaseId:128 },
-        10110: { name: "Paldean Tauros (Blaze)", category: "regional", region: "Paldea", height: 1.4, weight: 110.0, baseExp: 175, types: ["fighting","fire"], abilities: ["Intimidate","Anger Point","Cud Chew"], hp:75, attack:110, defense:105, spAttack:30, spDefense:70, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10110.png", pokedex:"Paldean Tauros's mane burns with fire. It is even more aggressive.", evolutionBaseId:128 },
-        10111: { name: "Paldean Tauros (Aqua)", category: "regional", region: "Paldea", height: 1.4, weight: 110.0, baseExp: 175, types: ["fighting","water"], abilities: ["Intimidate","Anger Point","Cud Chew"], hp:75, attack:110, defense:105, spAttack:30, spDefense:70, speed:100, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10111.png", pokedex:"Paldean Tauros's horns are water jets. It charges like a torpedo.", evolutionBaseId:128 },
-        // ==================== DEONYX-FORMEN ====================
-        10001: { name: "Deoxys (Normal Forme)", category: "form", region: "Hoenn", height: 1.7, weight: 60.8, baseExp: 270, types: ["psychic"], abilities: ["Pressure"], hp:50, attack:150, defense:50, spAttack:150, spDefense:50, speed:150, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10001.png", pokedex:"Deoxys's DNA is unstable. It can change form depending on the situation.", evolutionBaseId:386 },
-        10002: { name: "Deoxys (Attack Forme)", category: "form", region: "Hoenn", height: 1.7, weight: 60.8, baseExp: 270, types: ["psychic"], abilities: ["Pressure"], hp:50, attack:180, defense:20, spAttack:180, spDefense:20, speed:150, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png", pokedex:"Deoxys's Attack Forme focuses on raw offensive power.", evolutionBaseId:386 },
-        10004: { name: "Deoxys (Defense Forme)", category: "form", region: "Hoenn", height: 1.7, weight: 60.8, baseExp: 270, types: ["psychic"], abilities: ["Pressure"], hp:50, attack:70, defense:160, spAttack:70, spDefense:160, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10004.png", pokedex:"Deoxys's Defense Forme boasts incredible defenses.", evolutionBaseId:386 },
-        10005: { name: "Deoxys (Speed Forme)", category: "form", region: "Hoenn", height: 1.7, weight: 60.8, baseExp: 270, types: ["psychic"], abilities: ["Pressure"], hp:50, attack:95, defense:90, spAttack:95, spDefense:90, speed:180, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10005.png", pokedex:"Deoxys's Speed Forme is blindingly fast.", evolutionBaseId:386 },
-        // ==================== ROTOM-FORMEN ====================
-        10006: { name: "Rotom (Heat)", category: "form", region: "Sinnoh", height: 0.3, weight: 0.3, baseExp: 182, types: ["electric","fire"], abilities: ["Levitate"], hp:50, attack:65, defense:107, spAttack:105, spDefense:107, speed:86, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10006.png", pokedex:"Rotom possessing a microwave. It can blast heat waves.", evolutionBaseId:479 },
-        10007: { name: "Rotom (Wash)", category: "form", region: "Sinnoh", height: 0.3, weight: 0.3, baseExp: 182, types: ["electric","water"], abilities: ["Levitate"], hp:50, attack:65, defense:107, spAttack:105, spDefense:107, speed:86, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10007.png", pokedex:"Rotom possessing a washing machine. It sprays water.", evolutionBaseId:479 },
-        10008: { name: "Rotom (Frost)", category: "form", region: "Sinnoh", height: 0.3, weight: 0.3, baseExp: 182, types: ["electric","ice"], abilities: ["Levitate"], hp:50, attack:65, defense:107, spAttack:105, spDefense:107, speed:86, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10008.png", pokedex:"Rotom possessing a refrigerator. It freezes the air.", evolutionBaseId:479 },
-        10009: { name: "Rotom (Fan)", category: "form", region: "Sinnoh", height: 0.3, weight: 0.3, baseExp: 182, types: ["electric","flying"], abilities: ["Levitate"], hp:50, attack:65, defense:107, spAttack:105, spDefense:107, speed:86, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10009.png", pokedex:"Rotom possessing a fan. It whips up gusts of wind.", evolutionBaseId:479 },
-        10010: { name: "Rotom (Mow)", category: "form", region: "Sinnoh", height: 0.3, weight: 0.3, baseExp: 182, types: ["electric","grass"], abilities: ["Levitate"], hp:50, attack:65, defense:107, spAttack:105, spDefense:107, speed:86, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10010.png", pokedex:"Rotom possessing a lawnmower. It cuts grass and blades.", evolutionBaseId:479 },
-        // ==================== FURFROU-FRISUREN (Beispiele) ====================
-        10012: { name: "Furfrou (Natural)", category: "form", region: "Kalos", height: 1.2, weight: 28.0, baseExp: 165, types: ["normal"], abilities: ["Fur Coat"], hp:75, attack:80, defense:60, spAttack:65, spDefense:90, speed:102, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10012.png", pokedex:"Furfrou's natural haircut. It can be trimmed into various styles.", evolutionBaseId:676 },
-        10013: { name: "Furfrou (Heart)", category: "form", region: "Kalos", height: 1.2, weight: 28.0, baseExp: 165, types: ["normal"], abilities: ["Fur Coat"], hp:75, attack:80, defense:60, spAttack:65, spDefense:90, speed:102, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10013.png", pokedex:"Furfrou with a heart-shaped trim.", evolutionBaseId:676 },
-        // ==================== VIVILLON-MUSTER (nur ein Beispiel) ====================
-        10022: { name: "Vivillon (Meadow)", category: "form", region: "Kalos", height: 1.2, weight: 17.0, baseExp: 185, types: ["bug","flying"], abilities: ["Shield Dust","Compound Eyes","Friend Guard"], hp:80, attack:52, defense:50, spAttack:90, spDefense:50, speed:89, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png", pokedex:"Vivillon's wing pattern changes depending on the region.", evolutionBaseId:666 },
-        // ==================== PIKACHU HÜTE (Beispiel) ====================
-        10090: { name: "Pikachu (Original Cap)", category: "form", region: "Alola", height: 0.4, weight: 6.0, baseExp: 205, types: ["electric"], abilities: ["Static"], hp:35, attack:55, defense:40, spAttack:50, spDefense:50, speed:90, imageUrl:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10090.png", pokedex:"Pikachu wearing Ash's original cap.", evolutionBaseId:25 }
-    };
-
-    // Fallback für nicht definierte spezielle Formen
-    function getSpecialData(id) {
-        if (specialFormsData[id]) return specialFormsData[id];
-        return {
-            name: "Special Pokémon",
-            category: "special",
-            region: "Unknown",
-            height: 0,
-            weight: 0,
-            baseExp: 0,
-            types: [],
-            abilities: [],
-            hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0,
-            imageUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png",
-            pokedex: "No information available for this special form.",
-            evolutionBaseId: 10000
-        };
-    }
-
+    
     const typeColorMap = {
         normal: "#A8A77A", fire: "#EE8130", water: "#6390F0",
         electric: "#F7D02C", grass: "#7AC74C", ice: "#96D9D6",
@@ -333,44 +578,42 @@
         rock: "#B6A136", ghost: "#735797", dragon: "#6F35FC",
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
-
+    
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
         const btn = document.getElementById('darkModeBtn');
         btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
     }
-
+    
     function changeLanguage(lang) {
+        currentLanguage = lang;
         localStorage.setItem('language', lang);
         document.getElementById('languageSelect').value = lang;
     }
-
+    
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
         document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
     }
-    document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
-
+    document.getElementById('languageSelect').value = currentLanguage;
+    
     function navigatePrev() {
         let newId = currentPokemonId - 1;
         if (newId < 1) newId = 1025;
         window.location.href = `pokemon_detail.html?id=${newId}`;
     }
-
+    
     function navigateNext() {
         let newId = currentPokemonId + 1;
         if (newId > 1025) newId = 1;
         window.location.href = `pokemon_detail.html?id=${newId}`;
     }
-
+    
     async function playCry() {
-        const special = getSpecialData(currentPokemonId);
-        const baseId = special.evolutionBaseId;
+        if (!pokemonData) return;
         try {
-            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${baseId}`);
-            const data = await response.json();
-            const cryUrl = data.cries?.latest || data.cries?.legacy;
+            const cryUrl = pokemonData.cries?.latest || pokemonData.cries?.legacy;
             if (cryUrl) {
                 const audio = new Audio(cryUrl);
                 audio.volume = 0.35;
@@ -378,17 +621,19 @@
             }
         } catch(error) { console.log("Could not play cry:", error); }
     }
-
-    async function loadEvolutionTree(baseId, specialInfo) {
+    
+    async function loadEvolutionTree(baseId) {
         const evolutionContainer = document.getElementById('evolutionTree');
         if (!evolutionContainer) return;
         evolutionContainer.innerHTML = '<div style="text-align:center;"><div class="loader" style="width:40px; height:40px;"></div><p>Loading evolution chain...</p></div>';
+        
         try {
             const speciesResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${baseId}`);
             if (!speciesResponse.ok) throw new Error('Species not found');
             const speciesData = await speciesResponse.json();
             const chainResponse = await fetch(speciesData.evolution_chain.url);
             const chainData = await chainResponse.json();
+            
             let evolutionChainNames = [];
             let current = chainData.chain;
             function collectAllEvolutions(chainNode, list) {
@@ -399,6 +644,7 @@
             }
             collectAllEvolutions(current, evolutionChainNames);
             evolutionChainNames = [...new Set(evolutionChainNames)];
+            
             const evolutionDetails = [];
             for (const name of evolutionChainNames) {
                 try {
@@ -407,22 +653,12 @@
                     evolutionDetails.push({ id: pokeData.id, name: name.charAt(0).toUpperCase() + name.slice(1) });
                 } catch(err) {}
             }
+            
             let html = `<div class="evolution-title">🌳 Evolution Tree</div><div class="evolution-chain">`;
             for (let i = 0; i < evolutionDetails.length; i++) {
                 const evo = evolutionDetails[i];
                 html += `<div class="evolution-node"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evo.id}.png'"><a href="pokemon_detail.html?id=${evo.id}">${evo.name}</a></div>`;
                 if (i < evolutionDetails.length - 1) html += '<div class="evolution-arrow">→</div>';
-            }
-            if (specialInfo && currentPokemonId > 10000) {
-                html += `<div class="evolution-arrow">→</div>`;
-                let categoryLabel = "";
-                if (specialInfo.category === "mega") categoryLabel = "Mega Evolution";
-                else if (specialInfo.category === "primal") categoryLabel = "Primal Reversion";
-                else if (specialInfo.category === "gmax") categoryLabel = "Gigantamax";
-                else if (specialInfo.category === "ash") categoryLabel = "Bond Phenomenon";
-                else if (specialInfo.category === "regional") categoryLabel = "Regional Form";
-                else categoryLabel = "Special Form";
-                html += `<div class="evolution-node"><img src="${specialInfo.imageUrl}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'"><div><strong>${specialInfo.name}</strong></div><div class="special-form-badge">${categoryLabel}</div></div>`;
             }
             html += '</div>';
             evolutionContainer.innerHTML = html;
@@ -430,72 +666,98 @@
             evolutionContainer.innerHTML = `<div class="evolution-title">🌳 Evolution Tree</div><p style="text-align: center;">Evolution data not available for this special form.</p>`;
         }
     }
-
+    
     async function loadPokemonDetail() {
         const container = document.getElementById('mainContainer');
         container.innerHTML = '<div class="loader"></div><p style="text-align: center; margin-top: 15px;">Loading special form data...</p>';
         
-        const special = getSpecialData(currentPokemonId);
-        
-        let displayName = special.name;
-        let region = special.region;
-        let categoryText = "";
-        if (special.category === "mega") categoryText = "Mega Evolution";
-        else if (special.category === "primal") categoryText = "Primal Reversion";
-        else if (special.category === "gmax") categoryText = "Gigantamax";
-        else if (special.category === "ash") categoryText = "Bond Phenomenon";
-        else if (special.category === "regional") categoryText = "Regional Form";
-        else categoryText = "Special Form";
-        
-        const stats = {
-            hp: special.hp,
-            attack: special.attack,
-            defense: special.defense,
-            spAttack: special.spAttack,
-            spDefense: special.spDefense,
-            speed: special.speed
-        };
-        const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
-        
-        container.innerHTML = `
-            <div class="pokemon-header">
-                <h1>${displayName}</h1>
-                <div class="pokemon-id">#${String(currentPokemonId).padStart(5, '0')} ⭐ ${categoryText}</div>
-            </div>
-            <div class="pokemon-image-container">
-                <img class="pokemon-image" src="${special.imageUrl}" 
-                     alt="${displayName}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
-            </div>
-            <div class="action-buttons">
-                <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
-                <button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
-            </div>
-            <div class="info-grid">
-                <div class="info-card"><div class="info-label">📏 Height</div><div class="info-value">${special.height} m</div></div>
-                <div class="info-card"><div class="info-label">⚖️ Weight</div><div class="info-value">${special.weight} kg</div></div>
-                <div class="info-card"><div class="info-label">🎮 Base Experience</div><div class="info-value">${special.baseExp}</div></div>
-                <div class="info-card"><div class="info-label">🗺️ Region</div><div class="info-value">${region}</div></div>
-            </div>
-            <div class="section-title">🌈 Types</div>
-            <ul class="type-badge-list">${special.types.map(t => `<li class="type-badge" style="background: ${typeColorMap[t]}">${t.toUpperCase()}</li>`).join('')}</ul>
-            <div class="section-title">✨ Abilities</div>
-            <ul class="ability-list">${special.abilities.map(a => `<li class="ability-item">${a.toUpperCase()}</li>`).join('')}</ul>
-            <div class="section-title">📊 Base Stats</div>
-            <div class="stats-container">
-                <div class="stat-row"><span class="stat-name">❤️ HP</span> ${stats.hp}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.hp/255)*100}%">${stats.hp}</div></div></div>
-                <div class="stat-row"><span class="stat-name">⚔️ Attack</span> ${stats.attack}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.attack/255)*100}%">${stats.attack}</div></div></div>
-                <div class="stat-row"><span class="stat-name">🛡️ Defense</span> ${stats.defense}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.defense/255)*100}%">${stats.defense}</div></div></div>
-                <div class="stat-row"><span class="stat-name">🔮 Sp. Attack</span> ${stats.spAttack}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.spAttack/255)*100}%">${stats.spAttack}</div></div></div>
-                <div class="stat-row"><span class="stat-name">✨ Sp. Defense</span> ${stats.spDefense}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.spDefense/255)*100}%">${stats.spDefense}</div></div></div>
-                <div class="stat-row"><span class="stat-name">⚡ Speed</span> ${stats.speed}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.speed/255)*100}%">${stats.speed}</div></div></div>
-                <div class="stat-row" style="margin-top: 15px; border-top: 2px solid #ffcb05; padding-top: 12px;"><span class="stat-name">⭐ Total</span> <strong>${totalStats}</strong></div>
-            </div>
-            <div class="dex-entry"><strong>📖 Pokédex Entry</strong><br>"${special.pokedex}"</div>
-            <div class="evolution-section" id="evolutionTree"></div>
-            <div class="back-buttons"><a href="pokemon_list.html" class="back-button">← Back to Pokédex</a><a href="start.html" class="back-button">🏠 Home</a></div>
-        `;
-        
-        await loadEvolutionTree(special.evolutionBaseId, special);
+        try {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${currentPokemonId}`);
+            if (!response.ok) throw new Error('Pokémon not found');
+            pokemonData = await response.json();
+            
+            let region = "Unknown";
+            if (pokemonData.id <= 151) region = "Kanto";
+            else if (pokemonData.id <= 251) region = "Johto";
+            else if (pokemonData.id <= 386) region = "Hoenn";
+            else if (pokemonData.id <= 493) region = "Sinnoh";
+            else if (pokemonData.id <= 649) region = "Unova";
+            else if (pokemonData.id <= 721) region = "Kalos";
+            else if (pokemonData.id <= 809) region = "Alola";
+            else if (pokemonData.id <= 905) region = "Galar";
+            else region = "Paldea";
+            
+            const displayName = pokemonData.name.charAt(0).toUpperCase() + pokemonData.name.slice(1);
+            
+            // Pokédex Eintrag laden
+            let dexText = "No entry found";
+            try {
+                const speciesRes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonData.id}`);
+                if (speciesRes.ok) {
+                    const species = await speciesRes.json();
+                    for (let entry of species.flavor_text_entries) {
+                        if (entry.language.name === "en") {
+                            dexText = entry.flavor_text.replace(/\n/g, ' ').replace(/\f/g, ' ');
+                            break;
+                        }
+                    }
+                }
+            } catch(e) {}
+            
+            const stats = {
+                hp: pokemonData.stats[0].base_stat,
+                attack: pokemonData.stats[1].base_stat,
+                defense: pokemonData.stats[2].base_stat,
+                spAttack: pokemonData.stats[3].base_stat,
+                spDefense: pokemonData.stats[4].base_stat,
+                speed: pokemonData.stats[5].base_stat
+            };
+            const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
+            
+            container.innerHTML = `
+                <div class="pokemon-header">
+                    <h1>${displayName}</h1>
+                    <div class="pokemon-id">#${String(pokemonData.id).padStart(pokemonData.id > 10000 ? 5 : 3, '0')}</div>
+                </div>
+                <div class="pokemon-image-container">
+                    <img class="pokemon-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonData.id}.png" 
+                         alt="${displayName}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png'">
+                </div>
+                <div class="action-buttons">
+                    <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
+                    <button class="print-btn" onclick="window.print()">🖨️ Print / PDF</button>
+                </div>
+                <div class="info-grid">
+                    <div class="info-card"><div class="info-label">📏 Height</div><div class="info-value">${pokemonData.height / 10} m</div></div>
+                    <div class="info-card"><div class="info-label">⚖️ Weight</div><div class="info-value">${pokemonData.weight / 10} kg</div></div>
+                    <div class="info-card"><div class="info-label">🎮 Base Experience</div><div class="info-value">${pokemonData.base_experience}</div></div>
+                    <div class="info-card"><div class="info-label">🗺️ Region</div><div class="info-value">${region}</div></div>
+                </div>
+                <div class="section-title">🌈 Types</div>
+                <ul class="type-badge-list">${pokemonData.types.map(t => `<li class="type-badge" style="background: ${typeColorMap[t.type.name]}">${t.type.name.toUpperCase()}</li>`).join('')}</ul>
+                <div class="section-title">✨ Abilities</div>
+                <ul class="ability-list">${pokemonData.abilities.map(a => `<li class="ability-item">${a.ability.name.replace("-", " ").toUpperCase()}${a.is_hidden ? ' (Hidden)' : ''}</li>`).join('')}</ul>
+                <div class="section-title">📊 Base Stats</div>
+                <div class="stats-container">
+                    <div class="stat-row"><span class="stat-name">❤️ HP</span> ${stats.hp}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.hp/255)*100}%">${stats.hp}</div></div></div>
+                    <div class="stat-row"><span class="stat-name">⚔️ Attack</span> ${stats.attack}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.attack/255)*100}%">${stats.attack}</div></div></div>
+                    <div class="stat-row"><span class="stat-name">🛡️ Defense</span> ${stats.defense}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.defense/255)*100}%">${stats.defense}</div></div></div>
+                    <div class="stat-row"><span class="stat-name">🔮 Sp. Attack</span> ${stats.spAttack}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.spAttack/255)*100}%">${stats.spAttack}</div></div></div>
+                    <div class="stat-row"><span class="stat-name">✨ Sp. Defense</span> ${stats.spDefense}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.spDefense/255)*100}%">${stats.spDefense}</div></div></div>
+                    <div class="stat-row"><span class="stat-name">⚡ Speed</span> ${stats.speed}<div class="stat-bar-bg"><div class="stat-bar-fill" style="width: ${(stats.speed/255)*100}%">${stats.speed}</div></div></div>
+                    <div class="stat-row" style="margin-top: 15px; border-top: 2px solid #ffcb05; padding-top: 12px;"><span class="stat-name">⭐ Total</span> <strong>${totalStats}</strong></div>
+                </div>
+                <div class="dex-entry"><strong>📖 Pokédex Entry</strong><br>"${dexText}"</div>
+                <div class="evolution-section" id="evolutionTree"></div>
+                <div class="back-buttons"><a href="pokemon_list.html" class="back-button">← Back to Pokédex</a><a href="start.html" class="back-button">🏠 Home</a></div>
+            `;
+            
+            await loadEvolutionTree(pokemonData.id);
+            
+        } catch(error) {
+            console.error("Error loading special form:", error);
+            container.innerHTML = `<div style="text-align: center; padding: 60px 30px;"><h2>❌ Error Loading Special Form</h2><p>The special form with ID ${currentPokemonId} could not be found.</p><div class="back-buttons" style="margin-top: 30px;"><a href="pokemon_list.html" class="back-button">← Back to Pokédex</a><a href="start.html" class="back-button">🏠 Home</a></div></div>`;
+        }
     }
     
     loadPokemonDetail();
