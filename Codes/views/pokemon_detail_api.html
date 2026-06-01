@@ -192,29 +192,50 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== ALLE SPEZIALFORMEN FÜR GEN 7-9 (KORRIGIERT) ==========
+    // ========== SPEZIALFORMEN für Gen 7-9 ==========
     const specialFormsMapGen7Plus = {
-        58: { hisuian: { name: "Hisuian Growlithe", type: "regional", specialId: 10106 } },
-        59: { hisuian: { name: "Hisuian Arcanine", type: "regional", specialId: 10107 } },
-        77: { galarian: { name: "Galarian Ponyta", type: "regional", specialId: 10103 } },
-        78: { galarian: { name: "Galarian Rapidash", type: "regional", specialId: 10104 } },
-        79: { galarian: { name: "Galarian Slowpoke", type: "regional", specialId: null } },
-        80: { galarian: { name: "Galarian Slowbro", type: "regional", specialId: null } },
-        110: { galarian: { name: "Galarian Weezing", type: "regional", specialId: null } },
-        122: { galarian: { name: "Galarian Mr. Mime", type: "regional", specialId: null } },
-        144: { galarian: { name: "Galarian Articuno", type: "regional", specialId: null } },
-        145: { galarian: { name: "Galarian Zapdos", type: "regional", specialId: null } },
-        146: { galarian: { name: "Galarian Moltres", type: "regional", specialId: null } },
-        549: { hisuian: { name: "Hisuian Lilligant", type: "regional", specialId: null } },
-        571: { hisuian: { name: "Hisuian Zoroark", type: "regional", specialId: 10108 } },
-        628: { hisuian: { name: "Hisuian Braviary", type: "regional", specialId: null } },
-        713: { hisuian: { name: "Hisuian Avalugg", type: "regional", specialId: null } },
-        809: { gmax: { name: "Gigantamax Melmetal", type: "gmax", specialId: 10213 } },
-        812: { gmax: { name: "Gigantamax Rillaboom", type: "gmax", specialId: 10218 } },
-        815: { gmax: { name: "Gigantamax Cinderace", type: "gmax", specialId: 10219 } },
-        818: { gmax: { name: "Gigantamax Inteleon", type: "gmax", specialId: 10220 } },
-        823: { gmax: { name: "Gigantamax Corviknight", type: "gmax", specialId: 10221 } },
-        901: { hisuian: { name: "Hisuian Ursaluna", type: "regional", specialId: null } }
+        // Gigantamax (Gen 8) - Neue Pokémon aus Gen 8
+        809: { gmax: "Gigantamax Melmetal" },
+        812: { gmax: "Gigantamax Rillaboom" },
+        815: { gmax: "Gigantamax Cinderace" },
+        818: { gmax: "Gigantamax Inteleon" },
+        823: { gmax: "Gigantamax Corviknight" },
+        826: { gmax: "Gigantamax Orbeetle" },
+        834: { gmax: "Gigantamax Drednaw" },
+        839: { gmax: "Gigantamax Coalossal" },
+        841: { gmax: "Gigantamax Flapple" },
+        842: { gmax: "Gigantamax Appletun" },
+        844: { gmax: "Gigantamax Sandaconda" },
+        849: { gmax: "Gigantamax Toxtricity" },
+        851: { gmax: "Gigantamax Centiskorch" },
+        858: { gmax: "Gigantamax Hatterene" },
+        861: { gmax: "Gigantamax Grimmsnarl" },
+        869: { gmax: "Gigantamax Alcremie" },
+        879: { gmax: "Gigantamax Copperajah" },
+        884: { gmax: "Gigantamax Duraludon" },
+        
+        // Galarian Forms (Gen 8) - Regional Varianten
+        79: { galarian: "Galarian Slowpoke" },
+        80: { galarian: "Galarian Slowbro" },
+        83: { galarian: "Galarian Farfetch'd" },
+        110: { galarian: "Galarian Weezing" },
+        122: { galarian: "Galarian Mr. Mime" },
+        144: { galarian: "Galarian Articuno" },
+        145: { galarian: "Galarian Zapdos" },
+        146: { galarian: "Galarian Moltres" },
+        
+        // Hisuian Forms (Gen 8 - Legends Arceus)
+        549: { hisuian: "Hisuian Lilligant" },
+        628: { hisuian: "Hisuian Braviary" },
+        713: { hisuian: "Hisuian Avalugg" },
+        901: { hisuian: "Hisuian Ursaluna" },
+        
+        // Paldean Forms (Gen 9)
+        128: { paldean: "Paldean Tauros (Combat Breed)" },
+        128: { paldeanFire: "Paldean Tauros (Blaze Breed)" },
+        128: { paldeanWater: "Paldean Tauros (Aqua Breed)" },
+        916: { paldean: "Paldean Wooper" },
+        980: { paldean: "Paldean Clodsire" }
     };
     
     function toggleDarkMode() {
@@ -247,8 +268,8 @@
         window.location.href = `pokemon_detail_api.html?id=${newId}`;
     }
     
-    function goToSpecialForm(formKey, formName, specialId) {
-        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}&specialId=${specialId}`;
+    function goToSpecialForm(formKey, formName) {
+        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}`;
     }
     
     async function playCry() {
@@ -373,11 +394,11 @@
             const specials = specialFormsMapGen7Plus[currentPokemonId];
             if (specials) {
                 specialButtonsHtml = '<div class="special-forms-section"><div class="special-forms-title">⭐ Special Forms Available ⭐</div><div class="special-buttons">';
-                for (let [key, form] of Object.entries(specials)) {
+                for (let [key, name] of Object.entries(specials)) {
                     let btnClass = 'special-btn';
-                    if (form.type === 'gmax') btnClass += ' gmax';
+                    if (key === 'gmax') btnClass += ' gmax';
                     else btnClass += ' regional';
-                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${form.name}', '${form.specialId}')">✨ ${form.name}</button>`;
+                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${name}')">✨ ${name}</button>`;
                 }
                 specialButtonsHtml += '</div></div>';
             }
