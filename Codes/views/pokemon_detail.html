@@ -428,8 +428,8 @@
         window.location.href = `pokemon_detail.html?id=${newId}`;
     }
     
-    function goToSpecialForm(formKey, formData) {
-        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formData.name)}&specialId=${formData.specialId}`;
+    function goToSpecialForm(formKey, formName, specialId) {
+        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}&specialId=${specialId || ''}`;
     }
     
     async function playCry() {
@@ -566,7 +566,7 @@
                     else if (form.type === 'primal') btnClass += ' primal';
                     else btnClass += ' regional';
                     
-                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', ${JSON.stringify(form).replace(/"/g, '&quot;')})">✨ ${form.name}</button>`;
+                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${form.name}', '${form.specialId || ''}')">✨ ${form.name}</button>`;
                 }
                 specialButtonsHtml += '</div></div>';
             }
