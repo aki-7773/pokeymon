@@ -377,7 +377,7 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== VOLLSTÄNDIGE SPEZIALFORMEN DATEN mit korrekten Bild-URLs ==========
+    // ========== VOLLSTÄNDIGE SPEZIALFORMEN DATEN für ALLE mit korrekten Bild-IDs ==========
     const specialFormData = {
         // Charizard
         "6-megaX": { types: ["fire", "dragon"], ability: "Tough Claws", hp: 78, attack: 130, defense: 111, spAttack: 130, spDefense: 85, speed: 100, dex: "Mega Charizard X is a powerful Dragon-type form. Its blue flames burn hotter than ever before, and its physical strength is dramatically increased.", spriteId: 10034 },
@@ -413,27 +413,104 @@
         "384-mega": { types: ["dragon", "flying"], ability: "Delta Stream", hp: 105, attack: 180, defense: 100, spAttack: 180, spDefense: 100, speed: 115, dex: "Mega Rayquaza can calm the weather and create strong winds that protect Flying-types.", spriteId: 10064 },
         // Metagross
         "376-mega": { types: ["steel", "psychic"], ability: "Tough Claws", hp: 80, attack: 145, defense: 150, spAttack: 105, spDefense: 110, speed: 110, dex: "Mega Metagross folds its legs to become more aerodynamic, increasing its speed.", spriteId: 10061 },
+        // Salamence
+        "373-mega": { types: ["dragon", "flying"], ability: "Aerilate", hp: 95, attack: 145, defense: 130, spAttack: 120, spDefense: 90, speed: 120, dex: "Mega Salamence's wings merge into a single crescent shape, allowing incredible flight.", spriteId: 10060 },
+        // Ampharos
+        "181-mega": { types: ["electric", "dragon"], ability: "Mold Breaker", hp: 90, attack: 95, defense: 105, spAttack: 165, spDefense: 110, speed: 45, dex: "Mega Ampharos grows fabulous flowing hair and gains the Dragon type.", spriteId: 10041 },
+        // Steelix
+        "208-mega": { types: ["steel", "ground"], ability: "Sand Force", hp: 75, attack: 125, defense: 230, spAttack: 55, spDefense: 95, speed: 30, dex: "Mega Steelix's body becomes even harder than diamond, making it nearly indestructible.", spriteId: 10042 },
+        // Scizor
+        "212-mega": { types: ["bug", "steel"], ability: "Technician", hp: 70, attack: 150, defense: 140, spAttack: 65, spDefense: 100, speed: 75, dex: "Mega Scizor's pincers become even sharper, capable of cutting through steel beams.", spriteId: 10043 },
+        // Heracross
+        "214-mega": { types: ["bug", "fighting"], ability: "Skill Link", hp: 80, attack: 185, defense: 115, spAttack: 40, spDefense: 105, speed: 75, dex: "Mega Heracross's horn grows massive. It can lift objects up to 500 times its own weight.", spriteId: 10044 },
+        // Houndoom
+        "229-mega": { types: ["dark", "fire"], ability: "Solar Power", hp: 75, attack: 90, defense: 90, spAttack: 140, spDefense: 90, speed: 115, dex: "Mega Houndoom's flames burn with such intensity that they leave wounds that never heal.", spriteId: 10045 },
+        // Sableye
+        "302-mega": { types: ["dark", "ghost"], ability: "Magic Bounce", hp: 50, attack: 85, defense: 125, spAttack: 85, spDefense: 115, speed: 20, dex: "Mega Sableye's jewel grows enormous, reflecting any special attacks back at the opponent.", spriteId: 10049 },
+        // Mawile
+        "303-mega": { types: ["steel", "fairy"], ability: "Huge Power", hp: 50, attack: 105, defense: 125, spAttack: 55, spDefense: 95, speed: 50, dex: "Mega Mawile's second jaw grows enormous. Its bite force is powerful enough to crush iron.", spriteId: 10050 },
+        // Aggron
+        "306-mega": { types: ["steel"], ability: "Filter", hp: 70, attack: 140, defense: 230, spAttack: 60, spDefense: 80, speed: 50, dex: "Mega Aggron loses its Rock typing but becomes incredibly durable with Filter ability.", spriteId: 10051 },
+        // Medicham
+        "308-mega": { types: ["fighting", "psychic"], ability: "Pure Power", hp: 60, attack: 100, defense: 85, spAttack: 80, spDefense: 85, speed: 100, dex: "Mega Medicham meditates in battle, focusing its psychic energy into devastating physical attacks.", spriteId: 10052 },
+        // Manectric
+        "310-mega": { types: ["electric"], ability: "Intimidate", hp: 70, attack: 75, defense: 80, spAttack: 135, spDefense: 80, speed: 135, dex: "Mega Manectric's electrical energy forms a lightning cloud that intimidates opponents.", spriteId: 10053 },
+        // Sharpedo
+        "319-mega": { types: ["water", "dark"], ability: "Strong Jaw", hp: 70, attack: 140, defense: 70, spAttack: 110, spDefense: 65, speed: 105, dex: "Mega Sharpedo's jaws become incredibly powerful, capable of crushing steel ships.", spriteId: 10054 },
+        // Camerupt
+        "323-mega": { types: ["fire", "ground"], ability: "Sheer Force", hp: 70, attack: 120, defense: 100, spAttack: 145, spDefense: 105, speed: 20, dex: "Mega Camerupt's volcano erupts constantly, raining fire and ash on everything nearby.", spriteId: 10055 },
+        // Altaria
+        "334-mega": { types: ["dragon", "fairy"], ability: "Pixilate", hp: 75, attack: 110, defense: 110, spAttack: 110, spDefense: 105, speed: 80, dex: "Mega Altaria's cloud-like wings become even softer. Its voice becomes more melodious.", spriteId: 10056 },
+        // Banette
+        "354-mega": { types: ["ghost"], ability: "Prankster", hp: 64, attack: 165, defense: 75, spAttack: 93, spDefense: 83, speed: 75, dex: "Mega Banette's curse power grows exponentially. It seeks revenge on those who abandoned it.", spriteId: 10057 },
+        // Absol
+        "359-mega": { types: ["dark"], ability: "Magic Bounce", hp: 65, attack: 150, defense: 60, spAttack: 115, spDefense: 60, speed: 115, dex: "Mega Absol's wing-like fur allows it to sense disasters before they happen.", spriteId: 10058 },
+        // Glalie
+        "362-mega": { types: ["ice"], ability: "Refrigerate", hp: 80, attack: 120, defense: 80, spAttack: 120, spDefense: 80, speed: 100, dex: "Mega Glalie's jaw shatters, revealing an even larger mouth inside. Its icy breath freezes everything.", spriteId: 10059 },
+        // Lopunny
+        "428-mega": { types: ["normal", "fighting"], ability: "Scrappy", hp: 65, attack: 136, defense: 94, spAttack: 54, spDefense: 96, speed: 135, dex: "Mega Lopunny's kicks are so powerful they can bend steel. Its leg strength is unmatched.", spriteId: 10065 },
+        // Abomasnow
+        "460-mega": { types: ["grass", "ice"], ability: "Snow Warning", hp: 90, attack: 132, defense: 105, spAttack: 132, spDefense: 105, speed: 30, dex: "Mega Abomasnow creates a permanent blizzard around itself. The cold is unbearable for others.", spriteId: 10068 },
+        // Gallade
+        "475-mega": { types: ["psychic", "fighting"], ability: "Inner Focus", hp: 68, attack: 165, defense: 95, spAttack: 65, spDefense: 115, speed: 110, dex: "Mega Gallade's elbow blades extend. It can sense opponents' intentions before they move.", spriteId: 10069 },
+        // Audino
+        "531-mega": { types: ["normal", "fairy"], ability: "Healer", hp: 103, attack: 60, defense: 126, spAttack: 80, spDefense: 126, speed: 50, dex: "Mega Audino's hearing becomes incredibly sensitive. It can detect heartbeats from miles away.", spriteId: 10070 },
+        // Diancie
+        "719-mega": { types: ["rock", "fairy"], ability: "Clear Body", hp: 50, attack: 160, defense: 110, spAttack: 160, spDefense: 110, speed: 110, dex: "Mega Diancie's body shines like a perfect diamond. It can create diamonds from carbon in the air.", spriteId: 10071 },
         // Primal Kyogre
-        "382-primal": { types: ["water"], ability: "Primordial Sea", hp: 100, attack: 150, defense: 90, spAttack: 180, spDefense: 160, speed: 90, dex: "Primal Kyogre summons heavy rain that extinguishes all Fire-type moves.", spriteId: 10080 },
+        "382-primal": { types: ["water"], ability: "Primordial Sea", hp: 100, attack: 150, defense: 90, spAttack: 180, spDefense: 160, speed: 90, dex: "Primal Kyogre summons heavy rain that extinguishes all Fire-type moves. It can flood the entire world.", spriteId: 10080 },
         // Primal Groudon
-        "383-primal": { types: ["ground", "fire"], ability: "Desolate Land", hp: 100, attack: 180, defense: 160, spAttack: 150, spDefense: 90, speed: 90, dex: "Primal Groudon creates harsh sunlight that evaporates all Water-type moves.", spriteId: 10081 },
-        // Alolan Forms
-        "26-alolan": { types: ["electric", "psychic"], ability: "Surge Surfer", hp: 60, attack: 85, defense: 50, spAttack: 95, spDefense: 85, speed: 110, dex: "Alolan Raichu surfs on its tail using psychic power. It's very popular in Alola.", spriteId: 10100 },
-        "105-alolan": { types: ["fire", "ghost"], ability: "Cursed Body", hp: 60, attack: 80, defense: 110, spAttack: 50, spDefense: 80, speed: 45, dex: "Alolan Marowak uses its bone as a torch. The flames never go out.", spriteId: 10101 },
-        // Galarian Forms
-        "77-galarian": { types: ["psychic"], ability: "Pastel Veil", hp: 50, attack: 85, defense: 55, spAttack: 65, spDefense: 65, speed: 90, dex: "Galarian Ponyta's horn heals poison. It lives in the enchanted forests of Galar.", spriteId: 10103 },
-        "78-galarian": { types: ["psychic", "fairy"], ability: "Pastel Veil", hp: 65, attack: 100, defense: 70, spAttack: 80, spDefense: 80, speed: 105, dex: "Galarian Rapidash can read the emotions of others through its horn.", spriteId: 10104 },
-        // Hisuian Forms
+        "383-primal": { types: ["ground", "fire"], ability: "Desolate Land", hp: 100, attack: 180, defense: 160, spAttack: 150, spDefense: 90, speed: 90, dex: "Primal Groudon creates harsh sunlight that evaporates all Water-type moves. It can expand continents.", spriteId: 10081 },
+        // Alolan Raichu
+        "26-alolan": { types: ["electric", "psychic"], ability: "Surge Surfer", hp: 60, attack: 85, defense: 50, spAttack: 95, spDefense: 85, speed: 110, dex: "Alolan Raichu surfs on its tail using psychic power. It's very popular in Alola for its unique appearance.", spriteId: 10100 },
+        // Alolan Marowak
+        "105-alolan": { types: ["fire", "ghost"], ability: "Cursed Body", hp: 60, attack: 80, defense: 110, spAttack: 50, spDefense: 80, speed: 45, dex: "Alolan Marowak uses its bone as a torch. The flames never go out and are said to be spiritual.", spriteId: 10101 },
+        // Alolan Exeggutor
+        "103-alolan": { types: ["grass", "dragon"], ability: "Frisk", hp: 95, attack: 105, defense: 85, spAttack: 125, spDefense: 75, speed: 45, dex: "Alolan Exeggutor's tall neck helps it absorb more sunlight in the Alolan tropics. Its head can turn 360 degrees.", spriteId: 10102 },
+        // Galarian Ponyta
+        "77-galarian": { types: ["psychic"], ability: "Pastel Veil", hp: 50, attack: 85, defense: 55, spAttack: 65, spDefense: 65, speed: 90, dex: "Galarian Ponyta's horn heals poison. It lives in the enchanted forests of Galar and is very rare.", spriteId: 10103 },
+        // Galarian Rapidash
+        "78-galarian": { types: ["psychic", "fairy"], ability: "Pastel Veil", hp: 65, attack: 100, defense: 70, spAttack: 80, spDefense: 80, speed: 105, dex: "Galarian Rapidash can read the emotions of others through its horn. It only trusts pure-hearted trainers.", spriteId: 10104 },
+        // Hisuian Growlithe
         "58-hisuian": { types: ["fire", "rock"], ability: "Intimidate", hp: 60, attack: 75, defense: 45, spAttack: 65, spDefense: 50, speed: 55, dex: "Hisuian Growlithe has a rocky horn and is more aggressive than its Kantonian counterpart.", spriteId: 10106 },
+        // Hisuian Arcanine
         "59-hisuian": { types: ["fire", "rock"], ability: "Intimidate", hp: 90, attack: 115, defense: 80, spAttack: 95, spDefense: 80, speed: 90, dex: "Hisuian Arcanine's rocky fur provides excellent defense. It commands respect in Hisui.", spriteId: 10107 },
-        "571-hisuian": { types: ["normal", "ghost"], ability: "Illusion", hp: 55, attack: 100, defense: 60, spAttack: 125, spDefense: 60, speed: 110, dex: "Hisuian Zoroark's illusions are said to be powerful enough to create tangible copies.", spriteId: 10108 }
+        // Hisuian Zoroark
+        "571-hisuian": { types: ["normal", "ghost"], ability: "Illusion", hp: 55, attack: 100, defense: 60, spAttack: 125, spDefense: 60, speed: 110, dex: "Hisuian Zoroark's illusions are said to be powerful enough to create tangible copies that can attack.", spriteId: 10108 },
+        // Gigantamax Snorlax
+        "143-gmax": { types: ["normal"], ability: "Gluttony", hp: 160, attack: 110, defense: 65, spAttack: 65, spDefense: 110, speed: 30, dex: "Gigantamax Snorlax's belly grows to enormous size. It can store enough energy to last for years.", spriteId: 10209 },
+        // Gigantamax Lapras
+        "131-gmax": { types: ["water", "ice"], ability: "Water Absorb", hp: 130, attack: 85, defense: 80, spAttack: 85, spDefense: 95, speed: 60, dex: "Gigantamax Lapras's shell becomes even larger. Its melodic voice can calm even the fiercest storms.", spriteId: 10203 },
+        // Gigantamax Kingler
+        "99-gmax": { types: ["water"], ability: "Hyper Cutter", hp: 55, attack: 130, defense: 115, spAttack: 50, spDefense: 50, speed: 75, dex: "Gigantamax Kingler's pincers grow to massive size. One pinch can crush anything.", spriteId: 10198 },
+        // Gigantamax Machamp
+        "68-gmax": { types: ["fighting"], ability: "Guts", hp: 90, attack: 130, defense: 80, spAttack: 65, spDefense: 85, speed: 55, dex: "Gigantamax Machamp's four arms become incredibly muscular. It can punch mountains into rubble.", spriteId: 10201 },
+        // Gigantamax Meowth
+        "52-gmax": { types: ["normal"], ability: "Pickup", hp: 40, attack: 35, defense: 35, spAttack: 50, spDefense: 40, speed: 90, dex: "Gigantamax Meowth grows incredibly long. The coin on its forehead shines with golden light.", spriteId: 10200 },
+        // Gigantamax Gengar
+        "94-gmax": { types: ["ghost", "poison"], ability: "Cursed Body", hp: 60, attack: 65, defense: 80, spAttack: 170, spDefense: 95, speed: 130, dex: "Gigantamax Gengar's mouth stretches to the underworld, dragging anything nearby into the darkness.", spriteId: 10202 },
+        // Gigantamax Rillaboom
+        "812-gmax": { types: ["grass"], ability: "Overgrow", hp: 100, attack: 125, defense: 90, spAttack: 60, spDefense: 70, speed: 85, dex: "Gigantamax Rillaboom's drum grows enormous. Its drumming can cause earthquakes.", spriteId: 10218 },
+        // Gigantamax Cinderace
+        "815-gmax": { types: ["fire"], ability: "Blaze", hp: 80, attack: 116, defense: 75, spAttack: 65, spDefense: 75, speed: 119, dex: "Gigantamax Cinderace's fireball grows to enormous size. It can scorch entire fields.", spriteId: 10219 },
+        // Gigantamax Inteleon
+        "818-gmax": { types: ["water"], ability: "Torrent", hp: 70, attack: 85, defense: 65, spAttack: 125, spDefense: 65, speed: 120, dex: "Gigantamax Inteleon's water gun becomes a massive cannon. It can hit targets from miles away.", spriteId: 10220 },
+        // Gigantamax Corviknight
+        "823-gmax": { types: ["flying", "steel"], ability: "Pressure", hp: 98, attack: 87, defense: 105, spAttack: 53, spDefense: 85, speed: 67, dex: "Gigantamax Corviknight's wings become massive. It can carry entire buildings.", spriteId: 10221 },
+        // Gigantamax Melmetal
+        "809-gmax": { types: ["steel"], ability: "Iron Fist", hp: 135, attack: 143, defense: 143, spAttack: 80, spDefense: 65, speed: 34, dex: "Gigantamax Melmetal's body becomes liquid metal. It can form unlimited shapes.", spriteId: 10213 }
     };
     
     // Bestimme den korrekten FormKey
     let formKeyLookup = `${basePokemonId}-${formKey}`;
     let formData = specialFormData[formKeyLookup];
     
-    // Fallback für nicht definierte Spezialformen
+    // Fallback mit specialId
+    if (!formData && specialId) {
+        formData = specialFormData[`${basePokemonId}-${formKey}`];
+    }
+    
+    // Letzter Fallback - generische Daten
     if (!formData) {
         formData = {
             types: ["normal"],
