@@ -194,23 +194,22 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== ALLE SPEZIALFORMEN FÜR GEN 1-6 ==========
+    // ========== KOMPLETTE SPEZIALFORMEN MAP mit ALLEN Mega Evolutions ==========
     const specialFormsMap = {
+        // === GIGANTAMAX (Gen 8) ===
         3: { gmax: { name: "Gigantamax Venusaur", type: "gmax", specialId: 10204 } },
         6: { megaX: { name: "Mega Charizard X", type: "mega", specialId: 10034 }, megaY: { name: "Mega Charizard Y", type: "mega", specialId: 10035 }, gmax: { name: "Gigantamax Charizard", type: "gmax", specialId: 10196 } },
         9: { gmax: { name: "Gigantamax Blastoise", type: "gmax", specialId: 10205 } },
         25: { gmax: { name: "Gigantamax Pikachu", type: "gmax", specialId: 10199 } },
-        26: { alolan: { name: "Alolan Raichu", type: "regional", specialId: 10100 } },
         52: { gmax: { name: "Gigantamax Meowth", type: "gmax", specialId: 10200 } },
         68: { gmax: { name: "Gigantamax Machamp", type: "gmax", specialId: 10201 } },
         94: { mega: { name: "Mega Gengar", type: "mega", specialId: 10038 }, gmax: { name: "Gigantamax Gengar", type: "gmax", specialId: 10202 } },
         99: { gmax: { name: "Gigantamax Kingler", type: "gmax", specialId: 10198 } },
-        103: { alolan: { name: "Alolan Exeggutor", type: "regional", specialId: 10102 } },
-        105: { alolan: { name: "Alolan Marowak", type: "regional", specialId: 10101 } },
-        130: { mega: { name: "Mega Gyarados", type: "mega", specialId: 10039 } },
         131: { gmax: { name: "Gigantamax Lapras", type: "gmax", specialId: 10203 } },
         133: { gmax: { name: "Gigantamax Eevee", type: "gmax", specialId: 10195 } },
         143: { gmax: { name: "Gigantamax Snorlax", type: "gmax", specialId: 10209 } },
+        
+        // === MEGA EVOLUTIONS (Gen 6) ===
         150: { megaX: { name: "Mega Mewtwo X", type: "mega", specialId: 10036 }, megaY: { name: "Mega Mewtwo Y", type: "mega", specialId: 10037 } },
         181: { mega: { name: "Mega Ampharos", type: "mega", specialId: 10041 } },
         208: { mega: { name: "Mega Steelix", type: "mega", specialId: 10042 } },
@@ -235,8 +234,6 @@
         376: { mega: { name: "Mega Metagross", type: "mega", specialId: 10061 } },
         380: { mega: { name: "Mega Latias", type: "mega", specialId: 10062 } },
         381: { mega: { name: "Mega Latios", type: "mega", specialId: 10063 } },
-        382: { primal: { name: "Primal Kyogre", type: "primal", specialId: 10080 } },
-        383: { primal: { name: "Primal Groudon", type: "primal", specialId: 10081 } },
         384: { mega: { name: "Mega Rayquaza", type: "mega", specialId: 10064 } },
         428: { mega: { name: "Mega Lopunny", type: "mega", specialId: 10065 } },
         445: { mega: { name: "Mega Garchomp", type: "mega", specialId: 10066 } },
@@ -244,7 +241,19 @@
         460: { mega: { name: "Mega Abomasnow", type: "mega", specialId: 10068 } },
         475: { mega: { name: "Mega Gallade", type: "mega", specialId: 10069 } },
         531: { mega: { name: "Mega Audino", type: "mega", specialId: 10070 } },
-        719: { mega: { name: "Mega Diancie", type: "mega", specialId: 10071 } }
+        719: { mega: { name: "Mega Diancie", type: "mega", specialId: 10071 } },
+        
+        // === MEGA EVOLUTIONS (Gen 3 - Hoenn) ===
+        130: { mega: { name: "Mega Gyarados", type: "mega", specialId: 10039 } },
+        
+        // === PRIMAL FORMS (Gen 3) ===
+        382: { primal: { name: "Primal Kyogre", type: "primal", specialId: 10080 } },
+        383: { primal: { name: "Primal Groudon", type: "primal", specialId: 10081 } },
+        
+        // === REGIONAL FORMS (Alola) ===
+        26: { alolan: { name: "Alolan Raichu", type: "regional", specialId: 10100 } },
+        103: { alolan: { name: "Alolan Exeggutor", type: "regional", specialId: 10102 } },
+        105: { alolan: { name: "Alolan Marowak", type: "regional", specialId: 10101 } }
     };
     
     function toggleDarkMode() {
