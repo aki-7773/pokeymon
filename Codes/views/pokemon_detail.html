@@ -194,168 +194,135 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== VOLLSTÄNDIGE SPEZIALFORMEN MAP ==========
+    // ========== SPEZIALFORMEN MAP mit KORREKTEN KEYS ==========
+    // WICHTIG: Die Keys müssen mit denen in special_detail.html übereinstimmen!
     const specialFormsMap = {
-        // === KANTO MEGA EVOLUTIONS ===
-        1: { mega: { name: "Mega Venusaur", type: "mega", specialId: 10034 } },  // Venusaur
-        3: { mega: { name: "Mega Venusaur", type: "mega", specialId: 10034 }, gmax: { name: "Gigantamax Venusaur", type: "gmax", specialId: 10204 } },
-        6: { megaX: { name: "Mega Charizard X", type: "mega", specialId: 10034 }, megaY: { name: "Mega Charizard Y", type: "mega", specialId: 10035 }, gmax: { name: "Gigantamax Charizard", type: "gmax", specialId: 10196 } },
-        9: { mega: { name: "Mega Blastoise", type: "mega", specialId: 10034 }, gmax: { name: "Gigantamax Blastoise", type: "gmax", specialId: 10205 } },
-        15: { mega: { name: "Mega Beedrill", type: "mega", specialId: 10034 } },
-        18: { mega: { name: "Mega Pidgeot", type: "mega", specialId: 10034 } },
-        26: { megaX: { name: "Mega Raichu X", type: "mega", specialId: 10034 }, megaY: { name: "Mega Raichu Y", type: "mega", specialId: 10035 }, alolan: { name: "Alolan Raichu", type: "regional", specialId: 10100 } },
-        36: { mega: { name: "Mega Clefable", type: "mega", specialId: 10034 } },
-        65: { mega: { name: "Mega Alakazam", type: "mega", specialId: 10034 } },
-        71: { mega: { name: "Mega Victreebel", type: "mega", specialId: 10034 } },
-        80: { mega: { name: "Mega Slowbro", type: "mega", specialId: 10034 }, galarian: { name: "Galarian Slowbro", type: "regional", specialId: null } },
-        94: { mega: { name: "Mega Gengar", type: "mega", specialId: 10038 }, gmax: { name: "Gigantamax Gengar", type: "gmax", specialId: 10202 } },
-        115: { mega: { name: "Mega Kangaskhan", type: "mega", specialId: 10034 } },
-        121: { mega: { name: "Mega Starmie", type: "mega", specialId: 10034 } },
-        127: { mega: { name: "Mega Pinsir", type: "mega", specialId: 10034 } },
-        130: { mega: { name: "Mega Gyarados", type: "mega", specialId: 10039 } },
-        142: { mega: { name: "Mega Aerodactyl", type: "mega", specialId: 10034 } },
-        149: { mega: { name: "Mega Dragonite", type: "mega", specialId: 10034 } },
-        150: { megaX: { name: "Mega Mewtwo X", type: "mega", specialId: 10036 }, megaY: { name: "Mega Mewtwo Y", type: "mega", specialId: 10037 } },
-        
-        // === JOHTO MEGA EVOLUTIONS ===
-        154: { mega: { name: "Mega Meganium", type: "mega", specialId: 10034 } },
-        160: { mega: { name: "Mega Feraligatr", type: "mega", specialId: 10034 } },
-        181: { mega: { name: "Mega Ampharos", type: "mega", specialId: 10041 } },
-        208: { mega: { name: "Mega Steelix", type: "mega", specialId: 10042 } },
-        212: { mega: { name: "Mega Scizor", type: "mega", specialId: 10043 } },
-        214: { mega: { name: "Mega Heracross", type: "mega", specialId: 10044 } },
-        227: { mega: { name: "Mega Skarmory", type: "mega", specialId: 10034 } },
-        229: { mega: { name: "Mega Houndoom", type: "mega", specialId: 10045 } },
-        248: { mega: { name: "Mega Tyranitar", type: "mega", specialId: 10046 } },
-        
-        // === HOENN MEGA EVOLUTIONS ===
-        254: { mega: { name: "Mega Sceptile", type: "mega", specialId: 10034 } },
-        257: { mega: { name: "Mega Blaziken", type: "mega", specialId: 10047 } },
-        260: { mega: { name: "Mega Swampert", type: "mega", specialId: 10034 } },
-        282: { mega: { name: "Mega Gardevoir", type: "mega", specialId: 10048 } },
-        302: { mega: { name: "Mega Sableye", type: "mega", specialId: 10049 } },
-        303: { mega: { name: "Mega Mawile", type: "mega", specialId: 10050 } },
-        306: { mega: { name: "Mega Aggron", type: "mega", specialId: 10051 } },
-        308: { mega: { name: "Mega Medicham", type: "mega", specialId: 10052 } },
-        310: { mega: { name: "Mega Manectric", type: "mega", specialId: 10053 } },
-        319: { mega: { name: "Mega Sharpedo", type: "mega", specialId: 10054 } },
-        323: { mega: { name: "Mega Camerupt", type: "mega", specialId: 10055 } },
-        334: { mega: { name: "Mega Altaria", type: "mega", specialId: 10056 } },
-        354: { mega: { name: "Mega Banette", type: "mega", specialId: 10057 } },
-        358: { mega: { name: "Mega Chimecho", type: "mega", specialId: 10034 } },
-        359: { mega: { name: "Mega Absol", type: "mega", specialId: 10058 } },
-        362: { mega: { name: "Mega Glalie", type: "mega", specialId: 10059 } },
-        373: { mega: { name: "Mega Salamence", type: "mega", specialId: 10060 } },
-        376: { mega: { name: "Mega Metagross", type: "mega", specialId: 10061 } },
-        380: { mega: { name: "Mega Latias", type: "mega", specialId: 10062 } },
-        381: { mega: { name: "Mega Latios", type: "mega", specialId: 10063 } },
-        382: { primal: { name: "Primal Kyogre", type: "primal", specialId: 10080 } },
-        383: { primal: { name: "Primal Groudon", type: "primal", specialId: 10081 } },
-        384: { mega: { name: "Mega Rayquaza", type: "mega", specialId: 10064 } },
-        
-        // === SINNOH MEGA EVOLUTIONS ===
-        398: { mega: { name: "Mega Staraptor", type: "mega", specialId: 10034 } },
-        428: { mega: { name: "Mega Lopunny", type: "mega", specialId: 10065 } },
-        445: { mega: { name: "Mega Garchomp", type: "mega", specialId: 10066 } },
-        448: { mega: { name: "Mega Lucario", type: "mega", specialId: 10067 } },
-        460: { mega: { name: "Mega Abomasnow", type: "mega", specialId: 10068 } },
-        475: { mega: { name: "Mega Gallade", type: "mega", specialId: 10069 } },
-        478: { mega: { name: "Mega Froslass", type: "mega", specialId: 10034 } },
-        485: { mega: { name: "Mega Heatran", type: "mega", specialId: 10034 } },
-        491: { mega: { name: "Mega Darkrai", type: "mega", specialId: 10034 } },
-        
-        // === UNOVA MEGA EVOLUTIONS ===
-        500: { mega: { name: "Mega Emboar", type: "mega", specialId: 10034 } },
-        530: { mega: { name: "Mega Excadrill", type: "mega", specialId: 10034 } },
-        531: { mega: { name: "Mega Audino", type: "mega", specialId: 10070 } },
-        545: { mega: { name: "Mega Scolipede", type: "mega", specialId: 10034 } },
-        560: { mega: { name: "Mega Scrafty", type: "mega", specialId: 10034 } },
-        604: { mega: { name: "Mega Eelektross", type: "mega", specialId: 10034 } },
-        609: { mega: { name: "Mega Chandelure", type: "mega", specialId: 10034 } },
-        623: { mega: { name: "Mega Golurk", type: "mega", specialId: 10034 } },
-        
-        // === KALOS MEGA EVOLUTIONS ===
-        652: { mega: { name: "Mega Chesnaught", type: "mega", specialId: 10034 } },
-        655: { mega: { name: "Mega Delphox", type: "mega", specialId: 10034 } },
-        658: { mega: { name: "Mega Greninja", type: "mega", specialId: 10034 } },
-        668: { mega: { name: "Mega Pyroar", type: "mega", specialId: 10034 } },
-        670: { mega: { name: "Mega Floette", type: "mega", specialId: 10034 } },
-        678: { mega: { name: "Mega Meowstic", type: "mega", specialId: 10034 } },
-        687: { mega: { name: "Mega Malamar", type: "mega", specialId: 10034 } },
-        689: { mega: { name: "Mega Barbaracle", type: "mega", specialId: 10034 } },
-        691: { mega: { name: "Mega Dragalge", type: "mega", specialId: 10034 } },
-        701: { mega: { name: "Mega Hawlucha", type: "mega", specialId: 10034 } },
-        718: { mega: { name: "Mega Zygarde", type: "mega", specialId: 10034 } },
-        719: { mega: { name: "Mega Diancie", type: "mega", specialId: 10071 } },
-        
-        // === ALOLA MEGA EVOLUTIONS ===
-        740: { mega: { name: "Mega Crabominable", type: "mega", specialId: 10034 } },
-        768: { mega: { name: "Mega Golisopod", type: "mega", specialId: 10034 } },
-        780: { mega: { name: "Mega Drampa", type: "mega", specialId: 10034 } },
-        801: { mega: { name: "Mega Magearna", type: "mega", specialId: 10034 } },
-        807: { mega: { name: "Mega Zeraora", type: "mega", specialId: 10034 } },
-        
-        // === GALAR MEGA EVOLUTIONS ===
-        870: { mega: { name: "Mega Falinks", type: "mega", specialId: 10034 } },
-        
-        // === PALDEA MEGA EVOLUTIONS ===
-        953: { mega: { name: "Mega Scovillain", type: "mega", specialId: 10034 } },
-        970: { mega: { name: "Mega Glimmora", type: "mega", specialId: 10034 } },
-        978: { mega: { name: "Mega Tatsugiri Curly Form", type: "mega", specialId: 10034 } },
-        998: { mega: { name: "Mega Baxcalibur", type: "mega", specialId: 10034 } },
-        
-        // === GIGANTAMAX (Gen 8) ===
-        25: { gmax: { name: "Gigantamax Pikachu", type: "gmax", specialId: 10199 } },
-        52: { gmax: { name: "Gigantamax Meowth", type: "gmax", specialId: 10200 } },
-        68: { gmax: { name: "Gigantamax Machamp", type: "gmax", specialId: 10201 } },
-        99: { gmax: { name: "Gigantamax Kingler", type: "gmax", specialId: 10198 } },
-        131: { gmax: { name: "Gigantamax Lapras", type: "gmax", specialId: 10203 } },
-        133: { gmax: { name: "Gigantamax Eevee", type: "gmax", specialId: 10195 } },
-        143: { gmax: { name: "Gigantamax Snorlax", type: "gmax", specialId: 10209 } },
-        809: { gmax: { name: "Gigantamax Melmetal", type: "gmax", specialId: 10213 } },
-        812: { gmax: { name: "Gigantamax Rillaboom", type: "gmax", specialId: 10218 } },
-        815: { gmax: { name: "Gigantamax Cinderace", type: "gmax", specialId: 10219 } },
-        818: { gmax: { name: "Gigantamax Inteleon", type: "gmax", specialId: 10220 } },
-        823: { gmax: { name: "Gigantamax Corviknight", type: "gmax", specialId: 10221 } },
-        
-        // === REGIONAL FORMS ===
-        27: { alolan: { name: "Alolan Sandslash", type: "regional", specialId: 10101 } },  // Sandslash Alola
-        28: { alolan: { name: "Alolan Sandslash", type: "regional", specialId: 10101 } },
-        37: { alolan: { name: "Alolan Vulpix", type: "regional", specialId: null } },
-        38: { alolan: { name: "Alolan Ninetales", type: "regional", specialId: null } },
-        50: { alolan: { name: "Alolan Diglett", type: "regional", specialId: null } },
-        51: { alolan: { name: "Alolan Dugtrio", type: "regional", specialId: null } },
-        52: { alolan: { name: "Alolan Meowth", type: "regional", specialId: null }, gmax: { name: "Gigantamax Meowth", type: "gmax", specialId: 10200 } },
-        53: { alolan: { name: "Alolan Persian", type: "regional", specialId: null } },
-        74: { alolan: { name: "Alolan Geodude", type: "regional", specialId: null } },
-        75: { alolan: { name: "Alolan Graveler", type: "regional", specialId: null } },
-        76: { alolan: { name: "Alolan Golem", type: "regional", specialId: null } },
-        88: { alolan: { name: "Alolan Grimer", type: "regional", specialId: null } },
-        89: { alolan: { name: "Alolan Muk", type: "regional", specialId: null } },
-        103: { alolan: { name: "Alolan Exeggutor", type: "regional", specialId: 10102 } },
-        105: { alolan: { name: "Alolan Marowak", type: "regional", specialId: 10101 } },
-        
-        // === GALARIAN FORMS ===
-        77: { galarian: { name: "Galarian Ponyta", type: "regional", specialId: 10103 } },
-        78: { galarian: { name: "Galarian Rapidash", type: "regional", specialId: 10104 } },
-        79: { galarian: { name: "Galarian Slowpoke", type: "regional", specialId: null } },
-        80: { galarian: { name: "Galarian Slowbro", type: "regional", specialId: null } },
-        83: { galarian: { name: "Galarian Farfetch'd", type: "regional", specialId: null } },
-        110: { galarian: { name: "Galarian Weezing", type: "regional", specialId: null } },
-        122: { galarian: { name: "Galarian Mr. Mime", type: "regional", specialId: null } },
-        144: { galarian: { name: "Galarian Articuno", type: "regional", specialId: null } },
-        145: { galarian: { name: "Galarian Zapdos", type: "regional", specialId: null } },
-        146: { galarian: { name: "Galarian Moltres", type: "regional", specialId: null } },
-        
-        // === HISUIAN FORMS ===
-        58: { hisuian: { name: "Hisuian Growlithe", type: "regional", specialId: 10106 } },
-        59: { hisuian: { name: "Hisuian Arcanine", type: "regional", specialId: 10107 } },
-        211: { hisuian: { name: "Hisuian Qwilfish", type: "regional", specialId: null } },
-        549: { hisuian: { name: "Hisuian Lilligant", type: "regional", specialId: null } },
-        571: { hisuian: { name: "Hisuian Zoroark", type: "regional", specialId: 10108 } },
-        628: { hisuian: { name: "Hisuian Braviary", type: "regional", specialId: null } },
-        713: { hisuian: { name: "Hisuian Avalugg", type: "regional", specialId: null } },
-        901: { hisuian: { name: "Hisuian Ursaluna", type: "regional", specialId: null } }
+        // Venusaur (3) - NUR Venusaur, nicht Bulbasaur!
+        3: { mega: "Mega Venusaur", gmax: "Gigantamax Venusaur" },
+        // Charizard (6)
+        6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard" },
+        // Blastoise (9)
+        9: { mega: "Mega Blastoise", gmax: "Gigantamax Blastoise" },
+        // Beedrill (15)
+        15: { mega: "Mega Beedrill" },
+        // Pidgeot (18)
+        18: { mega: "Mega Pidgeot" },
+        // Alakazam (65)
+        65: { mega: "Mega Alakazam" },
+        // Slowbro (80)
+        80: { mega: "Mega Slowbro" },
+        // Gengar (94)
+        94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar" },
+        // Kangaskhan (115)
+        115: { mega: "Mega Kangaskhan" },
+        // Pinsir (127)
+        127: { mega: "Mega Pinsir" },
+        // Gyarados (130)
+        130: { mega: "Mega Gyarados" },
+        // Aerodactyl (142)
+        142: { mega: "Mega Aerodactyl" },
+        // Mewtwo (150)
+        150: { megaX: "Mega Mewtwo X", megaY: "Mega Mewtwo Y" },
+        // Ampharos (181)
+        181: { mega: "Mega Ampharos" },
+        // Steelix (208)
+        208: { mega: "Mega Steelix" },
+        // Scizor (212)
+        212: { mega: "Mega Scizor" },
+        // Heracross (214)
+        214: { mega: "Mega Heracross" },
+        // Houndoom (229)
+        229: { mega: "Mega Houndoom" },
+        // Tyranitar (248)
+        248: { mega: "Mega Tyranitar" },
+        // Sceptile (254)
+        254: { mega: "Mega Sceptile" },
+        // Blaziken (257)
+        257: { mega: "Mega Blaziken" },
+        // Swampert (260)
+        260: { mega: "Mega Swampert" },
+        // Gardevoir (282)
+        282: { mega: "Mega Gardevoir" },
+        // Sableye (302)
+        302: { mega: "Mega Sableye" },
+        // Mawile (303)
+        303: { mega: "Mega Mawile" },
+        // Aggron (306)
+        306: { mega: "Mega Aggron" },
+        // Medicham (308)
+        308: { mega: "Mega Medicham" },
+        // Manectric (310)
+        310: { mega: "Mega Manectric" },
+        // Sharpedo (319)
+        319: { mega: "Mega Sharpedo" },
+        // Camerupt (323)
+        323: { mega: "Mega Camerupt" },
+        // Altaria (334)
+        334: { mega: "Mega Altaria" },
+        // Banette (354)
+        354: { mega: "Mega Banette" },
+        // Absol (359)
+        359: { mega: "Mega Absol" },
+        // Glalie (362)
+        362: { mega: "Mega Glalie" },
+        // Salamence (373)
+        373: { mega: "Mega Salamence" },
+        // Metagross (376)
+        376: { mega: "Mega Metagross" },
+        // Latias (380)
+        380: { mega: "Mega Latias" },
+        // Latios (381)
+        381: { mega: "Mega Latios" },
+        // Kyogre (382)
+        382: { primal: "Primal Kyogre" },
+        // Groudon (383)
+        383: { primal: "Primal Groudon" },
+        // Rayquaza (384)
+        384: { mega: "Mega Rayquaza" },
+        // Lopunny (428)
+        428: { mega: "Mega Lopunny" },
+        // Garchomp (445)
+        445: { mega: "Mega Garchomp" },
+        // Lucario (448)
+        448: { mega: "Mega Lucario" },
+        // Abomasnow (460)
+        460: { mega: "Mega Abomasnow" },
+        // Gallade (475)
+        475: { mega: "Mega Gallade" },
+        // Audino (531)
+        531: { mega: "Mega Audino" },
+        // Diancie (719)
+        719: { mega: "Mega Diancie" },
+        // Pikachu (25)
+        25: { gmax: "Gigantamax Pikachu" },
+        // Meowth (52)
+        52: { gmax: "Gigantamax Meowth" },
+        // Eevee (133)
+        133: { gmax: "Gigantamax Eevee" },
+        // Snorlax (143)
+        143: { gmax: "Gigantamax Snorlax" },
+        // Machamp (68)
+        68: { gmax: "Gigantamax Machamp" },
+        // Lapras (131)
+        131: { gmax: "Gigantamax Lapras" },
+        // Kingler (99)
+        99: { gmax: "Gigantamax Kingler" },
+        // Alolan Raichu (26)
+        26: { alolan: "Alolan Raichu" },
+        // Alolan Marowak (105)
+        105: { alolan: "Alolan Marowak" },
+        // Alolan Exeggutor (103)
+        103: { alolan: "Alolan Exeggutor" },
+        // Galarian Ponyta (77)
+        77: { galarian: "Galarian Ponyta" },
+        // Galarian Rapidash (78)
+        78: { galarian: "Galarian Rapidash" },
+        // Hisuian Growlithe (58)
+        58: { hisuian: "Hisuian Growlithe" },
+        // Hisuian Arcanine (59)
+        59: { hisuian: "Hisuian Arcanine" },
+        // Hisuian Zoroark (571)
+        571: { hisuian: "Hisuian Zoroark" }
     };
     
     function toggleDarkMode() {
@@ -378,18 +345,18 @@
     
     function navigatePrev() {
         let newId = currentPokemonId - 1;
-        if (newId < 1) newId = 1025;
-        window.location.href = currentPokemonId <= 721 ? `pokemon_detail.html?id=${newId}` : `pokemon_detail_api.html?id=${newId}`;
+        if (newId < 1) newId = 721;
+        window.location.href = `pokemon_detail.html?id=${newId}`;
     }
     
     function navigateNext() {
         let newId = currentPokemonId + 1;
-        if (newId > 1025) newId = 1;
-        window.location.href = currentPokemonId <= 721 ? `pokemon_detail.html?id=${newId}` : `pokemon_detail_api.html?id=${newId}`;
+        if (newId > 721) newId = 1;
+        window.location.href = `pokemon_detail.html?id=${newId}`;
     }
     
-    function goToSpecialForm(formKey, formName, specialId) {
-        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}&specialId=${specialId}`;
+    function goToSpecialForm(formKey, formName) {
+        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}`;
     }
     
     async function playCry() {
@@ -487,10 +454,7 @@
             else if (currentPokemonId <= 386) generation = 3;
             else if (currentPokemonId <= 493) generation = 4;
             else if (currentPokemonId <= 649) generation = 5;
-            else if (currentPokemonId <= 721) generation = 6;
-            else if (currentPokemonId <= 809) generation = 7;
-            else if (currentPokemonId <= 905) generation = 8;
-            else generation = 9;
+            else generation = 6;
             
             let dexEntry = "No Pokédex entry found.";
             try {
@@ -516,17 +480,18 @@
             };
             const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
             
+            // Spezialformen Buttons
             let specialButtonsHtml = '';
             const specials = specialFormsMap[currentPokemonId];
             if (specials) {
                 specialButtonsHtml = '<div class="special-forms-section"><div class="special-forms-title">⭐ Special Forms Available ⭐</div><div class="special-buttons">';
-                for (let [key, form] of Object.entries(specials)) {
+                for (let [key, name] of Object.entries(specials)) {
                     let btnClass = 'special-btn';
-                    if (form.type === 'mega') btnClass += ' mega';
-                    else if (form.type === 'gmax') btnClass += ' gmax';
-                    else if (form.type === 'primal') btnClass += ' primal';
+                    if (key === 'mega' || key === 'megaX' || key === 'megaY') btnClass += ' mega';
+                    else if (key === 'gmax') btnClass += ' gmax';
+                    else if (key === 'primal') btnClass += ' primal';
                     else btnClass += ' regional';
-                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${form.name}', '${form.specialId || ''}')">✨ ${form.name}</button>`;
+                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${name}')">✨ ${name}</button>`;
                 }
                 specialButtonsHtml += '</div></div>';
             }
