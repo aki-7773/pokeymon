@@ -194,208 +194,57 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== ALLE SPEZIALFORMEN FÜR GEN 1-6 MIT IHREN EIGENEN DATEN ==========
+    // ========== ALLE SPEZIALFORMEN FÜR GEN 1-6 ==========
     const specialFormsMap = {
-        // Charizard (6)
-        6: {
-            megaX: { name: "Mega Charizard X", type: "mega", specialId: 10034 },
-            megaY: { name: "Mega Charizard Y", type: "mega", specialId: 10035 },
-            gmax: { name: "Gigantamax Charizard", type: "gmax", specialId: 10196 }
-        },
-        // Mewtwo (150)
-        150: {
-            megaX: { name: "Mega Mewtwo X", type: "mega", specialId: 10036 },
-            megaY: { name: "Mega Mewtwo Y", type: "mega", specialId: 10037 }
-        },
-        // Gengar (94)
-        94: {
-            mega: { name: "Mega Gengar", type: "mega", specialId: 10038 },
-            gmax: { name: "Gigantamax Gengar", type: "gmax", specialId: 10202 }
-        },
-        // Venusaur (3)
-        3: {
-            gmax: { name: "Gigantamax Venusaur", type: "gmax", specialId: 10204 }
-        },
-        // Blastoise (9)
-        9: {
-            gmax: { name: "Gigantamax Blastoise", type: "gmax", specialId: 10205 }
-        },
-        // Pikachu (25)
-        25: {
-            gmax: { name: "Gigantamax Pikachu", type: "gmax", specialId: 10199 }
-        },
-        // Meowth (52)
-        52: {
-            gmax: { name: "Gigantamax Meowth", type: "gmax", specialId: 10200 }
-        },
-        // Machamp (68)
-        68: {
-            gmax: { name: "Gigantamax Machamp", type: "gmax", specialId: 10201 }
-        },
-        // Gyarados (130)
-        130: {
-            mega: { name: "Mega Gyarados", type: "mega", specialId: 10039 }
-        },
-        // Lapras (131)
-        131: {
-            gmax: { name: "Gigantamax Lapras", type: "gmax", specialId: 10203 }
-        },
-        // Eevee (133)
-        133: {
-            gmax: { name: "Gigantamax Eevee", type: "gmax", specialId: 10195 }
-        },
-        // Snorlax (143)
-        143: {
-            gmax: { name: "Gigantamax Snorlax", type: "gmax", specialId: 10209 }
-        },
-        // Ampharos (181)
-        181: {
-            mega: { name: "Mega Ampharos", type: "mega", specialId: 10041 }
-        },
-        // Steelix (208)
-        208: {
-            mega: { name: "Mega Steelix", type: "mega", specialId: 10042 }
-        },
-        // Scizor (212)
-        212: {
-            mega: { name: "Mega Scizor", type: "mega", specialId: 10043 }
-        },
-        // Heracross (214)
-        214: {
-            mega: { name: "Mega Heracross", type: "mega", specialId: 10044 }
-        },
-        // Houndoom (229)
-        229: {
-            mega: { name: "Mega Houndoom", type: "mega", specialId: 10045 }
-        },
-        // Tyranitar (248)
-        248: {
-            mega: { name: "Mega Tyranitar", type: "mega", specialId: 10046 }
-        },
-        // Blaziken (257)
-        257: {
-            mega: { name: "Mega Blaziken", type: "mega", specialId: 10047 }
-        },
-        // Gardevoir (282)
-        282: {
-            mega: { name: "Mega Gardevoir", type: "mega", specialId: 10048 }
-        },
-        // Sableye (302)
-        302: {
-            mega: { name: "Mega Sableye", type: "mega", specialId: 10049 }
-        },
-        // Mawile (303)
-        303: {
-            mega: { name: "Mega Mawile", type: "mega", specialId: 10050 }
-        },
-        // Aggron (306)
-        306: {
-            mega: { name: "Mega Aggron", type: "mega", specialId: 10051 }
-        },
-        // Medicham (308)
-        308: {
-            mega: { name: "Mega Medicham", type: "mega", specialId: 10052 }
-        },
-        // Manectric (310)
-        310: {
-            mega: { name: "Mega Manectric", type: "mega", specialId: 10053 }
-        },
-        // Sharpedo (319)
-        319: {
-            mega: { name: "Mega Sharpedo", type: "mega", specialId: 10054 }
-        },
-        // Camerupt (323)
-        323: {
-            mega: { name: "Mega Camerupt", type: "mega", specialId: 10055 }
-        },
-        // Altaria (334)
-        334: {
-            mega: { name: "Mega Altaria", type: "mega", specialId: 10056 }
-        },
-        // Banette (354)
-        354: {
-            mega: { name: "Mega Banette", type: "mega", specialId: 10057 }
-        },
-        // Absol (359)
-        359: {
-            mega: { name: "Mega Absol", type: "mega", specialId: 10058 }
-        },
-        // Glalie (362)
-        362: {
-            mega: { name: "Mega Glalie", type: "mega", specialId: 10059 }
-        },
-        // Salamence (373)
-        373: {
-            mega: { name: "Mega Salamence", type: "mega", specialId: 10060 }
-        },
-        // Metagross (376)
-        376: {
-            mega: { name: "Mega Metagross", type: "mega", specialId: 10061 }
-        },
-        // Latias (380)
-        380: {
-            mega: { name: "Mega Latias", type: "mega", specialId: 10062 }
-        },
-        // Latios (381)
-        381: {
-            mega: { name: "Mega Latios", type: "mega", specialId: 10063 }
-        },
-        // Rayquaza (384)
-        384: {
-            mega: { name: "Mega Rayquaza", type: "mega", specialId: 10064 }
-        },
-        // Lopunny (428)
-        428: {
-            mega: { name: "Mega Lopunny", type: "mega", specialId: 10065 }
-        },
-        // Garchomp (445)
-        445: {
-            mega: { name: "Mega Garchomp", type: "mega", specialId: 10066 }
-        },
-        // Lucario (448)
-        448: {
-            mega: { name: "Mega Lucario", type: "mega", specialId: 10067 }
-        },
-        // Abomasnow (460)
-        460: {
-            mega: { name: "Mega Abomasnow", type: "mega", specialId: 10068 }
-        },
-        // Gallade (475)
-        475: {
-            mega: { name: "Mega Gallade", type: "mega", specialId: 10069 }
-        },
-        // Audino (531)
-        531: {
-            mega: { name: "Mega Audino", type: "mega", specialId: 10070 }
-        },
-        // Diancie (719)
-        719: {
-            mega: { name: "Mega Diancie", type: "mega", specialId: 10071 }
-        },
-        // Primal Kyogre (382)
-        382: {
-            primal: { name: "Primal Kyogre", type: "primal", specialId: 10080 }
-        },
-        // Primal Groudon (383)
-        383: {
-            primal: { name: "Primal Groudon", type: "primal", specialId: 10081 }
-        },
-        // Alolan Raichu (26)
-        26: {
-            alolan: { name: "Alolan Raichu", type: "regional", specialId: 10100 }
-        },
-        // Alolan Marowak (105)
-        105: {
-            alolan: { name: "Alolan Marowak", type: "regional", specialId: 10101 }
-        },
-        // Alolan Exeggutor (103)
-        103: {
-            alolan: { name: "Alolan Exeggutor", type: "regional", specialId: 10102 }
-        },
-        // Kingler (99)
-        99: {
-            gmax: { name: "Gigantamax Kingler", type: "gmax", specialId: 10198 }
-        }
+        3: { gmax: { name: "Gigantamax Venusaur", type: "gmax", specialId: 10204 } },
+        6: { megaX: { name: "Mega Charizard X", type: "mega", specialId: 10034 }, megaY: { name: "Mega Charizard Y", type: "mega", specialId: 10035 }, gmax: { name: "Gigantamax Charizard", type: "gmax", specialId: 10196 } },
+        9: { gmax: { name: "Gigantamax Blastoise", type: "gmax", specialId: 10205 } },
+        25: { gmax: { name: "Gigantamax Pikachu", type: "gmax", specialId: 10199 } },
+        26: { alolan: { name: "Alolan Raichu", type: "regional", specialId: 10100 } },
+        52: { gmax: { name: "Gigantamax Meowth", type: "gmax", specialId: 10200 } },
+        68: { gmax: { name: "Gigantamax Machamp", type: "gmax", specialId: 10201 } },
+        94: { mega: { name: "Mega Gengar", type: "mega", specialId: 10038 }, gmax: { name: "Gigantamax Gengar", type: "gmax", specialId: 10202 } },
+        99: { gmax: { name: "Gigantamax Kingler", type: "gmax", specialId: 10198 } },
+        103: { alolan: { name: "Alolan Exeggutor", type: "regional", specialId: 10102 } },
+        105: { alolan: { name: "Alolan Marowak", type: "regional", specialId: 10101 } },
+        130: { mega: { name: "Mega Gyarados", type: "mega", specialId: 10039 } },
+        131: { gmax: { name: "Gigantamax Lapras", type: "gmax", specialId: 10203 } },
+        133: { gmax: { name: "Gigantamax Eevee", type: "gmax", specialId: 10195 } },
+        143: { gmax: { name: "Gigantamax Snorlax", type: "gmax", specialId: 10209 } },
+        150: { megaX: { name: "Mega Mewtwo X", type: "mega", specialId: 10036 }, megaY: { name: "Mega Mewtwo Y", type: "mega", specialId: 10037 } },
+        181: { mega: { name: "Mega Ampharos", type: "mega", specialId: 10041 } },
+        208: { mega: { name: "Mega Steelix", type: "mega", specialId: 10042 } },
+        212: { mega: { name: "Mega Scizor", type: "mega", specialId: 10043 } },
+        214: { mega: { name: "Mega Heracross", type: "mega", specialId: 10044 } },
+        229: { mega: { name: "Mega Houndoom", type: "mega", specialId: 10045 } },
+        248: { mega: { name: "Mega Tyranitar", type: "mega", specialId: 10046 } },
+        257: { mega: { name: "Mega Blaziken", type: "mega", specialId: 10047 } },
+        282: { mega: { name: "Mega Gardevoir", type: "mega", specialId: 10048 } },
+        302: { mega: { name: "Mega Sableye", type: "mega", specialId: 10049 } },
+        303: { mega: { name: "Mega Mawile", type: "mega", specialId: 10050 } },
+        306: { mega: { name: "Mega Aggron", type: "mega", specialId: 10051 } },
+        308: { mega: { name: "Mega Medicham", type: "mega", specialId: 10052 } },
+        310: { mega: { name: "Mega Manectric", type: "mega", specialId: 10053 } },
+        319: { mega: { name: "Mega Sharpedo", type: "mega", specialId: 10054 } },
+        323: { mega: { name: "Mega Camerupt", type: "mega", specialId: 10055 } },
+        334: { mega: { name: "Mega Altaria", type: "mega", specialId: 10056 } },
+        354: { mega: { name: "Mega Banette", type: "mega", specialId: 10057 } },
+        359: { mega: { name: "Mega Absol", type: "mega", specialId: 10058 } },
+        362: { mega: { name: "Mega Glalie", type: "mega", specialId: 10059 } },
+        373: { mega: { name: "Mega Salamence", type: "mega", specialId: 10060 } },
+        376: { mega: { name: "Mega Metagross", type: "mega", specialId: 10061 } },
+        380: { mega: { name: "Mega Latias", type: "mega", specialId: 10062 } },
+        381: { mega: { name: "Mega Latios", type: "mega", specialId: 10063 } },
+        382: { primal: { name: "Primal Kyogre", type: "primal", specialId: 10080 } },
+        383: { primal: { name: "Primal Groudon", type: "primal", specialId: 10081 } },
+        384: { mega: { name: "Mega Rayquaza", type: "mega", specialId: 10064 } },
+        428: { mega: { name: "Mega Lopunny", type: "mega", specialId: 10065 } },
+        445: { mega: { name: "Mega Garchomp", type: "mega", specialId: 10066 } },
+        448: { mega: { name: "Mega Lucario", type: "mega", specialId: 10067 } },
+        460: { mega: { name: "Mega Abomasnow", type: "mega", specialId: 10068 } },
+        475: { mega: { name: "Mega Gallade", type: "mega", specialId: 10069 } },
+        531: { mega: { name: "Mega Audino", type: "mega", specialId: 10070 } },
+        719: { mega: { name: "Mega Diancie", type: "mega", specialId: 10071 } }
     };
     
     function toggleDarkMode() {
@@ -429,7 +278,7 @@
     }
     
     function goToSpecialForm(formKey, formName, specialId) {
-        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}&specialId=${specialId || ''}`;
+        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}&specialId=${specialId}`;
     }
     
     async function playCry() {
@@ -553,20 +402,17 @@
             };
             const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
             
-            // Spezialformen Buttons
             let specialButtonsHtml = '';
             const specials = specialFormsMap[currentPokemonId];
             if (specials) {
                 specialButtonsHtml = '<div class="special-forms-section"><div class="special-forms-title">⭐ Special Forms Available ⭐</div><div class="special-buttons">';
-                
                 for (let [key, form] of Object.entries(specials)) {
                     let btnClass = 'special-btn';
                     if (form.type === 'mega') btnClass += ' mega';
                     else if (form.type === 'gmax') btnClass += ' gmax';
                     else if (form.type === 'primal') btnClass += ' primal';
                     else btnClass += ' regional';
-                    
-                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${form.name}', '${form.specialId || ''}')">✨ ${form.name}</button>`;
+                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${form.name}', '${form.specialId}')">✨ ${form.name}</button>`;
                 }
                 specialButtonsHtml += '</div></div>';
             }
