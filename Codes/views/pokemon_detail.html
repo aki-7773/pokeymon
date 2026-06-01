@@ -194,21 +194,21 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== ALLE SPEZIALFORMEN für Gen 1-6 ==========
+    // ========== ALLE SPEZIALFORMEN für Gen 1-6 mit korrekten Bild-URLs ==========
     const specialFormsMap = {
-        // Gigantamax
-        3: { gmax: "Gigantamax Venusaur" },
-        6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard" },
-        9: { gmax: "Gigantamax Blastoise" },
-        25: { gmax: "Gigantamax Pikachu" },
-        52: { gmax: "Gigantamax Meowth" },
-        68: { gmax: "Gigantamax Machamp" },
-        94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar" },
-        99: { gmax: "Gigantamax Kingler" },
+        // Gigantamax (Gen 8)
+        3: { gmax: "Gigantamax Venusaur", gmaxId: 10204 },
+        6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard", gmaxId: 10196 },
+        9: { gmax: "Gigantamax Blastoise", gmaxId: 10205 },
+        25: { gmax: "Gigantamax Pikachu", gmaxId: 10199 },
+        52: { gmax: "Gigantamax Meowth", gmaxId: 10200 },
+        68: { gmax: "Gigantamax Machamp", gmaxId: 10201 },
+        94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar", gmaxId: 10202 },
+        99: { gmax: "Gigantamax Kingler", gmaxId: 10198 },
         130: { mega: "Mega Gyarados" },
-        131: { gmax: "Gigantamax Lapras" },
-        133: { gmax: "Gigantamax Eevee" },
-        143: { gmax: "Gigantamax Snorlax" },
+        131: { gmax: "Gigantamax Lapras", gmaxId: 10203 },
+        133: { gmax: "Gigantamax Eevee", gmaxId: 10195 },
+        143: { gmax: "Gigantamax Snorlax", gmaxId: 10209 },
         // Mega Evolutions
         150: { megaX: "Mega Mewtwo X", megaY: "Mega Mewtwo Y" },
         181: { mega: "Mega Ampharos" },
@@ -245,26 +245,10 @@
         // Primal Forms
         382: { primal: "Primal Kyogre" },
         383: { primal: "Primal Groudon" },
-        // Regional Forms (Gen 1-6 haben Alola Formen)
+        // Alolan Forms (Regional)
         26: { alolan: "Alolan Raichu" },
         105: { alolan: "Alolan Marowak" },
         103: { alolan: "Alolan Exeggutor" }
-    };
-    
-    // Bekannte Pokémon-IDs für Evolutionen
-    const evolutionIdMap = {
-        "bulbasaur": 1, "ivysaur": 2, "venusaur": 3,
-        "charmander": 4, "charmeleon": 5, "charizard": 6,
-        "squirtle": 7, "wartortle": 8, "blastoise": 9,
-        "caterpie": 10, "metapod": 11, "butterfree": 12,
-        "weedle": 13, "kakuna": 14, "beedrill": 15,
-        "pidgey": 16, "pidgeotto": 17, "pidgeot": 18,
-        "rattata": 19, "raticate": 20,
-        "spearow": 21, "fearow": 22,
-        "ekans": 23, "arbok": 24,
-        "pichu": 172, "pikachu": 25, "raichu": 26,
-        "cleffa": 173, "clefairy": 35, "clefable": 36,
-        "igglybuff": 174, "jigglypuff": 39, "wigglytuff": 40
     };
     
     function toggleDarkMode() {
@@ -297,8 +281,8 @@
         window.location.href = `pokemon_detail.html?id=${newId}`;
     }
     
-    function goToSpecialForm(formKey, formName) {
-        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}`;
+    function goToSpecialForm(formKey, formName, specialId) {
+        window.location.href = `special_detail.html?pokemon=${currentPokemonId}&form=${formKey}&name=${encodeURIComponent(formName)}&specialId=${specialId || ''}`;
     }
     
     async function playCry() {
@@ -313,7 +297,7 @@
         } catch(e) { console.log('Cry playback failed'); }
     }
     
-    async function loadEvolutionTree(pokemonId, currentPokemonName) {
+    async function loadEvolutionTree(pokemonId) {
         const evolutionContainer = document.getElementById('evolutionTree');
         if (!evolutionContainer) return;
         evolutionContainer.innerHTML = '<div class="loader-small"></div><p style="text-align:center;">Loading evolution data...</p>';
@@ -337,7 +321,6 @@
             collectNames(current, evolutionNames);
             evolutionNames = [...new Set(evolutionNames)];
             
-            // Hole Details für jedes Evolutions-Pokémon
             const evolutionDetails = [];
             for (const name of evolutionNames) {
                 try {
@@ -348,17 +331,8 @@
                             id: pokeData.id,
                             name: name.charAt(0).toUpperCase() + name.slice(1)
                         });
-                    } else {
-                        // Fallback: Versuche ID aus der Map zu bekommen
-                        let fallbackId = evolutionIdMap[name] || (evolutionDetails.length + 1);
-                        evolutionDetails.push({
-                            id: fallbackId,
-                            name: name.charAt(0).toUpperCase() + name.slice(1)
-                        });
                     }
-                } catch(err) {
-                    console.log(`Could not fetch ${name}`);
-                }
+                } catch(err) {}
             }
             
             if (evolutionDetails.length === 1) {
@@ -369,12 +343,13 @@
             let html = '<div class="evolution-title">🌳 Evolution Tree</div><div class="evolution-chain">';
             for (let i = 0; i < evolutionDetails.length; i++) {
                 const evo = evolutionDetails[i];
+                const detailPage = evo.id <= 721 ? 'pokemon_detail.html' : 'pokemon_detail_api.html';
                 html += `
                     <div class="evolution-node">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png" 
-                             onclick="location.href='pokemon_detail.html?id=${evo.id}'"
+                             onclick="location.href='${detailPage}?id=${evo.id}'"
                              onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evo.id}.png'">
-                        <a href="pokemon_detail.html?id=${evo.id}">${evo.name}</a>
+                        <a href="${detailPage}?id=${evo.id}">${evo.name}</a>
                     </div>
                 `;
                 if (i < evolutionDetails.length - 1) html += '<div class="evolution-arrow">→</div>';
@@ -383,7 +358,6 @@
             evolutionContainer.innerHTML = html;
             
         } catch(error) {
-            console.error('Evolution error:', error);
             evolutionContainer.innerHTML = '<div class="evolution-title">🌳 Evolution Tree</div><p>Evolution data not available</p>';
         }
     }
@@ -438,14 +412,24 @@
             if (specials) {
                 specialButtonsHtml = '<div class="special-forms-section"><div class="special-forms-title">⭐ Special Forms Available ⭐</div><div class="special-buttons">';
                 
-                for (let [key, name] of Object.entries(specials)) {
+                for (let [key, value] of Object.entries(specials)) {
                     let btnClass = 'special-btn';
+                    let formName = value;
+                    let specialId = null;
+                    
+                    if (typeof value === 'object') {
+                        formName = value.name || key;
+                        specialId = value.id || null;
+                    } else {
+                        formName = value;
+                    }
+                    
                     if (key.includes('mega')) btnClass += ' mega';
                     else if (key === 'gmax') btnClass += ' gmax';
                     else if (key === 'primal') btnClass += ' primal';
                     else btnClass += ' regional';
                     
-                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${name}')">✨ ${name}</button>`;
+                    specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${formName}', '${specialId || ''}')">✨ ${formName}</button>`;
                 }
                 specialButtonsHtml += '</div></div>';
             }
@@ -514,7 +498,7 @@
                 </div>
             `;
             
-            await loadEvolutionTree(currentPokemonId, pokemonName);
+            await loadEvolutionTree(currentPokemonId);
             
         } catch(error) {
             console.error('Error:', error);
