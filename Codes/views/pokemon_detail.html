@@ -194,75 +194,95 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== SPEZIALFORMEN MAP - NUR EVOLUTIONS, NICHT DIE BASIS-FORMEN ==========
+    // ========== SPEZIALFORMEN für Gen 1-6 ==========
     const specialFormsMap = {
-        // NUR die entwickelten Pokémon, NICHT Bulbasaur (1), Charmander (4), Squirtle (7) etc.
-        3: { mega: "Mega Venusaur", gmax: "Gigantamax Venusaur" },        // Venusaur
-        6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard" },  // Charizard
-        9: { mega: "Mega Blastoise", gmax: "Gigantamax Blastoise" },      // Blastoise
-        15: { mega: "Mega Beedrill" },                                     // Beedrill
-        18: { mega: "Mega Pidgeot" },                                      // Pidgeot
-        65: { mega: "Mega Alakazam" },                                     // Alakazam
-        80: { mega: "Mega Slowbro" },                                      // Slowbro
-        94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar" },           // Gengar
-        115: { mega: "Mega Kangaskhan" },                                  // Kangaskhan
-        127: { mega: "Mega Pinsir" },                                      // Pinsir
-        130: { mega: "Mega Gyarados" },                                    // Gyarados
-        142: { mega: "Mega Aerodactyl" },                                  // Aerodactyl
-        150: { megaX: "Mega Mewtwo X", megaY: "Mega Mewtwo Y" },           // Mewtwo
-        181: { mega: "Mega Ampharos" },                                    // Ampharos
-        208: { mega: "Mega Steelix" },                                     // Steelix
-        212: { mega: "Mega Scizor" },                                      // Scizor
-        214: { mega: "Mega Heracross" },                                   // Heracross
-        229: { mega: "Mega Houndoom" },                                    // Houndoom
-        248: { mega: "Mega Tyranitar" },                                   // Tyranitar
-        254: { mega: "Mega Sceptile" },                                    // Sceptile
-        257: { mega: "Mega Blaziken" },                                    // Blaziken
-        260: { mega: "Mega Swampert" },                                    // Swampert
-        282: { mega: "Mega Gardevoir" },                                   // Gardevoir
-        302: { mega: "Mega Sableye" },                                     // Sableye
-        303: { mega: "Mega Mawile" },                                      // Mawile
-        306: { mega: "Mega Aggron" },                                      // Aggron
-        308: { mega: "Mega Medicham" },                                    // Medicham
-        310: { mega: "Mega Manectric" },                                   // Manectric
-        319: { mega: "Mega Sharpedo" },                                    // Sharpedo
-        323: { mega: "Mega Camerupt" },                                    // Camerupt
-        334: { mega: "Mega Altaria" },                                     // Altaria
-        354: { mega: "Mega Banette" },                                     // Banette
-        359: { mega: "Mega Absol" },                                       // Absol
-        362: { mega: "Mega Glalie" },                                      // Glalie
-        373: { mega: "Mega Salamence" },                                   // Salamence
-        376: { mega: "Mega Metagross" },                                   // Metagross
-        380: { mega: "Mega Latias" },                                      // Latias
-        381: { mega: "Mega Latios" },                                      // Latios
-        382: { primal: "Primal Kyogre" },                                  // Kyogre
-        383: { primal: "Primal Groudon" },                                 // Groudon
-        384: { mega: "Mega Rayquaza" },                                    // Rayquaza
-        428: { mega: "Mega Lopunny" },                                     // Lopunny
-        445: { mega: "Mega Garchomp" },                                    // Garchomp
-        448: { mega: "Mega Lucario" },                                     // Lucario
-        460: { mega: "Mega Abomasnow" },                                   // Abomasnow
-        475: { mega: "Mega Gallade" },                                     // Gallade
-        531: { mega: "Mega Audino" },                                      // Audino
-        719: { mega: "Mega Diancie" },                                     // Diancie
-        // Gigantamax (Gen 8)
-        25: { gmax: "Gigantamax Pikachu" },                                // Pikachu
-        52: { gmax: "Gigantamax Meowth" },                                 // Meowth
-        68: { gmax: "Gigantamax Machamp" },                                // Machamp
-        99: { gmax: "Gigantamax Kingler" },                                // Kingler
-        131: { gmax: "Gigantamax Lapras" },                                // Lapras
-        133: { gmax: "Gigantamax Eevee" },                                 // Eevee
-        143: { gmax: "Gigantamax Snorlax" },                               // Snorlax
-        // Regionale Formen
-        26: { alolan: "Alolan Raichu" },                                   // Raichu
-        28: { alolan: "Alolan Sandslash" },                                // Sandslash
-        103: { alolan: "Alolan Exeggutor" },                               // Exeggutor
-        105: { alolan: "Alolan Marowak" },                                 // Marowak
-        77: { galarian: "Galarian Ponyta" },                               // Ponyta
-        78: { galarian: "Galarian Rapidash" },                             // Rapidash
-        58: { hisuian: "Hisuian Growlithe" },                              // Growlithe
-        59: { hisuian: "Hisuian Arcanine" },                               // Arcanine
-        571: { hisuian: "Hisuian Zoroark" }                                // Zoroark
+        // Kanto Mega Evolutions
+        3: { mega: "Mega Venusaur", gmax: "Gigantamax Venusaur" },
+        6: { megaX: "Mega Charizard X", megaY: "Mega Charizard Y", gmax: "Gigantamax Charizard" },
+        9: { mega: "Mega Blastoise", gmax: "Gigantamax Blastoise" },
+        15: { mega: "Mega Beedrill" },
+        18: { mega: "Mega Pidgeot" },
+        65: { mega: "Mega Alakazam" },
+        80: { mega: "Mega Slowbro" },
+        94: { mega: "Mega Gengar", gmax: "Gigantamax Gengar" },
+        115: { mega: "Mega Kangaskhan" },
+        127: { mega: "Mega Pinsir" },
+        130: { mega: "Mega Gyarados" },
+        142: { mega: "Mega Aerodactyl" },
+        150: { megaX: "Mega Mewtwo X", megaY: "Mega Mewtwo Y" },
+        
+        // Johto Mega Evolutions
+        181: { mega: "Mega Ampharos" },
+        208: { mega: "Mega Steelix" },
+        212: { mega: "Mega Scizor" },
+        214: { mega: "Mega Heracross" },
+        229: { mega: "Mega Houndoom" },
+        248: { mega: "Mega Tyranitar" },
+        
+        // Hoenn Mega Evolutions
+        254: { mega: "Mega Sceptile" },
+        257: { mega: "Mega Blaziken" },
+        260: { mega: "Mega Swampert" },
+        282: { mega: "Mega Gardevoir" },
+        302: { mega: "Mega Sableye" },
+        303: { mega: "Mega Mawile" },
+        306: { mega: "Mega Aggron" },
+        308: { mega: "Mega Medicham" },
+        310: { mega: "Mega Manectric" },
+        319: { mega: "Mega Sharpedo" },
+        323: { mega: "Mega Camerupt" },
+        334: { mega: "Mega Altaria" },
+        354: { mega: "Mega Banette" },
+        359: { mega: "Mega Absol" },
+        362: { mega: "Mega Glalie" },
+        373: { mega: "Mega Salamence" },
+        376: { mega: "Mega Metagross" },
+        380: { mega: "Mega Latias" },
+        381: { mega: "Mega Latios" },
+        382: { primal: "Primal Kyogre" },
+        383: { primal: "Primal Groudon" },
+        384: { mega: "Mega Rayquaza" },
+        
+        // Sinnoh Mega Evolutions
+        428: { mega: "Mega Lopunny" },
+        445: { mega: "Mega Garchomp" },
+        448: { mega: "Mega Lucario" },
+        460: { mega: "Mega Abomasnow" },
+        475: { mega: "Mega Gallade" },
+        
+        // Unova Mega Evolutions
+        531: { mega: "Mega Audino" },
+        
+        // Kalos Mega Evolutions
+        719: { mega: "Mega Diancie" },
+        
+        // Gigantamax (Gen 8) - aber nur für Gen 1-6 Pokémon
+        12: { gmax: "Gigantamax Butterfree" },
+        25: { gmax: "Gigantamax Pikachu" },
+        52: { gmax: "Gigantamax Meowth" },
+        68: { gmax: "Gigantamax Machamp" },
+        99: { gmax: "Gigantamax Kingler" },
+        131: { gmax: "Gigantamax Lapras" },
+        133: { gmax: "Gigantamax Eevee" },
+        143: { gmax: "Gigantamax Snorlax" },
+        
+        // Alolan Forms (Gen 7 - aber für Gen 1-6 Pokémon)
+        26: { alolan: "Alolan Raichu" },
+        28: { alolan: "Alolan Sandslash" },
+        38: { alolan: "Alolan Ninetales" },
+        89: { alolan: "Alolan Muk" },
+        103: { alolan: "Alolan Exeggutor" },
+        105: { alolan: "Alolan Marowak" },
+        
+        // Galarian Forms (Gen 8)
+        77: { galarian: "Galarian Ponyta" },
+        78: { galarian: "Galarian Rapidash" },
+        110: { galarian: "Galarian Weezing" },
+        
+        // Hisuian Forms
+        58: { hisuian: "Hisuian Growlithe" },
+        59: { hisuian: "Hisuian Arcanine" },
+        571: { hisuian: "Hisuian Zoroark" }
     };
     
     function toggleDarkMode() {
@@ -420,7 +440,6 @@
             };
             const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
             
-            // Spezialformen Buttons
             let specialButtonsHtml = '';
             const specials = specialFormsMap[currentPokemonId];
             if (specials) {
@@ -495,7 +514,7 @@
                 </div>
                 
                 <div style="text-align: center;">
-                    <a href="pokemon_list.html" class="back-button">← Back to Pokédex</a>
+                    <a href="pokemon_list.html" class="back-button">← Back to Pokédex (Gen 1-6)</a>
                     <a href="start.html" class="back-button" style="margin-left: 15px;">🏠 Home</a>
                 </div>
             `;
