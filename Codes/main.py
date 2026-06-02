@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 import hashlib
 
+
 # ============================================================
 # KONFIGURATION
 # ============================================================
@@ -119,6 +120,21 @@ def get_user_session():
 @route("/")
 def index():
     return static_file("start.html", root="./views")
+
+# ============================================================
+# FAVICON & STATIC FILES, ETC
+# ============================================================
+@route('/favicon.ico')
+def favicon():
+    # Versuche zuerst im static-Ordner, dann im Hauptverzeichnis
+    if os.path.exists("./static/favicon.ico"):
+        return static_file('favicon.ico', root='./static')
+    elif os.path.exists("./favicon.ico"):
+        return static_file('favicon.ico', root='./')
+    else:
+        # Fallback: Leere Antwort, aber kein Fehler mehr
+        from bottle import HTTPResponse
+        return HTTPResponse(status=204)  # No Content
 
 @route("/views/<filename>")
 def serve_views(filename):
