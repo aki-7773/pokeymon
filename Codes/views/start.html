@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Pokémon Website</title>
     <style>
+        /* ========== DEINE BESTEHENDEN STYLES (bleiben alle erhalten) ========== */
         * {
             margin: 0;
             padding: 0;
@@ -572,81 +573,102 @@
             margin: 30px 0;
         }
         
-        /* ========== FOOTER ========== */
-        .footer-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 30px;
-            padding: 20px 25px;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
+        .info-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
         
-        body.dark-mode .footer-wrapper {
-            background: rgba(0,0,0,0.3);
-            border-color: rgba(255,255,255,0.1);
-        }
-        
-        .footer-credits {
-            text-align: left;
-        }
-        
-        .footer-credits p {
-            color: rgba(255,255,255,0.9);
-            font-size: 12px;
-            margin: 3px 0;
-        }
-        
-        .footer-credits a {
-            color: #ffcb05;
-            text-decoration: none;
-        }
-        
-        .footer-credits a:hover {
-            text-decoration: underline;
-        }
-        
-        .footer-about {
-            text-align: right;
-        }
-        
-        .footer-about a {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.2);
-            padding: 8px 20px;
-            border-radius: 40px;
+        body.dark-mode .info-card {
+            background: rgba(0,0,0,0.8);
             color: white;
-            text-decoration: none;
+        }
+        
+        .info-card h3 {
+            color: #2a75bb;
+            margin-bottom: 15px;
+        }
+        
+        body.dark-mode .info-card h3 {
+            color: #ffcb05;
+        }
+        
+        /* Team Mitglieder mit Easter Egg */
+        .team-members {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .team-member {
+            background: rgba(0,0,0,0.05);
+            padding: 8px 18px;
+            border-radius: 30px;
+            transition: all 0.2s ease;
+        }
+        
+        body.dark-mode .team-member {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        /* Easter Egg Klick-Effekt */
+        .easter-egg {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .easter-egg:hover {
+            transform: scale(1.05);
+            background: rgba(255,203,5,0.3);
+        }
+        
+        /* Data Source Bereich - neu gestaltet */
+        .data-source {
+            margin: 20px 0 15px 0;
+            padding: 15px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        body.dark-mode .data-source {
+            background: rgba(255,255,255,0.08);
+        }
+        
+        .data-source-icon {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .data-source-title {
             font-weight: bold;
-            transition: all 0.3s;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .data-source-link {
             font-size: 14px;
         }
         
-        .footer-about a:hover {
-            background: #ffcb05;
+        .data-source-link a {
             color: #2a75bb;
-            transform: translateY(-2px);
+            text-decoration: none;
+            font-weight: bold;
         }
         
-        .about-icon {
-            font-size: 18px;
+        body.dark-mode .data-source-link a {
+            color: #ffcb05;
         }
         
-        @media (max-width: 768px) {
-            .footer-wrapper {
-                flex-direction: column;
-                text-align: center;
-            }
-            .footer-credits, .footer-about {
-                text-align: center;
-            }
+        .data-source-desc {
+            font-size: 11px;
+            color: #888;
+            margin-top: 5px;
         }
         
         /* Animationen */
@@ -810,8 +832,7 @@
     
     <!-- Main Navigation -->
     <div class="main-nav">
-        <a href="pokemon_list.html" class="nav-btn">📋 Gen 1-6 Pokédex</a>
-        <a href="pokemon_list_gen7plus.html" class="nav-btn">🌟 Gen 7-9 Pokédex</a>
+        <a href="pokemon_list.html" class="nav-btn">📋 Normal Pokédex</a>
         <a href="regions_list.html" class="nav-btn">🗺️ Regions</a>
         <a href="team.html" class="nav-btn">⭐ My Team</a>
         <a href="compare.html" class="nav-btn">📊 Simple Compare</a>
@@ -896,18 +917,34 @@
         </div>
     </div>
     
-    <!-- FOOTER -->
-    <div class="footer-wrapper">
-        <div class="footer-credits">
-            <p>📡 Data provided by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a></p>
-            <p>© 1995-2024 Nintendo, Game Freak, and Creatures Inc.</p>
+    <!-- About This App Card (angepasst mit Easter Egg und neuem Data Source Bereich) -->
+    <div class="info-card">
+        <h3>📱 About This App</h3>
+        <p>This Pokémon Database was created as a comprehensive encyclopedia for all Pokémon fans.</p>
+        
+        <!-- Team Mitglieder mit Easter Egg -->
+        <div class="team-members">
+            <span class="team-member easter-egg" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')">
+                👨‍💻 Reinaldo
+            </span>
+            <span class="team-member">👨‍💻 Petr</span>
         </div>
-        <div class="footer-about">
-            <a href="credits.html">
-                <span class="about-icon">📱</span>
-                <span>About & Credits</span>
-            </a>
+        
+        <!-- Data Source Bereich - neu gestaltet -->
+        <div class="data-source">
+            <div class="data-source-icon">📡</div>
+            <div class="data-source-title">Data Source</div>
+            <div class="data-source-link">
+                <a href="https://pokeapi.co/" target="_blank">PokeAPI</a>
+                <span> – The RESTful Pokémon API</span>
+            </div>
+            <div class="data-source-desc">Providing real-time data for all Pokémon, moves, abilities and more.</div>
         </div>
+        
+        <p style="margin-top: 15px; font-size: 12px;">
+            Pokémon © 1995-2024 Nintendo, Game Freak, and Creatures Inc.<br>
+            Made by Reinaldo and Petr
+        </p>
     </div>
 </div>
 
@@ -1054,7 +1091,7 @@
         }
     }
     
-    // Search Function
+    // ========== SUCH-FIX: NUR NORMALE POKÉMON (KEINE SPECIALS) ==========
     let allPokemonNames = [];
 
     async function loadPokemonNames() {
