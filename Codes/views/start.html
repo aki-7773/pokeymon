@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Pokémon Website</title>
     <style>
-        /* ========== DEINE BESTEHENDEN STYLES (bleiben alle erhalten) ========== */
+        /* ========== DEINE BESTEHENDEN STYLES ========== */
         * {
             margin: 0;
             padding: 0;
@@ -596,7 +596,6 @@
             color: #ffcb05;
         }
         
-        /* Team Mitglieder mit Easter Egg */
         .team-members {
             display: flex;
             justify-content: center;
@@ -609,66 +608,10 @@
             background: rgba(0,0,0,0.05);
             padding: 8px 18px;
             border-radius: 30px;
-            transition: all 0.2s ease;
         }
         
         body.dark-mode .team-member {
             background: rgba(255,255,255,0.1);
-        }
-        
-        /* Easter Egg Klick-Effekt */
-        .easter-egg {
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        
-        .easter-egg:hover {
-            transform: scale(1.05);
-            background: rgba(255,203,5,0.3);
-        }
-        
-        /* Data Source Bereich - neu gestaltet */
-        .data-source {
-            margin: 20px 0 15px 0;
-            padding: 15px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 20px;
-            text-align: center;
-        }
-        
-        body.dark-mode .data-source {
-            background: rgba(255,255,255,0.08);
-        }
-        
-        .data-source-icon {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-        
-        .data-source-title {
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-        
-        .data-source-link {
-            font-size: 14px;
-        }
-        
-        .data-source-link a {
-            color: #2a75bb;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        body.dark-mode .data-source-link a {
-            color: #ffcb05;
-        }
-        
-        .data-source-desc {
-            font-size: 11px;
-            color: #888;
-            margin-top: 5px;
         }
         
         /* Animationen */
@@ -917,31 +860,16 @@
         </div>
     </div>
     
-    <!-- About This App Card (angepasst mit Easter Egg und neuem Data Source Bereich) -->
+    <!-- About This App Card -->
     <div class="info-card">
         <h3>📱 About This App</h3>
         <p>This Pokémon Database was created as a comprehensive encyclopedia for all Pokémon fans.</p>
-        
-        <!-- Team Mitglieder mit Easter Egg -->
         <div class="team-members">
-            <span class="team-member easter-egg" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')">
-                👨‍💻 Reinaldo
-            </span>
+            <span class="team-member">👨‍💻 Reinaldo</span>
             <span class="team-member">👨‍💻 Petr</span>
         </div>
-        
-        <!-- Data Source Bereich - neu gestaltet -->
-        <div class="data-source">
-            <div class="data-source-icon">📡</div>
-            <div class="data-source-title">Data Source</div>
-            <div class="data-source-link">
-                <a href="https://pokeapi.co/" target="_blank">PokeAPI</a>
-                <span> – The RESTful Pokémon API</span>
-            </div>
-            <div class="data-source-desc">Providing real-time data for all Pokémon, moves, abilities and more.</div>
-        </div>
-        
         <p style="margin-top: 15px; font-size: 12px;">
+            Data provided by <a href="https://pokeapi.co/" target="_blank">PokeAPI</a><br>
             Pokémon © 1995-2024 Nintendo, Game Freak, and Creatures Inc.<br>
             Made by Reinaldo and Petr
         </p>
