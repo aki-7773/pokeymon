@@ -136,6 +136,17 @@
             border-color: rgba(255,203,5,0.2);
         }
         
+        /* Easter Egg Styling (nur für Reinaldo) */
+        .easter-egg {
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        
+        .easter-egg:hover {
+            transform: scale(1.02);
+            background: rgba(255,203,5,0.25);
+        }
+        
         .team-avatar {
             font-size: 48px;
             margin-bottom: 10px;
@@ -197,6 +208,74 @@
         .feature-icon {
             font-size: 24px;
             width: 40px;
+        }
+        
+        /* === NEUER DATA SOURCE BEREICH (wie gewünscht) === */
+        .data-source-card {
+            background: rgba(42,117,187,0.08);
+            border-radius: 24px;
+            padding: 25px 20px;
+            margin: 20px 0;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(42,117,187,0.15);
+        }
+        
+        body.dark-mode .data-source-card {
+            background: rgba(255,203,5,0.08);
+            border-color: rgba(255,203,5,0.15);
+        }
+        
+        .data-source-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .data-source-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2a75bb;
+            margin: 10px 0 5px;
+        }
+        
+        body.dark-mode .data-source-title {
+            color: #ffcb05;
+        }
+        
+        .data-source-name {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #2a75bb, #ffcb05);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 5px 0;
+        }
+        
+        .data-source-desc {
+            font-size: 14px;
+            color: #555;
+            margin-top: 8px;
+        }
+        
+        body.dark-mode .data-source-desc {
+            color: #ccc;
+        }
+        
+        .data-source-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #2a75bb;
+            font-weight: bold;
+            text-decoration: none;
+            border-bottom: 2px dotted #2a75bb;
+        }
+        
+        body.dark-mode .data-source-link {
+            color: #ffcb05;
+            border-bottom-color: #ffcb05;
         }
         
         .api-logo {
@@ -299,6 +378,7 @@
             .control-buttons, .profile-btn { top: 10px; }
             .profile-btn { left: 10px; padding: 6px 12px; font-size: 12px; }
             .dark-mode-toggle, .language-select { padding: 6px 12px; font-size: 11px; }
+            .data-source-name { font-size: 22px; }
         }
     </style>
 </head>
@@ -340,17 +420,19 @@
         </p>
     </div>
     
-    <!-- Team Section -->
+    <!-- Team Section (Reinaldo mit Easter Egg) -->
     <div class="section">
         <div class="section-title">
             <span>👥</span> Meet the Team
         </div>
         <div class="team-grid">
-            <div class="team-card">
+            <!-- EASTER EGG: Reinaldo klickbar (Rickroll) -->
+            <div class="team-card easter-egg" onclick="window.open('https://www.youtube.com/watch?v=dQw4w9WgXcQ', '_blank')">
                 <div class="team-avatar">🎮</div>
                 <div class="team-name">Reinaldo</div>
                 <div class="team-role">Lead Developer & Designer</div>
                 <div style="margin-top: 10px; font-size: 12px;">Frontend, Backend, API Integration</div>
+                <div style="margin-top: 6px; font-size: 11px; opacity:0.7;">✨ (click me!) ✨</div>
             </div>
             <div class="team-card">
                 <div class="team-avatar">⚡</div>
@@ -396,21 +478,22 @@
         </div>
     </div>
     
-    <!-- API Credit Section -->
+    <!-- ========== NEUER, OPTISCH AUFGEWERTETER DATA SOURCE BEREICH ========== -->
     <div class="section">
         <div class="section-title">
             <span>📡</span> Data Source
         </div>
-        <div class="api-logo">
-            <img src="https://pokeapi.co/logo.png" alt="PokeAPI" onerror="this.style.display='none'">
-            <div style="text-align: center;">
-                <strong>PokeAPI</strong><br>
-                <small>The RESTful Pokémon API</small>
+        <div class="data-source-card">
+            <div class="data-source-icon">🌐</div>
+            <div class="data-source-title">Powered by</div>
+            <div class="data-source-name">PokeAPI</div>
+            <div class="data-source-desc">The RESTful Pokémon API</div>
+            <a href="https://pokeapi.co/" target="_blank" class="data-source-link">pokeapi.co ↗</a>
+            <div style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
+                All Pokémon data (names, stats, abilities, types, evolutions, images)
             </div>
         </div>
         <p style="text-align: center; font-size: 13px; margin-top: 15px;">
-            All Pokémon data (names, stats, abilities, types, evolutions, images) is provided by 
-            <a href="https://pokeapi.co/" target="_blank">PokeAPI</a>.<br>
             Special thanks to the PokeAPI team for making this project possible!
         </p>
     </div>
