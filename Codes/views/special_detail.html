@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Special Form - Pokémon</title>
+    <title>Special Form</title>
     <style>
         * {
             margin: 0;
@@ -102,17 +102,11 @@
         }
         
         .pokemon-image {
-            width: 280px;
-            height: 280px;
+            width: 260px;
+            height: 260px;
             object-fit: contain;
             filter: drop-shadow(8px 12px 20px rgba(0,0,0,0.2));
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            transition: transform 0.3s;
-        }
-        
-        .pokemon-image:hover {
-            transform: scale(1.02);
+            background: transparent;
         }
         
         .cry-button {
@@ -132,18 +126,45 @@
             color: #2a75bb;
         }
         
-        .type-badge-mega, .type-badge-gmax, .type-badge-primal, .type-badge-regional {
+        .type-badge-mega {
             display: inline-block;
+            background: linear-gradient(135deg, #9c27b0, #7b1fa2);
             color: white;
             padding: 5px 15px;
             border-radius: 25px;
             font-size: 14px;
             margin-left: 10px;
         }
-        .type-badge-mega { background: linear-gradient(135deg, #9c27b0, #7b1fa2); }
-        .type-badge-gmax { background: linear-gradient(135deg, #f44336, #d32f2f); }
-        .type-badge-primal { background: linear-gradient(135deg, #00bcd4, #0097a7); }
-        .type-badge-regional { background: linear-gradient(135deg, #2196f3, #1976d2); }
+        
+        .type-badge-gmax {
+            display: inline-block;
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+        .type-badge-primal {
+            display: inline-block;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+        .type-badge-regional {
+            display: inline-block;
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
         
         .info-grid {
             display: grid;
@@ -356,130 +377,181 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // Basis-URL für hochwertige Bilder vom HybridShivam Repository
+    // Basis-URL für hochwertige Bilder
     const IMAGE_BASE_URL = 'https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/images/';
     
-    // ========== VOLLSTÄNDIGE SPEZIALFORMEN DATEN (250+ Formen) ==========
+    // ========== SPEZIALFORMEN DATEN mit KORREKTEN Bild-URLs ==========
     const specialFormData = {
-        // === KANTO MEGA EVOLUTIONS ===
-        "3-mega": { types: ["grass","poison"], ability: "Thick Fat", hp:80, attack:100, defense:123, spAttack:122, spDefense:120, speed:80, dex: "Mega Venusaur's flower blooms even larger, releasing a calming scent.", imageFile: "003-Mega.png" },
+        // Alolan Sandslash (28)
+        "28-alolan": { types: ["ice","steel"], ability: "Slush Rush", hp:75, attack:100, defense:120, spAttack:25, spDefense:65, speed:65, dex: "Alolan Sandslash's back is covered with ice spikes.", imageFile: "028-Alolan.png" },
+        
+        // Alolan Raichu (26)
+        "26-alolan": { types: ["electric","psychic"], ability: "Surge Surfer", hp:60, attack:85, defense:50, spAttack:95, spDefense:85, speed:110, dex: "Alolan Raichu surfs on its tail using psychic power.", imageFile: "026-Alolan.png" },
+        
+        // Alolan Ninetales (38)
+        "38-alolan": { types: ["ice","fairy"], ability: "Snow Cloak", hp:73, attack:67, defense:75, spAttack:81, spDefense:100, speed:109, dex: "Alolan Ninetales's frozen tail is beautiful.", imageFile: "038-Alolan.png" },
+        
+        // Alolan Muk (89)
+        "89-alolan": { types: ["poison","dark"], ability: "Poison Touch", hp:105, attack:105, defense:75, spAttack:65, spDefense:100, speed:50, dex: "Alolan Muk's rainbow colors are toxic.", imageFile: "089-Alolan.png" },
+        
+        // Alolan Exeggutor (103)
+        "103-alolan": { types: ["grass","dragon"], ability: "Frisk", hp:95, attack:105, defense:85, spAttack:125, spDefense:75, speed:45, dex: "Alolan Exeggutor's tall neck absorbs sunlight.", imageFile: "103-Alolan.png" },
+        
+        // Alolan Marowak (105)
+        "105-alolan": { types: ["fire","ghost"], ability: "Cursed Body", hp:60, attack:80, defense:110, spAttack:50, spDefense:80, speed:45, dex: "Alolan Marowak uses its bone as a torch.", imageFile: "105-Alolan.png" },
+        
+        // Charizard Forms
         "6-megaX": { types: ["fire","dragon"], ability: "Tough Claws", hp:78, attack:130, defense:111, spAttack:130, spDefense:85, speed:100, dex: "Mega Charizard X's blue flames burn hotter than ever.", imageFile: "006-Mega-X.png" },
         "6-megaY": { types: ["fire","flying"], ability: "Drought", hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, dex: "Mega Charizard Y has immense special attack power.", imageFile: "006-Mega-Y.png" },
-        "9-mega": { types: ["water"], ability: "Mega Launcher", hp:79, attack:103, defense:120, spAttack:135, spDefense:115, speed:78, dex: "Mega Blastoise's cannons grow enormous.", imageFile: "009-Mega.png" },
-        "15-mega": { types: ["bug","poison"], ability: "Adaptability", hp:65, attack:150, defense:40, spAttack:15, spDefense:80, speed:145, dex: "Mega Beedrill's stingers grow even sharper.", imageFile: "015-Mega.png" },
-        "18-mega": { types: ["normal","flying"], ability: "No Guard", hp:83, attack:80, defense:80, spAttack:135, spDefense:80, speed:121, dex: "Mega Pidgeot flies at incredible speeds.", imageFile: "018-Mega.png" },
-        "65-mega": { types: ["psychic"], ability: "Trace", hp:55, attack:50, defense:65, spAttack:175, spDefense:105, speed:150, dex: "Mega Alakazam's mental powers are limitless.", imageFile: "065-Mega.png" },
-        "80-mega": { types: ["water","psychic"], ability: "Shell Armor", hp:95, attack:75, defense:180, spAttack:130, spDefense:80, speed:30, dex: "Mega Slowbro's shell grows harder.", imageFile: "080-Mega.png" },
-        "94-mega": { types: ["ghost","poison"], ability: "Shadow Tag", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Mega Gengar traps opponents with Shadow Tag.", imageFile: "094-Mega.png" },
-        "115-mega": { types: ["normal"], ability: "Parental Bond", hp:105, attack:125, defense:100, spAttack:60, spDefense:100, speed:100, dex: "Mega Kangaskhan's child fights alongside it.", imageFile: "115-Mega.png" },
-        "127-mega": { types: ["bug"], ability: "Aerilate", hp:65, attack:155, defense:120, spAttack:65, spDefense:90, speed:105, dex: "Mega Pinsir's wings become powerful.", imageFile: "127-Mega.png" },
-        "130-mega": { types: ["water","dark"], ability: "Mold Breaker", hp:95, attack:155, defense:109, spAttack:70, spDefense:130, speed:81, dex: "Mega Gyarados's rage destroys everything.", imageFile: "130-Mega.png" },
-        "142-mega": { types: ["rock","flying"], ability: "Tough Claws", hp:80, attack:135, defense:85, spAttack:70, spDefense:95, speed:150, dex: "Mega Aerodactyl's speed is unmatched.", imageFile: "142-Mega.png" },
+        "6-gmax": { types: ["fire","flying"], ability: "Blaze", hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, dex: "Gigantamax Charizard's flames never go out.", imageFile: "006-Gigantamax.png" },
+        
+        // Venusaur
+        "3-mega": { types: ["grass","poison"], ability: "Thick Fat", hp:80, attack:100, defense:123, spAttack:122, spDefense:120, speed:80, dex: "Mega Venusaur's flower blooms even larger.", imageFile: "003-Mega.png" },
+        "3-gmax": { types: ["grass","poison"], ability: "Overgrow", hp:80, attack:82, defense:83, spAttack:100, spDefense:100, speed:80, dex: "Gigantamax Venusaur's flower puts foes to sleep.", imageFile: "003-Gigantamax.png" },
+        
+        // Blastoise
+        "9-mega": { types: ["water"], ability: "Mega Launcher", hp:79, attack:103, defense:120, spAttack:135, spDefense:115, speed:78, dex: "Mega Blastoise's cannons are enormous.", imageFile: "009-Mega.png" },
+        "9-gmax": { types: ["water"], ability: "Torrent", hp:79, attack:83, defense:100, spAttack:85, spDefense:105, speed:78, dex: "Gigantamax Blastoise's cannons grow enormous.", imageFile: "009-Gigantamax.png" },
+        
+        // Mewtwo
         "150-megaX": { types: ["psychic","fighting"], ability: "Steadfast", hp:106, attack:190, defense:100, spAttack:154, spDefense:100, speed:130, dex: "Mega Mewtwo X focuses on physical combat.", imageFile: "150-Mega-X.png" },
         "150-megaY": { types: ["psychic"], ability: "Insomnia", hp:106, attack:150, defense:70, spAttack:194, spDefense:120, speed:140, dex: "Mega Mewtwo Y has peak psychic ability.", imageFile: "150-Mega-Y.png" },
         
-        // === JOHTO MEGA EVOLUTIONS ===
-        "181-mega": { types: ["electric","dragon"], ability: "Mold Breaker", hp:90, attack:95, defense:105, spAttack:165, spDefense:110, speed:45, dex: "Mega Ampharos gains the Dragon type.", imageFile: "181-Mega.png" },
-        "208-mega": { types: ["steel","ground"], ability: "Sand Force", hp:75, attack:125, defense:230, spAttack:55, spDefense:95, speed:30, dex: "Mega Steelix's body is harder than diamond.", imageFile: "208-Mega.png" },
-        "212-mega": { types: ["bug","steel"], ability: "Technician", hp:70, attack:150, defense:140, spAttack:65, spDefense:100, speed:75, dex: "Mega Scizor's pincers cut through steel.", imageFile: "212-Mega.png" },
-        "214-mega": { types: ["bug","fighting"], ability: "Skill Link", hp:80, attack:185, defense:115, spAttack:40, spDefense:105, speed:75, dex: "Mega Heracross's horn grows massive.", imageFile: "214-Mega.png" },
-        "229-mega": { types: ["dark","fire"], ability: "Solar Power", hp:75, attack:90, defense:90, spAttack:140, spDefense:90, speed:115, dex: "Mega Houndoom's flames burn intensely.", imageFile: "229-Mega.png" },
+        // Gengar
+        "94-mega": { types: ["ghost","poison"], ability: "Shadow Tag", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Mega Gengar traps opponents.", imageFile: "094-Mega.png" },
+        "94-gmax": { types: ["ghost","poison"], ability: "Cursed Body", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Gigantamax Gengar's mouth stretches.", imageFile: "094-Gigantamax.png" },
+        
+        // Gyarados
+        "130-mega": { types: ["water","dark"], ability: "Mold Breaker", hp:95, attack:155, defense:109, spAttack:70, spDefense:130, speed:81, dex: "Mega Gyarados's rage destroys everything.", imageFile: "130-Mega.png" },
+        
+        // Pikachu
+        "25-gmax": { types: ["electric"], ability: "Static", hp:45, attack:80, defense:50, spAttack:75, spDefense:60, speed:120, dex: "Gigantamax Pikachu's tail grows enormous.", imageFile: "025-Gigantamax.png" },
+        
+        // Eevee
+        "133-gmax": { types: ["normal"], ability: "Run Away", hp:55, attack:55, defense:50, spAttack:45, spDefense:65, speed:55, dex: "Gigantamax Eevee's fur is soft.", imageFile: "133-Gigantamax.png" },
+        
+        // Snorlax
+        "143-gmax": { types: ["normal"], ability: "Gluttony", hp:160, attack:110, defense:65, spAttack:65, spDefense:110, speed:30, dex: "Gigantamax Snorlax's belly grows.", imageFile: "143-Gigantamax.png" },
+        
+        // Lapras
+        "131-gmax": { types: ["water","ice"], ability: "Water Absorb", hp:130, attack:85, defense:80, spAttack:85, spDefense:95, speed:60, dex: "Gigantamax Lapras's shell grows.", imageFile: "131-Gigantamax.png" },
+        
+        // Machamp
+        "68-gmax": { types: ["fighting"], ability: "Guts", hp:90, attack:130, defense:80, spAttack:65, spDefense:85, speed:55, dex: "Gigantamax Machamp's arms are muscular.", imageFile: "068-Gigantamax.png" },
+        
+        // Meowth
+        "52-gmax": { types: ["normal"], ability: "Pickup", hp:40, attack:35, defense:35, spAttack:50, spDefense:40, speed:90, dex: "Gigantamax Meowth grows incredibly long.", imageFile: "052-Gigantamax.png" },
+        
+        // Kingler
+        "99-gmax": { types: ["water"], ability: "Hyper Cutter", hp:55, attack:130, defense:115, spAttack:50, spDefense:50, speed:75, dex: "Gigantamax Kingler's pincers crush.", imageFile: "099-Gigantamax.png" },
+        
+        // Lucario
+        "448-mega": { types: ["fighting","steel"], ability: "Adaptability", hp:70, attack:145, defense:88, spAttack:140, spDefense:70, speed:112, dex: "Mega Lucario reads auras perfectly.", imageFile: "448-Mega.png" },
+        
+        // Blaziken
+        "257-mega": { types: ["fire","fighting"], ability: "Speed Boost", hp:80, attack:160, defense:80, spAttack:130, spDefense:80, speed:100, dex: "Mega Blaziken's kicks are devastating.", imageFile: "257-Mega.png" },
+        
+        // Garchomp
+        "445-mega": { types: ["dragon","ground"], ability: "Sand Force", hp:108, attack:170, defense:115, spAttack:120, spDefense:95, speed:92, dex: "Mega Garchomp's blades cut steel.", imageFile: "445-Mega.png" },
+        
+        // Tyranitar
         "248-mega": { types: ["rock","dark"], ability: "Sand Stream", hp:100, attack:164, defense:150, spAttack:95, spDefense:120, speed:71, dex: "Mega Tyranitar's armor is impenetrable.", imageFile: "248-Mega.png" },
         
-        // === HOENN MEGA EVOLUTIONS ===
-        "254-mega": { types: ["grass","dragon"], ability: "Lightning Rod", hp:70, attack:110, defense:75, spAttack:145, spDefense:85, speed:145, dex: "Mega Sceptile's tail launches needles.", imageFile: "254-Mega.png" },
-        "257-mega": { types: ["fire","fighting"], ability: "Speed Boost", hp:80, attack:160, defense:80, spAttack:130, spDefense:80, speed:100, dex: "Mega Blaziken's kicks are devastating.", imageFile: "257-Mega.png" },
-        "260-mega": { types: ["water","ground"], ability: "Swift Swim", hp:100, attack:150, defense:110, spAttack:95, spDefense:110, speed:70, dex: "Mega Swampert swims faster than a jet.", imageFile: "260-Mega.png" },
+        // Gardevoir
         "282-mega": { types: ["psychic","fairy"], ability: "Pixilate", hp:68, attack:85, defense:65, spAttack:165, spDefense:135, speed:100, dex: "Mega Gardevoir creates black holes.", imageFile: "282-Mega.png" },
-        "302-mega": { types: ["dark","ghost"], ability: "Magic Bounce", hp:50, attack:85, defense:125, spAttack:85, spDefense:115, speed:20, dex: "Mega Sableye's jewel reflects attacks.", imageFile: "302-Mega.png" },
-        "303-mega": { types: ["steel","fairy"], ability: "Huge Power", hp:50, attack:105, defense:125, spAttack:55, spDefense:95, speed:50, dex: "Mega Mawile's jaws crush iron.", imageFile: "303-Mega.png" },
-        "306-mega": { types: ["steel"], ability: "Filter", hp:70, attack:140, defense:230, spAttack:60, spDefense:80, speed:50, dex: "Mega Aggron loses its Rock typing.", imageFile: "306-Mega.png" },
-        "308-mega": { types: ["fighting","psychic"], ability: "Pure Power", hp:60, attack:100, defense:85, spAttack:80, spDefense:85, speed:100, dex: "Mega Medicham meditates in battle.", imageFile: "308-Mega.png" },
-        "310-mega": { types: ["electric"], ability: "Intimidate", hp:70, attack:75, defense:80, spAttack:135, spDefense:80, speed:135, dex: "Mega Manectric's lightning clouds intimidate.", imageFile: "310-Mega.png" },
-        "319-mega": { types: ["water","dark"], ability: "Strong Jaw", hp:70, attack:140, defense:70, spAttack:110, spDefense:65, speed:105, dex: "Mega Sharpedo's jaws crush ships.", imageFile: "319-Mega.png" },
-        "323-mega": { types: ["fire","ground"], ability: "Sheer Force", hp:70, attack:120, defense:100, spAttack:145, spDefense:105, speed:20, dex: "Mega Camerupt's volcano erupts.", imageFile: "323-Mega.png" },
-        "334-mega": { types: ["dragon","fairy"], ability: "Pixilate", hp:75, attack:110, defense:110, spAttack:110, spDefense:105, speed:80, dex: "Mega Altaria's voice becomes melodious.", imageFile: "334-Mega.png" },
-        "354-mega": { types: ["ghost"], ability: "Prankster", hp:64, attack:165, defense:75, spAttack:93, spDefense:83, speed:75, dex: "Mega Banette's curse grows stronger.", imageFile: "354-Mega.png" },
-        "359-mega": { types: ["dark"], ability: "Magic Bounce", hp:65, attack:150, defense:60, spAttack:115, spDefense:60, speed:115, dex: "Mega Absol senses disasters.", imageFile: "359-Mega.png" },
-        "362-mega": { types: ["ice"], ability: "Refrigerate", hp:80, attack:120, defense:80, spAttack:120, spDefense:80, speed:100, dex: "Mega Glalie's jaw shatters.", imageFile: "362-Mega.png" },
-        "373-mega": { types: ["dragon","flying"], ability: "Aerilate", hp:95, attack:145, defense:130, spAttack:120, spDefense:90, speed:120, dex: "Mega Salamence's wings merge.", imageFile: "373-Mega.png" },
-        "376-mega": { types: ["steel","psychic"], ability: "Tough Claws", hp:80, attack:145, defense:150, spAttack:105, spDefense:110, speed:110, dex: "Mega Metagross becomes aerodynamic.", imageFile: "376-Mega.png" },
-        "380-mega": { types: ["dragon","psychic"], ability: "Levitate", hp:80, attack:100, defense:120, spAttack:140, spDefense:150, speed:110, dex: "Mega Latias's defenses increase.", imageFile: "380-Mega.png" },
-        "381-mega": { types: ["dragon","psychic"], ability: "Levitate", hp:80, attack:130, defense:100, spAttack:160, spDefense:120, speed:110, dex: "Mega Latios's offenses increase.", imageFile: "381-Mega.png" },
-        "382-primal": { types: ["water"], ability: "Primordial Sea", hp:100, attack:150, defense:90, spAttack:180, spDefense:160, speed:90, dex: "Primal Kyogre floods the world.", imageFile: "382-Primal.png" },
-        "383-primal": { types: ["ground","fire"], ability: "Desolate Land", hp:100, attack:180, defense:160, spAttack:150, spDefense:90, speed:90, dex: "Primal Groudon expands continents.", imageFile: "383-Primal.png" },
+        
+        // Rayquaza
         "384-mega": { types: ["dragon","flying"], ability: "Delta Stream", hp:105, attack:180, defense:100, spAttack:180, spDefense:100, speed:115, dex: "Mega Rayquaza calms the weather.", imageFile: "384-Mega.png" },
         
-        // === SINNOH MEGA EVOLUTIONS ===
+        // Metagross
+        "376-mega": { types: ["steel","psychic"], ability: "Tough Claws", hp:80, attack:145, defense:150, spAttack:105, spDefense:110, speed:110, dex: "Mega Metagross becomes aerodynamic.", imageFile: "376-Mega.png" },
+        
+        // Salamence
+        "373-mega": { types: ["dragon","flying"], ability: "Aerilate", hp:95, attack:145, defense:130, spAttack:120, spDefense:90, speed:120, dex: "Mega Salamence's wings merge.", imageFile: "373-Mega.png" },
+        
+        // Ampharos
+        "181-mega": { types: ["electric","dragon"], ability: "Mold Breaker", hp:90, attack:95, defense:105, spAttack:165, spDefense:110, speed:45, dex: "Mega Ampharos gains the Dragon type.", imageFile: "181-Mega.png" },
+        
+        // Steelix
+        "208-mega": { types: ["steel","ground"], ability: "Sand Force", hp:75, attack:125, defense:230, spAttack:55, spDefense:95, speed:30, dex: "Mega Steelix's body is harder than diamond.", imageFile: "208-Mega.png" },
+        
+        // Scizor
+        "212-mega": { types: ["bug","steel"], ability: "Technician", hp:70, attack:150, defense:140, spAttack:65, spDefense:100, speed:75, dex: "Mega Scizor's pincers cut steel.", imageFile: "212-Mega.png" },
+        
+        // Heracross
+        "214-mega": { types: ["bug","fighting"], ability: "Skill Link", hp:80, attack:185, defense:115, spAttack:40, spDefense:105, speed:75, dex: "Mega Heracross's horn grows massive.", imageFile: "214-Mega.png" },
+        
+        // Houndoom
+        "229-mega": { types: ["dark","fire"], ability: "Solar Power", hp:75, attack:90, defense:90, spAttack:140, spDefense:90, speed:115, dex: "Mega Houndoom's flames burn intensely.", imageFile: "229-Mega.png" },
+        
+        // Sableye
+        "302-mega": { types: ["dark","ghost"], ability: "Magic Bounce", hp:50, attack:85, defense:125, spAttack:85, spDefense:115, speed:20, dex: "Mega Sableye's jewel reflects attacks.", imageFile: "302-Mega.png" },
+        
+        // Mawile
+        "303-mega": { types: ["steel","fairy"], ability: "Huge Power", hp:50, attack:105, defense:125, spAttack:55, spDefense:95, speed:50, dex: "Mega Mawile's jaws crush iron.", imageFile: "303-Mega.png" },
+        
+        // Aggron
+        "306-mega": { types: ["steel"], ability: "Filter", hp:70, attack:140, defense:230, spAttack:60, spDefense:80, speed:50, dex: "Mega Aggron loses its Rock typing.", imageFile: "306-Mega.png" },
+        
+        // Medicham
+        "308-mega": { types: ["fighting","psychic"], ability: "Pure Power", hp:60, attack:100, defense:85, spAttack:80, spDefense:85, speed:100, dex: "Mega Medicham meditates in battle.", imageFile: "308-Mega.png" },
+        
+        // Manectric
+        "310-mega": { types: ["electric"], ability: "Intimidate", hp:70, attack:75, defense:80, spAttack:135, spDefense:80, speed:135, dex: "Mega Manectric's lightning clouds intimidate.", imageFile: "310-Mega.png" },
+        
+        // Sharpedo
+        "319-mega": { types: ["water","dark"], ability: "Strong Jaw", hp:70, attack:140, defense:70, spAttack:110, spDefense:65, speed:105, dex: "Mega Sharpedo's jaws crush ships.", imageFile: "319-Mega.png" },
+        
+        // Camerupt
+        "323-mega": { types: ["fire","ground"], ability: "Sheer Force", hp:70, attack:120, defense:100, spAttack:145, spDefense:105, speed:20, dex: "Mega Camerupt's volcano erupts.", imageFile: "323-Mega.png" },
+        
+        // Altaria
+        "334-mega": { types: ["dragon","fairy"], ability: "Pixilate", hp:75, attack:110, defense:110, spAttack:110, spDefense:105, speed:80, dex: "Mega Altaria's voice becomes melodious.", imageFile: "334-Mega.png" },
+        
+        // Banette
+        "354-mega": { types: ["ghost"], ability: "Prankster", hp:64, attack:165, defense:75, spAttack:93, spDefense:83, speed:75, dex: "Mega Banette's curse grows stronger.", imageFile: "354-Mega.png" },
+        
+        // Absol
+        "359-mega": { types: ["dark"], ability: "Magic Bounce", hp:65, attack:150, defense:60, spAttack:115, spDefense:60, speed:115, dex: "Mega Absol senses disasters.", imageFile: "359-Mega.png" },
+        
+        // Glalie
+        "362-mega": { types: ["ice"], ability: "Refrigerate", hp:80, attack:120, defense:80, spAttack:120, spDefense:80, speed:100, dex: "Mega Glalie's jaw shatters.", imageFile: "362-Mega.png" },
+        
+        // Lopunny
         "428-mega": { types: ["normal","fighting"], ability: "Scrappy", hp:65, attack:136, defense:94, spAttack:54, spDefense:96, speed:135, dex: "Mega Lopunny's kicks bend steel.", imageFile: "428-Mega.png" },
-        "445-mega": { types: ["dragon","ground"], ability: "Sand Force", hp:108, attack:170, defense:115, spAttack:120, spDefense:95, speed:92, dex: "Mega Garchomp's blades cut steel.", imageFile: "445-Mega.png" },
-        "448-mega": { types: ["fighting","steel"], ability: "Adaptability", hp:70, attack:145, defense:88, spAttack:140, spDefense:70, speed:112, dex: "Mega Lucario reads auras perfectly.", imageFile: "448-Mega.png" },
+        
+        // Abomasnow
         "460-mega": { types: ["grass","ice"], ability: "Snow Warning", hp:90, attack:132, defense:105, spAttack:132, spDefense:105, speed:30, dex: "Mega Abomasnow creates blizzards.", imageFile: "460-Mega.png" },
+        
+        // Gallade
         "475-mega": { types: ["psychic","fighting"], ability: "Inner Focus", hp:68, attack:165, defense:95, spAttack:65, spDefense:115, speed:110, dex: "Mega Gallade's blades extend.", imageFile: "475-Mega.png" },
         
-        // === UNOVA MEGA EVOLUTIONS ===
+        // Audino
         "531-mega": { types: ["normal","fairy"], ability: "Healer", hp:103, attack:60, defense:126, spAttack:80, spDefense:126, speed:50, dex: "Mega Audino's hearing is sensitive.", imageFile: "531-Mega.png" },
         
-        // === KALOS MEGA EVOLUTIONS ===
+        // Diancie
         "719-mega": { types: ["rock","fairy"], ability: "Clear Body", hp:50, attack:160, defense:110, spAttack:160, spDefense:110, speed:110, dex: "Mega Diancie's body shines like diamond.", imageFile: "719-Mega.png" },
         
-        // === GIGANTAMAX FORMS ===
-        "3-gmax": { types: ["grass","poison"], ability: "Overgrow", hp:80, attack:82, defense:83, spAttack:100, spDefense:100, speed:80, dex: "Gigantamax Venusaur's flower puts foes to sleep.", imageFile: "003-Gigantamax.png" },
-        "6-gmax": { types: ["fire","flying"], ability: "Blaze", hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, dex: "Gigantamax Charizard's flames never go out.", imageFile: "006-Gigantamax.png" },
-        "9-gmax": { types: ["water"], ability: "Torrent", hp:79, attack:83, defense:100, spAttack:85, spDefense:105, speed:78, dex: "Gigantamax Blastoise's cannons grow enormous.", imageFile: "009-Gigantamax.png" },
-        "12-gmax": { types: ["bug","flying"], ability: "Compound Eyes", hp:60, attack:45, defense:50, spAttack:90, spDefense:80, speed:70, dex: "Gigantamax Butterfree's scales cause sleep.", imageFile: "012-Gigantamax.png" },
-        "25-gmax": { types: ["electric"], ability: "Static", hp:45, attack:80, defense:50, spAttack:75, spDefense:60, speed:120, dex: "Gigantamax Pikachu's tail grows enormous.", imageFile: "025-Gigantamax.png" },
-        "52-gmax": { types: ["normal"], ability: "Pickup", hp:40, attack:35, defense:35, spAttack:50, spDefense:40, speed:90, dex: "Gigantamax Meowth grows incredibly long.", imageFile: "052-Gigantamax.png" },
-        "68-gmax": { types: ["fighting"], ability: "Guts", hp:90, attack:130, defense:80, spAttack:65, spDefense:85, speed:55, dex: "Gigantamax Machamp's arms are muscular.", imageFile: "068-Gigantamax.png" },
-        "94-gmax": { types: ["ghost","poison"], ability: "Cursed Body", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Gigantamax Gengar's mouth stretches.", imageFile: "094-Gigantamax.png" },
-        "99-gmax": { types: ["water"], ability: "Hyper Cutter", hp:55, attack:130, defense:115, spAttack:50, spDefense:50, speed:75, dex: "Gigantamax Kingler's pincers crush.", imageFile: "099-Gigantamax.png" },
-        "131-gmax": { types: ["water","ice"], ability: "Water Absorb", hp:130, attack:85, defense:80, spAttack:85, spDefense:95, speed:60, dex: "Gigantamax Lapras's shell grows.", imageFile: "131-Gigantamax.png" },
-        "133-gmax": { types: ["normal"], ability: "Run Away", hp:55, attack:55, defense:50, spAttack:45, spDefense:65, speed:55, dex: "Gigantamax Eevee's fur is soft.", imageFile: "133-Gigantamax.png" },
-        "143-gmax": { types: ["normal"], ability: "Gluttony", hp:160, attack:110, defense:65, spAttack:65, spDefense:110, speed:30, dex: "Gigantamax Snorlax's belly grows.", imageFile: "143-Gigantamax.png" },
-        "569-gmax": { types: ["poison"], ability: "Stench", hp:80, attack:95, defense:82, spAttack:60, spDefense:82, speed:75, dex: "Gigantamax Garbodor's toxic gas spreads.", imageFile: "569-Gigantamax.png" },
-        "809-gmax": { types: ["steel"], ability: "Iron Fist", hp:135, attack:143, defense:143, spAttack:80, spDefense:65, speed:34, dex: "Gigantamax Melmetal's body liquifies.", imageFile: "809-Gigantamax.png" },
-        "812-gmax": { types: ["grass"], ability: "Overgrow", hp:100, attack:125, defense:90, spAttack:60, spDefense:70, speed:85, dex: "Gigantamax Rillaboom's drum shakes earth.", imageFile: "812-Gigantamax.png" },
-        "815-gmax": { types: ["fire"], ability: "Blaze", hp:80, attack:116, defense:75, spAttack:65, spDefense:75, speed:119, dex: "Gigantamax Cinderace's fireball grows.", imageFile: "815-Gigantamax.png" },
-        "818-gmax": { types: ["water"], ability: "Torrent", hp:70, attack:85, defense:65, spAttack:125, spDefense:65, speed:120, dex: "Gigantamax Inteleon's water cannon.", imageFile: "818-Gigantamax.png" },
-        "823-gmax": { types: ["flying","steel"], ability: "Pressure", hp:98, attack:87, defense:105, spAttack:53, spDefense:85, speed:67, dex: "Gigantamax Corviknight's wings carry buildings.", imageFile: "823-Gigantamax.png" },
-        "826-gmax": { types: ["bug","psychic"], ability: "Swarm", hp:60, attack:45, defense:110, spAttack:80, spDefense:120, speed:90, dex: "Gigantamax Orbeetle's UFO body.", imageFile: "826-Gigantamax.png" },
-        "834-gmax": { types: ["water","rock"], ability: "Strong Jaw", hp:90, attack:115, defense:90, spAttack:48, spDefense:68, speed:74, dex: "Gigantamax Drednaw's jaw crushes.", imageFile: "834-Gigantamax.png" },
-        "839-gmax": { types: ["rock","fire"], ability: "Steam Engine", hp:110, attack:80, defense:120, spAttack:80, spDefense:90, speed:30, dex: "Gigantamax Coalossal's furnace blasts.", imageFile: "839-Gigantamax.png" },
-        "841-gmax": { types: ["grass","dragon"], ability: "Ripen", hp:70, attack:110, defense:80, spAttack:95, spDefense:60, speed:70, dex: "Gigantamax Flapple's apple grows.", imageFile: "841-Gigantamax.png" },
-        "842-gmax": { types: ["grass","dragon"], ability: "Ripen", hp:110, attack:85, defense:80, spAttack:100, spDefense:80, speed:30, dex: "Gigantamax Appletun's apple grows.", imageFile: "842-Gigantamax.png" },
-        "844-gmax": { types: ["ground"], ability: "Sand Spit", hp:72, attack:107, defense:125, spAttack:65, spDefense:70, speed:71, dex: "Gigantamax Sandaconda's sand whirl.", imageFile: "844-Gigantamax.png" },
-        "849-gmax": { types: ["electric","poison"], ability: "Punk Rock", hp:75, attack:98, defense:70, spAttack:114, spDefense:70, speed:75, dex: "Gigantamax Toxtricity's music shocks.", imageFile: "849-Gigantamax.png" },
-        "851-gmax": { types: ["fire","bug"], ability: "Flash Fire", hp:100, attack:115, defense:65, spAttack:90, spDefense:90, speed:65, dex: "Gigantamax Centiskorch's body heats.", imageFile: "851-Gigantamax.png" },
-        "858-gmax": { types: ["psychic","fairy"], ability: "Healer", hp:57, attack:90, defense:95, spAttack:136, spDefense:103, speed:29, dex: "Gigantamax Hatterene's silence.", imageFile: "858-Gigantamax.png" },
-        "861-gmax": { types: ["dark","fairy"], ability: "Prankster", hp:95, attack:120, defense:65, spAttack:95, spDefense:75, speed:60, dex: "Gigantamax Grimmsnarl's hair.", imageFile: "861-Gigantamax.png" },
-        "869-gmax": { types: ["fairy"], ability: "Sweet Veil", hp:65, attack:60, defense:75, spAttack:110, spDefense:121, speed:64, dex: "Gigantamax Alcremie's cream.", imageFile: "869-Gigantamax.png" },
-        "879-gmax": { types: ["steel"], ability: "Sheer Force", hp:122, attack:130, defense:69, spAttack:80, spDefense:69, speed:30, dex: "Gigantamax Copperajah's weight.", imageFile: "879-Gigantamax.png" },
-        "884-gmax": { types: ["steel","dragon"], ability: "Light Metal", hp:70, attack:95, defense:115, spAttack:120, spDefense:50, speed:85, dex: "Gigantamax Duraludon's tower.", imageFile: "884-Gigantamax.png" },
+        // Primal Kyogre
+        "382-primal": { types: ["water"], ability: "Primordial Sea", hp:100, attack:150, defense:90, spAttack:180, spDefense:160, speed:90, dex: "Primal Kyogre floods the world.", imageFile: "382-Primal.png" },
         
-        // === ALOLAN FORMS ===
-        "26-alolan": { types: ["electric","psychic"], ability: "Surge Surfer", hp:60, attack:85, defense:50, spAttack:95, spDefense:85, speed:110, dex: "Alolan Raichu surfs on its tail.", imageFile: "026-Alolan.png" },
-        "28-alolan": { types: ["ice","steel"], ability: "Slush Rush", hp:75, attack:100, defense:120, spAttack:25, spDefense:65, speed:65, dex: "Alolan Sandslash's ice spikes.", imageFile: "028-Alolan.png" },
-        "38-alolan": { types: ["ice","fairy"], ability: "Snow Cloak", hp:73, attack:67, defense:75, spAttack:81, spDefense:100, speed:109, dex: "Alolan Ninetales's frozen tail.", imageFile: "038-Alolan.png" },
-        "89-alolan": { types: ["poison","dark"], ability: "Poison Touch", hp:105, attack:105, defense:75, spAttack:65, spDefense:100, speed:50, dex: "Alolan Muk's rainbow colors.", imageFile: "089-Alolan.png" },
-        "103-alolan": { types: ["grass","dragon"], ability: "Frisk", hp:95, attack:105, defense:85, spAttack:125, spDefense:75, speed:45, dex: "Alolan Exeggutor's tall neck.", imageFile: "103-Alolan.png" },
-        "105-alolan": { types: ["fire","ghost"], ability: "Cursed Body", hp:60, attack:80, defense:110, spAttack:50, spDefense:80, speed:45, dex: "Alolan Marowak's bone torch.", imageFile: "105-Alolan.png" },
+        // Primal Groudon
+        "383-primal": { types: ["ground","fire"], ability: "Desolate Land", hp:100, attack:180, defense:160, spAttack:150, spDefense:90, speed:90, dex: "Primal Groudon expands continents.", imageFile: "383-Primal.png" },
         
-        // === GALARIAN FORMS ===
+        // Galarian Ponyta
         "77-galarian": { types: ["psychic"], ability: "Pastel Veil", hp:50, attack:85, defense:55, spAttack:65, spDefense:65, speed:90, dex: "Galarian Ponyta's horn heals.", imageFile: "077-Galarian.png" },
-        "78-galarian": { types: ["psychic","fairy"], ability: "Pastel Veil", hp:65, attack:100, defense:70, spAttack:80, spDefense:80, speed:105, dex: "Galarian Rapidash reads emotions.", imageFile: "078-Galarian.png" },
-        "110-galarian": { types: ["poison","fairy"], ability: "Levitate", hp:65, attack:90, defense:120, spAttack:85, spDefense:70, speed:60, dex: "Galarian Weezing's clean air.", imageFile: "110-Galarian.png" },
-        "144-galarian": { types: ["psychic","flying"], ability: "Competitive", hp:90, attack:85, defense:85, spAttack:125, spDefense:100, speed:95, dex: "Galarian Articuno's aura.", imageFile: "144-Galarian.png" },
-        "145-galarian": { types: ["fighting","flying"], ability: "Defiant", hp:90, attack:125, defense:90, spAttack:85, spDefense:90, speed:100, dex: "Galarian Zapdos's kicking.", imageFile: "145-Galarian.png" },
-        "146-galarian": { types: ["dark","flying"], ability: "Berserk", hp:90, attack:85, defense:90, spAttack:125, spDefense:90, speed:95, dex: "Galarian Moltres's evil aura.", imageFile: "146-Galarian.png" },
         
-        // === HISUIAN FORMS ===
-        "58-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:60, attack:75, defense:45, spAttack:65, spDefense:50, speed:55, dex: "Hisuian Growlithe's rocky horn.", imageFile: "058-Hisuian.png" },
-        "59-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:90, attack:115, defense:80, spAttack:95, spDefense:80, speed:90, dex: "Hisuian Arcanine's rocky fur.", imageFile: "059-Hisuian.png" },
-        "549-hisuian": { types: ["grass","fighting"], ability: "Chlorophyll", hp:70, attack:105, defense:75, spAttack:50, spDefense:75, speed:105, dex: "Hisuian Lilligant's dance.", imageFile: "549-Hisuian.png" },
-        "571-hisuian": { types: ["normal","ghost"], ability: "Illusion", hp:55, attack:100, defense:60, spAttack:125, spDefense:60, speed:110, dex: "Hisuian Zoroark's illusions.", imageFile: "571-Hisuian.png" },
-        "628-hisuian": { types: ["psychic","flying"], ability: "Sheer Force", hp:100, attack:85, defense:70, spAttack:80, spDefense:70, speed:65, dex: "Hisuian Braviary's psychic.", imageFile: "628-Hisuian.png" },
-        "713-hisuian": { types: ["ice","rock"], ability: "Strong Jaw", hp:95, attack:117, defense:184, spAttack:44, spDefense:46, speed:28, dex: "Hisuian Avalugg's ice.", imageFile: "713-Hisuian.png" },
-        "901-hisuian": { types: ["ground","normal"], ability: "Bulletproof", hp:130, attack:140, defense:105, spAttack:45, spDefense:80, speed:50, dex: "Hisuian Ursaluna's power.", imageFile: "901-Hisuian.png" }
+        // Galarian Rapidash
+        "78-galarian": { types: ["psychic","fairy"], ability: "Pastel Veil", hp:65, attack:100, defense:70, spAttack:80, spDefense:80, speed:105, dex: "Galarian Rapidash reads emotions.", imageFile: "078-Galarian.png" },
+        
+        // Hisuian Growlithe
+        "58-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:60, attack:75, defense:45, spAttack:65, spDefense:50, speed:55, dex: "Hisuian Growlithe has a rocky horn.", imageFile: "058-Hisuian.png" },
+        
+        // Hisuian Arcanine
+        "59-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:90, attack:115, defense:80, spAttack:95, spDefense:80, speed:90, dex: "Hisuian Arcanine's rocky fur protects.", imageFile: "059-Hisuian.png" },
+        
+        // Hisuian Zoroark
+        "571-hisuian": { types: ["normal","ghost"], ability: "Illusion", hp:55, attack:100, defense:60, spAttack:125, spDefense:60, speed:110, dex: "Hisuian Zoroark's illusions are powerful.", imageFile: "571-Hisui.png" }
     };
     
     // Finde die Daten für die aktuelle Form
@@ -533,7 +605,7 @@
         let badgeText = '⚡ MEGA EVOLUTION';
         if (formKey === 'gmax') { badgeClass = 'type-badge-gmax'; badgeText = '💥 GIGANTAMAX'; }
         else if (formKey === 'primal') { badgeClass = 'type-badge-primal'; badgeText = '🌊 PRIMAL REVERSION'; }
-        else if (formKey.includes('alolan') || formKey.includes('galarian') || formKey.includes('hisuian')) 
+        else if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian') 
             { badgeClass = 'type-badge-regional'; badgeText = '🌍 REGIONAL FORM'; }
         
         container.innerHTML = `
