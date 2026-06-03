@@ -10,7 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -18,11 +18,11 @@
             transition: all 0.3s ease;
             padding: 20px;
         }
-        
+
         body.dark-mode {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
-        
+
         .container {
             max-width: 700px;
             margin: 0 auto;
@@ -31,12 +31,12 @@
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
-        
+
         body.dark-mode .container {
             background: rgba(0,0,0,0.88);
             color: #e0e0e0;
         }
-        
+
         .control-buttons {
             position: fixed;
             top: 20px;
@@ -45,7 +45,7 @@
             gap: 12px;
             z-index: 100;
         }
-        
+
         .dark-mode-toggle, .language-select {
             background: rgba(42,117,187,0.9);
             color: white;
@@ -55,7 +55,7 @@
             cursor: pointer;
             font-weight: bold;
         }
-        
+
         .profile-btn {
             position: fixed;
             top: 20px;
@@ -68,7 +68,7 @@
             font-weight: bold;
             z-index: 100;
         }
-        
+
         .back-link {
             position: fixed;
             bottom: 20px;
@@ -81,26 +81,26 @@
             font-weight: bold;
             z-index: 100;
         }
-        
+
         .pokemon-header {
             text-align: center;
             margin-bottom: 25px;
         }
-        
+
         .pokemon-header h1 {
             color: #2a75bb;
             font-size: 38px;
         }
-        
+
         body.dark-mode .pokemon-header h1 {
             color: #ffcb05;
         }
-        
+
         .pokemon-image-container {
             text-align: center;
             margin: 15px 0;
         }
-        
+
         .pokemon-image {
             width: 260px;
             height: 260px;
@@ -108,7 +108,7 @@
             filter: drop-shadow(8px 12px 20px rgba(0,0,0,0.2));
             background: transparent;
         }
-        
+
         .cry-button {
             display: block;
             margin: 10px auto;
@@ -120,12 +120,12 @@
             cursor: pointer;
             font-weight: bold;
         }
-        
+
         .cry-button:hover {
             background: #ffcb05;
             color: #2a75bb;
         }
-        
+
         .type-badge-mega {
             display: inline-block;
             background: linear-gradient(135deg, #9c27b0, #7b1fa2);
@@ -135,7 +135,7 @@
             font-size: 14px;
             margin-left: 10px;
         }
-        
+
         .type-badge-gmax {
             display: inline-block;
             background: linear-gradient(135deg, #f44336, #d32f2f);
@@ -145,7 +145,7 @@
             font-size: 14px;
             margin-left: 10px;
         }
-        
+
         .type-badge-primal {
             display: inline-block;
             background: linear-gradient(135deg, #00bcd4, #0097a7);
@@ -155,7 +155,7 @@
             font-size: 14px;
             margin-left: 10px;
         }
-        
+
         .type-badge-regional {
             display: inline-block;
             background: linear-gradient(135deg, #2196f3, #1976d2);
@@ -165,10 +165,20 @@
             font-size: 14px;
             margin-left: 10px;
         }
-        
+
         .type-badge-bond {
             display: inline-block;
             background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        .type-badge-paradox {
+            display: inline-block;
+            background: linear-gradient(135deg, #e91e63, #c2185b);
             color: white;
             padding: 5px 15px;
             border-radius: 25px;
@@ -185,37 +195,37 @@
             padding: 18px;
             border-radius: 24px;
         }
-        
+
         .info-card {
             background: white;
             padding: 14px;
             border-radius: 20px;
             text-align: center;
         }
-        
+
         body.dark-mode .info-card {
             background: rgba(30,30,40,0.9);
         }
-        
+
         .info-label {
             font-weight: bold;
             color: #2a75bb;
             margin-bottom: 6px;
         }
-        
+
         body.dark-mode .info-label {
             color: #ffcb05;
         }
-        
+
         .info-value {
             font-size: 18px;
             font-weight: 600;
         }
-        
+
         .types-section, .abilities-section {
             margin: 20px 0;
         }
-        
+
         .section-title {
             font-size: 20px;
             font-weight: bold;
@@ -224,11 +234,11 @@
             border-left: 4px solid #ffcb05;
             padding-left: 15px;
         }
-        
+
         body.dark-mode .section-title {
             color: #ffcb05;
         }
-        
+
         .type-badge-list, .ability-list {
             display: flex;
             flex-wrap: wrap;
@@ -236,7 +246,7 @@
             list-style: none;
             padding: 0;
         }
-        
+
         .type-badge {
             display: inline-block;
             padding: 8px 20px;
@@ -246,33 +256,33 @@
             font-size: 14px;
             text-transform: uppercase;
         }
-        
+
         .ability-item {
             background: #e8e8e8;
             padding: 8px 18px;
             border-radius: 40px;
             font-weight: 500;
         }
-        
+
         body.dark-mode .ability-item {
             background: #3a3a4a;
             color: #eee;
         }
-        
+
         .stats-container {
             margin: 25px 0;
         }
-        
+
         .stat-row {
             margin: 14px 0;
         }
-        
+
         .stat-name {
             font-weight: bold;
             display: inline-block;
             width: 100px;
         }
-        
+
         .stat-bar-bg {
             background: #e0e0e0;
             border-radius: 20px;
@@ -280,11 +290,11 @@
             overflow: hidden;
             margin-top: 5px;
         }
-        
+
         body.dark-mode .stat-bar-bg {
             background: #3a3a4a;
         }
-        
+
         .stat-bar-fill {
             background: linear-gradient(90deg, #ff9800, #f57c00);
             height: 100%;
@@ -295,7 +305,7 @@
             border-radius: 20px;
             transition: width 0.5s ease;
         }
-        
+
         .dex-entry {
             background: #f5f0e8;
             padding: 20px;
@@ -305,12 +315,12 @@
             line-height: 1.6;
             border-left: 5px solid #ffcb05;
         }
-        
+
         body.dark-mode .dex-entry {
             background: #2a2a3a;
             color: #ddd;
         }
-        
+
         .back-button {
             display: inline-block;
             margin-top: 20px;
@@ -322,7 +332,7 @@
             font-weight: bold;
             text-align: center;
         }
-        
+
         .loader-small {
             border: 3px solid #f3f3f3;
             border-top: 3px solid #ffcb05;
@@ -332,12 +342,12 @@
             animation: spin 1s linear infinite;
             margin: 20px auto;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         @media (max-width: 768px) {
             body { padding: 15px; }
             .container { padding: 20px; }
@@ -375,9 +385,9 @@
     const basePokemonId = parseInt(urlParams.get('pokemon')) || 6;
     const formKey = urlParams.get('form') || 'megaX';
     const formName = urlParams.get('name') || 'Special Form';
-    
+
     let currentLanguage = localStorage.getItem('language') || 'en';
-    
+
     const typeColors = {
         normal: "#A8A77A", fire: "#EE8130", water: "#6390F0",
         electric: "#F7D02C", grass: "#7AC74C", ice: "#96D9D6",
@@ -386,111 +396,95 @@
         rock: "#B6A136", ghost: "#735797", dragon: "#6F35FC",
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
-    
-    // ========== FUNKTIONIERENDE PNG-BILD-URLS ==========
-    // Verwendung von Project Pokemon Images Repository
-    function getImageUrlForForm(baseId, formKey, formType) {
-        const paddedId = String(baseId).padStart(3, '0');
-        
-        // Spezielle URLs für verschiedene Formen
-        // Quelle: https://github.com/Project-EKISHO/pokemon-images
-        
-        // 1. Ash-Greninja (Battle Bond)
-        if (formKey === 'bond' && baseId === 658) {
-            return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/658-Ash-Greninja.png`;
-        }
-        
-        // 2. Mega Greninja
-        if (formKey === 'mega' && baseId === 658) {
-            return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/658-Mega.png`;
-        }
-        
-        // 3. Mega Raichu
-        if (formKey === 'mega' && baseId === 26) {
-            return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/026-Mega.png`;
-        }
-        
-        // 4. Gigantamax Formen
+
+    // Basis-URLs für Bilder
+    const POKEAPI_ARTWORK_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
+    const HYBRID_IMAGE_BASE_URL = 'https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/images/';
+    const POKEMONDB_IMAGE_URL = 'https://img.pokemondb.net/artwork/';
+
+    // ========== BILD-URL FÜR ALLE FORMEN ==========
+    function getImageUrlForForm(baseId, formKey, formData) {
+        // Für Gigantamax
         if (formKey === 'gmax') {
-            const gmaxFiles = {
-                3: '003-Gigantamax', 6: '006-Gigantamax', 9: '009-Gigantamax',
-                12: '012-Gigantamax', 25: '025-Gigantamax', 52: '052-Gigantamax',
-                68: '068-Gigantamax', 94: '094-Gigantamax', 99: '099-Gigantamax',
-                131: '131-Gigantamax', 133: '133-Gigantamax', 143: '143-Gigantamax'
+            const gmaxNames = {
+                3: 'venusaur-gigantamax', 6: 'charizard-gigantamax', 9: 'blastoise-gigantamax',
+                12: 'butterfree-gigantamax', 25: 'pikachu-gigantamax', 52: 'meowth-gigantamax',
+                68: 'machamp-gigantamax', 94: 'gengar-gigantamax', 99: 'kingler-gigantamax',
+                131: 'lapras-gigantamax', 133: 'eevee-gigantamax', 143: 'snorlax-gigantamax'
             };
-            if (gmaxFiles[baseId]) {
-                return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/${gmaxFiles[baseId]}.png`;
+            if (gmaxNames[baseId]) {
+                return `${POKEMONDB_IMAGE_URL}${gmaxNames[baseId]}.jpg`;
             }
         }
         
-        // 5. Mega Evolutions
+        // Für Mega Evolutions
         if (formKey === 'mega' || formKey === 'megaX' || formKey === 'megaY') {
-            // Charizard X/Y
-            if (baseId === 6 && formKey === 'megaX') {
-                return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/006-Mega-X.png`;
+            const megaNames = {
+                3: 'venusaur-mega', 6: 'charizard-mega-x', 9: 'blastoise-mega',
+                15: 'beedrill-mega', 18: 'pidgeot-mega', 65: 'alakazam-mega',
+                80: 'slowbro-mega', 94: 'gengar-mega', 115: 'kangaskhan-mega',
+                127: 'pinsir-mega', 130: 'gyarados-mega', 142: 'aerodactyl-mega',
+                150: 'mewtwo-mega-x', 181: 'ampharos-mega', 208: 'steelix-mega',
+                212: 'scizor-mega', 214: 'heracross-mega', 229: 'houndoom-mega',
+                248: 'tyranitar-mega', 254: 'sceptile-mega', 257: 'blaziken-mega',
+                260: 'swampert-mega', 282: 'gardevoir-mega', 302: 'sableye-mega',
+                303: 'mawile-mega', 306: 'aggron-mega', 308: 'medicham-mega',
+                310: 'manectric-mega', 319: 'sharpedo-mega', 323: 'camerupt-mega',
+                334: 'altaria-mega', 354: 'banette-mega', 359: 'absol-mega',
+                362: 'glalie-mega', 373: 'salamence-mega', 376: 'metagross-mega',
+                380: 'latias-mega', 381: 'latios-mega', 384: 'rayquaza-mega',
+                428: 'lopunny-mega', 445: 'garchomp-mega', 448: 'lucario-mega',
+                460: 'abomasnow-mega', 475: 'gallade-mega', 531: 'audino-mega',
+                658: 'greninja-mega', 719: 'diancie-mega', 26: 'raichu-mega'
+            };
+            let megaName = megaNames[baseId];
+            if (formKey === 'megaX') megaName = megaNames[baseId]?.replace('-x', '') + '-x';
+            if (formKey === 'megaY') megaName = megaNames[baseId]?.replace('-x', '') + '-y';
+            if (megaName) {
+                return `${POKEMONDB_IMAGE_URL}${megaName}.jpg`;
             }
-            if (baseId === 6 && formKey === 'megaY') {
-                return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/006-Mega-Y.png`;
-            }
-            // Mewtwo X/Y
-            if (baseId === 150 && formKey === 'megaX') {
-                return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/150-Mega-X.png`;
-            }
-            if (baseId === 150 && formKey === 'megaY') {
-                return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/150-Mega-Y.png`;
-            }
-            // Alle anderen Megas
-            return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/${paddedId}-Mega.png`;
         }
         
-        // 6. Primal Forms
+        // Für Ash-Greninja (Battle Bond)
+        if (formKey === 'bond' && baseId === 658) {
+            return `https://img.pokemondb.net/artwork/ash-greninja.jpg`;
+        }
+        
+        // Für Primal Forms
         if (formKey === 'primal') {
-            if (baseId === 382) {
-                return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/382-Primal.png`;
-            }
-            if (baseId === 383) {
-                return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/383-Primal.png`;
-            }
+            if (baseId === 382) return `${POKEMONDB_IMAGE_URL}kyogre-primal.jpg`;
+            if (baseId === 383) return `${POKEMONDB_IMAGE_URL}groudon-primal.jpg`;
         }
         
-        // 7. Alolan Forms
+        // Für Alolan Forms (HybridShivam PNGs)
         if (formKey === 'alolan') {
-            return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/${paddedId}-Alolan.png`;
+            const paddedId = String(baseId).padStart(3, '0');
+            return `${HYBRID_IMAGE_BASE_URL}${paddedId}-Alolan.png`;
         }
         
-        // 8. Galarian Forms
+        // Für Galarian Forms (HybridShivam PNGs)
         if (formKey === 'galarian') {
-            return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/${paddedId}-Galarian.png`;
+            const paddedId = String(baseId).padStart(3, '0');
+            return `${HYBRID_IMAGE_BASE_URL}${paddedId}-Galarian.png`;
         }
         
-        // 9. Hisuian Forms
+        // Für Hisuian Forms (HybridShivam PNGs)
         if (formKey === 'hisuian') {
-            if (baseId === 571) {
-                return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/571-Hisui.png`;
-            }
-            return `https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/${paddedId}-Hisuian.png`;
+            const paddedId = String(baseId).padStart(3, '0');
+            if (baseId === 571) return `${HYBRID_IMAGE_BASE_URL}571-Hisui.png`;
+            return `${HYBRID_IMAGE_BASE_URL}${paddedId}-Hisuian.png`;
         }
         
-        // Fallback: Offizielles Artwork
-        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${baseId}.png`;
+        // Fallback: Standard Artwork
+        return `${POKEAPI_ARTWORK_URL}${baseId}.png`;
     }
-    
+
     // ========== SPEZIALFORMEN DATEN ==========
     const specialFormData = {
         // Alolan Forms
         "26-alolan": { types: ["electric","psychic"], ability: "Surge Surfer", hp:60, attack:85, defense:50, spAttack:95, spDefense:85, speed:110, dex: "Alolan Raichu surfs on its tail using psychic power." },
-        "27-alolan": { types: ["ice","steel"], ability: "Snow Cloak", hp:50, attack:75, defense:90, spAttack:10, spDefense:35, speed:40, dex: "Alolan Sandshrew lives on snowy mountains." },
         "28-alolan": { types: ["ice","steel"], ability: "Slush Rush", hp:75, attack:100, defense:120, spAttack:25, spDefense:65, speed:65, dex: "Alolan Sandslash's back is covered with ice spikes." },
-        "37-alolan": { types: ["ice"], ability: "Snow Cloak", hp:38, attack:41, defense:40, spAttack:50, spDefense:65, speed:65, dex: "Alolan Vulpix lives on snowy mountains." },
-        "38-alolan": { types: ["ice","fairy"], ability: "Snow Warning", hp:73, attack:67, defense:75, spAttack:81, spDefense:100, speed:109, dex: "Alolan Ninetales's frozen tail is beautiful. Its hidden ability is Snow Warning." },
-        "50-alolan": { types: ["ground","steel"], ability: "Sand Veil", hp:10, attack:55, defense:30, spAttack:35, spDefense:45, speed:90, dex: "Alolan Diglett has three small hairs." },
-        "51-alolan": { types: ["ground","steel"], ability: "Sand Veil", hp:35, attack:100, defense:60, spAttack:50, spDefense:70, speed:110, dex: "Alolan Dugtrio's steel whiskers are deadly." },
-        "52-alolan": { types: ["dark"], ability: "Pickup", hp:40, attack:35, defense:35, spAttack:50, spDefense:40, speed:90, dex: "Alolan Meowth is prideful and vain." },
-        "53-alolan": { types: ["dark"], ability: "Fur Coat", hp:65, attack:60, defense:60, spAttack:75, spDefense:65, speed:115, dex: "Alolan Persian's round face is cute." },
-        "74-alolan": { types: ["rock","electric"], ability: "Magnet Pull", hp:40, attack:80, defense:100, spAttack:30, spDefense:30, speed:20, dex: "Alolan Geodude has magnetic abilities." },
-        "75-alolan": { types: ["rock","electric"], ability: "Magnet Pull", hp:55, attack:95, defense:115, spAttack:45, spDefense:45, speed:35, dex: "Alolan Graveler zaps opponents." },
-        "76-alolan": { types: ["rock","electric"], ability: "Magnet Pull", hp:80, attack:120, defense:130, spAttack:55, spDefense:65, speed:45, dex: "Alolan Golem fires rocks." },
-        "88-alolan": { types: ["poison","dark"], ability: "Poison Touch", hp:80, attack:80, defense:50, spAttack:40, spDefense:50, speed:25, dex: "Alolan Grimer eats garbage." },
+        "38-alolan": { types: ["ice","fairy"], ability: "Snow Warning", hp:73, attack:67, defense:75, spAttack:81, spDefense:100, speed:109, dex: "Alolan Ninetales's frozen tail is beautiful." },
         "89-alolan": { types: ["poison","dark"], ability: "Poison Touch", hp:105, attack:105, defense:75, spAttack:65, spDefense:100, speed:50, dex: "Alolan Muk's rainbow colors are toxic." },
         "103-alolan": { types: ["grass","dragon"], ability: "Frisk", hp:95, attack:105, defense:85, spAttack:125, spDefense:75, speed:45, dex: "Alolan Exeggutor's tall neck absorbs sunlight." },
         "105-alolan": { types: ["fire","ghost"], ability: "Cursed Body", hp:60, attack:80, defense:110, spAttack:50, spDefense:80, speed:45, dex: "Alolan Marowak uses its bone as a torch." },
@@ -500,16 +494,9 @@
         "6-megaX": { types: ["fire","dragon"], ability: "Tough Claws", hp:78, attack:130, defense:111, spAttack:130, spDefense:85, speed:100, dex: "Mega Charizard X's blue flames burn hotter than ever." },
         "6-megaY": { types: ["fire","flying"], ability: "Drought", hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, dex: "Mega Charizard Y has immense special attack power." },
         "9-mega": { types: ["water"], ability: "Mega Launcher", hp:79, attack:103, defense:120, spAttack:135, spDefense:115, speed:78, dex: "Mega Blastoise's cannons are enormous." },
-        "15-mega": { types: ["bug","poison"], ability: "Adaptability", hp:65, attack:150, defense:40, spAttack:15, spDefense:80, speed:145, dex: "Mega Beedrill's stingers are deadly." },
-        "18-mega": { types: ["normal","flying"], ability: "No Guard", hp:83, attack:80, defense:80, spAttack:135, spDefense:80, speed:121, dex: "Mega Pidgeot's speed is unmatched." },
         "26-mega": { types: ["electric","psychic"], ability: "Surge Surfer", hp:60, attack:100, defense:70, spAttack:110, spDefense:95, speed:130, dex: "Mega Raichu's psychic power has increased dramatically." },
-        "65-mega": { types: ["psychic"], ability: "Trace", hp:55, attack:50, defense:65, spAttack:175, spDefense:105, speed:150, dex: "Mega Alakazam reads minds." },
-        "80-mega": { types: ["water","psychic"], ability: "Shell Armor", hp:95, attack:75, defense:180, spAttack:130, spDefense:80, speed:30, dex: "Mega Slowbro's shell is hard." },
         "94-mega": { types: ["ghost","poison"], ability: "Shadow Tag", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Mega Gengar traps opponents." },
-        "115-mega": { types: ["normal"], ability: "Parental Bond", hp:105, attack:125, defense:100, spAttack:60, spDefense:100, speed:100, dex: "Mega Kangaskhan fights with its child." },
-        "127-mega": { types: ["bug"], ability: "Aerilate", hp:65, attack:155, defense:120, spAttack:65, spDefense:90, speed:105, dex: "Mega Pinsir's flight is powerful." },
         "130-mega": { types: ["water","dark"], ability: "Mold Breaker", hp:95, attack:155, defense:109, spAttack:70, spDefense:130, speed:81, dex: "Mega Gyarados's rage destroys everything." },
-        "142-mega": { types: ["rock","flying"], ability: "Tough Claws", hp:80, attack:135, defense:85, spAttack:70, spDefense:95, speed:150, dex: "Mega Aerodactyl's fangs are sharp." },
         "150-megaX": { types: ["psychic","fighting"], ability: "Steadfast", hp:106, attack:190, defense:100, spAttack:154, spDefense:100, speed:130, dex: "Mega Mewtwo X focuses on physical combat." },
         "150-megaY": { types: ["psychic"], ability: "Insomnia", hp:106, attack:150, defense:70, spAttack:194, spDefense:120, speed:140, dex: "Mega Mewtwo Y has peak psychic ability." },
         "181-mega": { types: ["electric","dragon"], ability: "Mold Breaker", hp:90, attack:95, defense:105, spAttack:165, spDefense:110, speed:45, dex: "Mega Ampharos gains the Dragon type." },
@@ -518,9 +505,7 @@
         "214-mega": { types: ["bug","fighting"], ability: "Skill Link", hp:80, attack:185, defense:115, spAttack:40, spDefense:105, speed:75, dex: "Mega Heracross's horn grows massive." },
         "229-mega": { types: ["dark","fire"], ability: "Solar Power", hp:75, attack:90, defense:90, spAttack:140, spDefense:90, speed:115, dex: "Mega Houndoom's flames burn intensely." },
         "248-mega": { types: ["rock","dark"], ability: "Sand Stream", hp:100, attack:164, defense:150, spAttack:95, spDefense:120, speed:71, dex: "Mega Tyranitar's armor is impenetrable." },
-        "254-mega": { types: ["grass","dragon"], ability: "Lightning Rod", hp:70, attack:110, defense:75, spAttack:145, spDefense:85, speed:145, dex: "Mega Sceptile's speed is incredible." },
         "257-mega": { types: ["fire","fighting"], ability: "Speed Boost", hp:80, attack:160, defense:80, spAttack:130, spDefense:80, speed:100, dex: "Mega Blaziken's kicks are devastating." },
-        "260-mega": { types: ["water","ground"], ability: "Swift Swim", hp:100, attack:150, defense:110, spAttack:95, spDefense:110, speed:70, dex: "Mega Swampert's strength is massive." },
         "282-mega": { types: ["psychic","fairy"], ability: "Pixilate", hp:68, attack:85, defense:65, spAttack:165, spDefense:135, speed:100, dex: "Mega Gardevoir creates black holes." },
         "302-mega": { types: ["dark","ghost"], ability: "Magic Bounce", hp:50, attack:85, defense:125, spAttack:85, spDefense:115, speed:20, dex: "Mega Sableye's jewel reflects attacks." },
         "303-mega": { types: ["steel","fairy"], ability: "Huge Power", hp:50, attack:105, defense:125, spAttack:55, spDefense:95, speed:50, dex: "Mega Mawile's jaws crush iron." },
@@ -535,8 +520,6 @@
         "362-mega": { types: ["ice"], ability: "Refrigerate", hp:80, attack:120, defense:80, spAttack:120, spDefense:80, speed:100, dex: "Mega Glalie's jaw shatters." },
         "373-mega": { types: ["dragon","flying"], ability: "Aerilate", hp:95, attack:145, defense:130, spAttack:120, spDefense:90, speed:120, dex: "Mega Salamence's wings merge." },
         "376-mega": { types: ["steel","psychic"], ability: "Tough Claws", hp:80, attack:145, defense:150, spAttack:105, spDefense:110, speed:110, dex: "Mega Metagross becomes aerodynamic." },
-        "380-mega": { types: ["dragon","psychic"], ability: "Levitate", hp:80, attack:100, defense:120, spAttack:140, spDefense:150, speed:110, dex: "Mega Latias's defense increases." },
-        "381-mega": { types: ["dragon","psychic"], ability: "Levitate", hp:80, attack:130, defense:100, spAttack:160, spDefense:120, speed:110, dex: "Mega Latios's attack increases." },
         "384-mega": { types: ["dragon","flying"], ability: "Delta Stream", hp:105, attack:180, defense:100, spAttack:180, spDefense:100, speed:115, dex: "Mega Rayquaza calms the weather." },
         "428-mega": { types: ["normal","fighting"], ability: "Scrappy", hp:65, attack:136, defense:94, spAttack:54, spDefense:96, speed:135, dex: "Mega Lopunny's kicks bend steel." },
         "445-mega": { types: ["dragon","ground"], ability: "Sand Force", hp:108, attack:170, defense:115, spAttack:120, spDefense:95, speed:92, dex: "Mega Garchomp's blades cut steel." },
@@ -570,26 +553,20 @@
         "143-gmax": { types: ["normal"], ability: "Gluttony", hp:160, attack:110, defense:65, spAttack:65, spDefense:110, speed:30, dex: "Gigantamax Snorlax's belly grows." },
         
         // Galarian Forms
-        "52-galarian": { types: ["steel"], ability: "Pickup", hp:40, attack:35, defense:35, spAttack:50, spDefense:40, speed:90, dex: "Galarian Meowth has a iron whiskers." },
         "77-galarian": { types: ["psychic"], ability: "Pastel Veil", hp:50, attack:85, defense:55, spAttack:65, spDefense:65, speed:90, dex: "Galarian Ponyta's horn heals." },
         "78-galarian": { types: ["psychic","fairy"], ability: "Pastel Veil", hp:65, attack:100, defense:70, spAttack:80, spDefense:80, speed:105, dex: "Galarian Rapidash reads emotions." },
-        "83-galarian": { types: ["fighting"], ability: "Steadfast", hp:52, attack:95, defense:55, spAttack:58, spDefense:62, speed:55, dex: "Galarian Farfetch'd fights with a leek." },
-        "110-galarian": { types: ["poison","fairy"], ability: "Levitate", hp:65, attack:90, defense:120, spAttack:85, spDefense:70, speed:60, dex: "Galarian Weezing absorbs polluted air." },
-        "122-galarian": { types: ["ice","psychic"], ability: "Vital Spirit", hp:50, attack:65, defense:65, spAttack:90, spDefense:90, speed:100, dex: "Galarian Mr. Mime taps rhythmically." },
-        "263-galarian": { types: ["dark","normal"], ability: "Pickup", hp:38, attack:30, defense:41, spAttack:30, spDefense:41, speed:60, dex: "Galarian Zigzagoon runs in zigzags." },
-        "264-galarian": { types: ["dark","normal"], ability: "Pickup", hp:78, attack:70, defense:61, spAttack:50, spDefense:61, speed:100, dex: "Galarian Linoone is aggressive." },
         
         // Hisuian Forms
         "58-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:60, attack:75, defense:45, spAttack:65, spDefense:50, speed:55, dex: "Hisuian Growlithe has a rocky horn." },
         "59-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:90, attack:115, defense:80, spAttack:95, spDefense:80, speed:90, dex: "Hisuian Arcanine's rocky fur protects." },
-        "100-hisuian": { types: ["electric","grass"], ability: "Soundproof", hp:40, attack:30, defense:50, spAttack:55, spDefense:55, speed:100, dex: "Hisuian Voltorb is energetic." },
-        "101-hisuian": { types: ["electric","grass"], ability: "Soundproof", hp:60, attack:50, defense:70, spAttack:80, spDefense:80, speed:150, dex: "Hisuian Electrode is explosive." },
         "571-hisuian": { types: ["normal","ghost"], ability: "Illusion", hp:55, attack:100, defense:60, spAttack:125, spDefense:60, speed:110, dex: "Hisuian Zoroark's illusions are powerful." }
     };
-    
+
+    // Finde die Daten für die aktuelle Form
     let lookupKey = `${basePokemonId}-${formKey}`;
     let formData = specialFormData[lookupKey];
-    
+
+    // Fallback für nicht gefundene Formen
     if (!formData) {
         formData = {
             types: ["normal"], ability: "Unknown", hp: 100, attack: 100, defense: 100,
@@ -597,56 +574,57 @@
             dex: `${formName} is a special form of Pokémon #${basePokemonId}.`
         };
     }
-    
+
     const cryUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${basePokemonId}.ogg`;
-    
+
     function playCry() {
         const audio = new Audio(cryUrl);
         audio.volume = 0.3;
         audio.play().catch(e => console.log('Playback failed'));
     }
-    
+
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
         const btn = document.getElementById('darkModeBtn');
         btn.innerHTML = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
     }
-    
+
     function changeLanguage(lang) {
         localStorage.setItem('language', lang);
         document.getElementById('languageSelect').value = lang;
     }
-    
+
     if (localStorage.getItem('darkMode') === 'true') {
         document.body.classList.add('dark-mode');
         document.getElementById('darkModeBtn').innerHTML = '☀️ Light Mode';
     }
     document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
-    
+
     function loadSpecialForm() {
         const container = document.getElementById('mainContainer');
         const totalStats = formData.hp + formData.attack + formData.defense + 
                           formData.spAttack + formData.spDefense + formData.speed;
-        
+
         let badgeClass = 'type-badge-mega';
         let badgeText = '⚡ MEGA EVOLUTION';
         if (formKey === 'gmax') { badgeClass = 'type-badge-gmax'; badgeText = '💥 GIGANTAMAX'; }
         else if (formKey === 'primal') { badgeClass = 'type-badge-primal'; badgeText = '🌊 PRIMAL REVERSION'; }
         else if (formKey === 'bond') { badgeClass = 'type-badge-bond'; badgeText = '🤝 BATTLE BOND'; }
-        else if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian' || formKey === 'paldean') 
+        else if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian') 
             { badgeClass = 'type-badge-regional'; badgeText = '🌍 REGIONAL FORM'; }
-        
-        const imageUrl = getImageUrlForForm(basePokemonId, formKey, formName);
-        const fallbackUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${basePokemonId}.png`;
-        
+        else if (formKey === 'paradox') { badgeClass = 'type-badge-paradox'; badgeText = '⏱️ PARADOX FORM'; }
+
+        const imageUrl = getImageUrlForForm(basePokemonId, formKey, formData);
+        const fallbackImageUrl = `${POKEAPI_ARTWORK_URL}${basePokemonId}.png`;
+
         container.innerHTML = `
             <div class="pokemon-header">
                 <h1>${formName} <span class="${badgeClass}">${badgeText}</span></h1>
             </div>
             <div class="pokemon-image-container">
                 <img class="pokemon-image" src="${imageUrl}" alt="${formName}" 
-                     onerror="this.onerror=null; this.src='${fallbackUrl}';">
+                     onerror="this.onerror=null; this.src='${fallbackImageUrl}';">
             </div>
             <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
             <div class="info-grid">
@@ -680,7 +658,7 @@
             </div>
         `;
     }
-    
+
     loadSpecialForm();
 </script>
 </body>
