@@ -92,6 +92,7 @@
         .special-btn.gmax { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; }
         .special-btn.primal { background: linear-gradient(135deg, #00bcd4, #0097a7); color: white; }
         .special-btn.regional { background: linear-gradient(135deg, #2196f3, #1976d2); color: white; }
+        .special-btn.bond { background: linear-gradient(135deg, #ff9800, #f57c00); color: white; }
         .special-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .action-buttons { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
         .cry-button, .print-btn { background: #2a75bb; color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; font-weight: bold; }
@@ -254,25 +255,26 @@
         531: { mega: "Mega Audino" },
         
         // Kalos Mega Evolutions
+        658: { bond: "Ash-Greninja" },  // Greninja Battle Bond Form
         719: { mega: "Mega Diancie" },
         
-        // ===== Z-A MEGAS (Legends Z-A) =====
-        26: { mega: "Mega Raichu" },          // Mega Raichu
-        101: { mega: "Mega Electrode" },      // Mega Electrode
-        132: { mega: "Mega Ditto" },          // Mega Ditto
-        196: { mega: "Mega Espeon" },         // Mega Espeon
-        197: { mega: "Mega Umbreon" },        // Mega Umbreon
-        470: { mega: "Mega Leafeon" },        // Mega Leafeon
-        471: { mega: "Mega Glaceon" },        // Mega Glaceon
-        479: { mega: "Mega Rotom" },          // Mega Rotom
-        603: { mega: "Mega Eelektrik" },      // Mega Eelektrik
-        604: { mega: "Mega Eelektross" },     // Mega Eelektross (Elektross Mega)
-        609: { mega: "Mega Chandelure" },     // Mega Chandelure
-        619: { mega: "Mega Mienfoo" },        // Mega Mienfoo
-        620: { mega: "Mega Mienshao" },       // Mega Mienshao
-        718: { mega: "Mega Zygarde" },        // Mega Zygarde (mit Hidden Ability)
+        // Z-A MEGAS (Legends Z-A)
+        26: { mega: "Mega Raichu" },
+        101: { mega: "Mega Electrode" },
+        132: { mega: "Mega Ditto" },
+        196: { mega: "Mega Espeon" },
+        197: { mega: "Mega Umbreon" },
+        470: { mega: "Mega Leafeon" },
+        471: { mega: "Mega Glaceon" },
+        479: { mega: "Mega Rotom" },
+        603: { mega: "Mega Eelektrik" },
+        604: { mega: "Mega Eelektross" },
+        609: { mega: "Mega Chandelure" },
+        619: { mega: "Mega Mienfoo" },
+        620: { mega: "Mega Mienshao" },
+        718: { mega: "Mega Zygarde" },
         
-        // Gigantamax (Gen 8) - aber nur für Gen 1-6 Pokémon
+        // Gigantamax (Gen 8)
         12: { gmax: "Gigantamax Butterfree" },
         25: { gmax: "Gigantamax Pikachu" },
         52: { gmax: "Gigantamax Meowth" },
@@ -282,7 +284,7 @@
         133: { gmax: "Gigantamax Eevee" },
         143: { gmax: "Gigantamax Snorlax" },
         
-        // Alolan Forms (Gen 7 - aber für Gen 1-6 Pokémon)
+        // Alolan Forms
         26: { alolan: "Alolan Raichu" },
         27: { alolan: "Alolan Sandshrew" },
         28: { alolan: "Alolan Sandslash" },
@@ -300,7 +302,7 @@
         103: { alolan: "Alolan Exeggutor" },
         105: { alolan: "Alolan Marowak" },
         
-        // Galarian Forms (Gen 8)
+        // Galarian Forms
         52: { galarian: "Galarian Meowth" },
         77: { galarian: "Galarian Ponyta" },
         78: { galarian: "Galarian Rapidash" },
@@ -490,6 +492,7 @@
                     if (key === 'mega' || key === 'megaX' || key === 'megaY') btnClass += ' mega';
                     else if (key === 'gmax') btnClass += ' gmax';
                     else if (key === 'primal') btnClass += ' primal';
+                    else if (key === 'bond') btnClass += ' bond';
                     else btnClass += ' regional';
                     specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${name}')">✨ ${name}</button>`;
                 }
