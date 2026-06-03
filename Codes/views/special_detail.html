@@ -166,6 +166,16 @@
             margin-left: 10px;
         }
 
+        .type-badge-bond {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
         .type-badge-paradox {
             display: inline-block;
             background: linear-gradient(135deg, #e91e63, #c2185b);
@@ -391,6 +401,7 @@
     const POKEAPI_ARTWORK_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
     const HYBRID_IMAGE_BASE_URL = 'https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/images/';
     const POKEMONDB_IMAGE_URL = 'https://img.pokemondb.net/artwork/';
+    const PROJECT_EKISHO_URL = 'https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/';
 
     // ========== NEUE FUNKTION: Holt offizielles Artwork von PokeAPI ==========
     async function getOfficialFormArtwork(apiFormName) {
@@ -399,7 +410,6 @@
             const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${apiFormName}`);
             if (!response.ok) return null;
             const data = await response.json();
-            // Priorität: offizielles Artwork > Front Sprite
             return data.sprites?.other?.["official-artwork"]?.front_default || data.sprites?.front_default || null;
         } catch (error) {
             console.log(`Could not fetch artwork for ${apiFormName}:`, error);
@@ -409,107 +419,70 @@
 
     // ========== BILD-URL FÜR ALLE FORMEN ==========
     function getImageUrlForForm(baseId, formKey, formData) {
-        // ========== GIGANTAMAX - KORRIGIERT: Jetzt PNG von HybridShivam ==========
+        // Gigantamax - zuerst versuchen von Project-EKISHO (funktioniert besser)
         if (formKey === 'gmax') {
-            const gmaxPngFiles = {
+            // Versuche Project-EKISHO zuerst
+            const gmaxEkishoFiles = {
                 3: '003-Gigantamax', 6: '006-Gigantamax', 9: '009-Gigantamax',
                 12: '012-Gigantamax', 25: '025-Gigantamax', 52: '052-Gigantamax',
                 68: '068-Gigantamax', 94: '094-Gigantamax', 99: '099-Gigantamax',
                 131: '131-Gigantamax', 133: '133-Gigantamax', 143: '143-Gigantamax'
             };
-            if (gmaxPngFiles[baseId]) {
-                return `${HYBRID_IMAGE_BASE_URL}${gmaxPngFiles[baseId]}.png`;
+            if (gmaxEkishoFiles[baseId]) {
+                return `${PROJECT_EKISHO_URL}${gmaxEkishoFiles[baseId]}.png`;
             }
         }
         
-        // Für Mega Evolutions
+        // Für Mega Evolutions - zuerst versuchen von Project-EKISHO
         if (formKey === 'mega' || formKey === 'megaX' || formKey === 'megaY') {
-            const megaNames = {
-                3: 'venusaur-mega', 6: 'charizard-mega-x', 9: 'blastoise-mega',
-                15: 'beedrill-mega', 18: 'pidgeot-mega', 65: 'alakazam-mega',
-                80: 'slowbro-mega', 94: 'gengar-mega', 115: 'kangaskhan-mega',
-                127: 'pinsir-mega', 130: 'gyarados-mega', 142: 'aerodactyl-mega',
-                150: 'mewtwo-mega-x', 181: 'ampharos-mega', 208: 'steelix-mega',
-                212: 'scizor-mega', 214: 'heracross-mega', 229: 'houndoom-mega',
-                248: 'tyranitar-mega', 254: 'sceptile-mega', 257: 'blaziken-mega',
-                260: 'swampert-mega', 282: 'gardevoir-mega', 302: 'sableye-mega',
-                303: 'mawile-mega', 306: 'aggron-mega', 308: 'medicham-mega',
-                310: 'manectric-mega', 319: 'sharpedo-mega', 323: 'camerupt-mega',
-                334: 'altaria-mega', 354: 'banette-mega', 359: 'absol-mega',
-                362: 'glalie-mega', 373: 'salamence-mega', 376: 'metagross-mega',
-                380: 'latias-mega', 381: 'latios-mega', 384: 'rayquaza-mega',
-                428: 'lopunny-mega', 445: 'garchomp-mega', 448: 'lucario-mega',
-                460: 'abomasnow-mega', 475: 'gallade-mega', 531: 'audino-mega',
-                719: 'diancie-mega'
-            };
-            let megaName = megaNames[baseId];
-            if (formKey === 'megaX') megaName = megaNames[baseId]?.replace('-x', '') + '-x';
-            if (formKey === 'megaY') megaName = megaNames[baseId]?.replace('-x', '') + '-y';
-            if (megaName) {
-                return `${POKEMONDB_IMAGE_URL}${megaName}.jpg`;
+            const paddedId = String(baseId).padStart(3, '0');
+            if (baseId === 6 && formKey === 'megaX') {
+                return `${PROJECT_EKISHO_URL}006-Mega-X.png`;
             }
+            if (baseId === 6 && formKey === 'megaY') {
+                return `${PROJECT_EKISHO_URL}006-Mega-Y.png`;
+            }
+            if (baseId === 150 && formKey === 'megaX') {
+                return `${PROJECT_EKISHO_URL}150-Mega-X.png`;
+            }
+            if (baseId === 150 && formKey === 'megaY') {
+                return `${PROJECT_EKISHO_URL}150-Mega-Y.png`;
+            }
+            return `${PROJECT_EKISHO_URL}${paddedId}-Mega.png`;
         }
         
         // Für Primal Forms
         if (formKey === 'primal') {
-            const primalNames = { 382: 'kyogre-primal', 383: 'groudon-primal' };
-            if (primalNames[baseId]) {
-                return `${POKEMONDB_IMAGE_URL}${primalNames[baseId]}.jpg`;
-            }
+            if (baseId === 382) return `${PROJECT_EKISHO_URL}382-Primal.png`;
+            if (baseId === 383) return `${PROJECT_EKISHO_URL}383-Primal.png`;
         }
         
-        // Für Regionale Formen
+        // Für Alolan Forms
         if (formKey === 'alolan') {
-            const alolanNames = {
-                26: 'raichu-alolan', 27: 'sandshrew-alolan', 28: 'sandslash-alolan',
-                37: 'vulpix-alolan', 38: 'ninetales-alolan', 50: 'diglett-alolan',
-                51: 'dugtrio-alolan', 52: 'meowth-alolan', 53: 'persian-alolan',
-                74: 'geodude-alolan', 75: 'graveler-alolan', 76: 'golem-alolan',
-                88: 'grimer-alolan', 89: 'muk-alolan', 103: 'exeggutor-alolan',
-                105: 'marowak-alolan'
-            };
-            if (alolanNames[baseId]) {
-                return `${POKEMONDB_IMAGE_URL}${alolanNames[baseId]}.jpg`;
-            }
+            const paddedId = String(baseId).padStart(3, '0');
+            return `${PROJECT_EKISHO_URL}${paddedId}-Alolan.png`;
         }
         
+        // Für Galarian Forms
         if (formKey === 'galarian') {
-            const galarianNames = {
-                52: 'meowth-galar', 77: 'ponyta-galar', 78: 'rapidash-galar',
-                79: 'slowpoke-galar', 80: 'slowbro-galar', 83: 'farfetchd-galar',
-                110: 'weezing-galar', 122: 'mrmime-galar', 144: 'articuno-galar',
-                145: 'zapdos-galar', 146: 'moltres-galar', 263: 'zigzagoon-galar',
-                264: 'linoone-galar', 554: 'darumaka-galar', 555: 'darmanitan-galar',
-                562: 'yamask-galar', 618: 'stunfisk-galar'
-            };
-            if (galarianNames[baseId]) {
-                return `${POKEMONDB_IMAGE_URL}${galarianNames[baseId]}.jpg`;
-            }
+            const paddedId = String(baseId).padStart(3, '0');
+            return `${PROJECT_EKISHO_URL}${paddedId}-Galarian.png`;
         }
         
+        // Für Hisuian Forms
         if (formKey === 'hisuian') {
-            const hisuianNames = {
-                58: 'growlithe-hisui', 59: 'arcanine-hisui', 100: 'voltorb-hisui',
-                101: 'electrode-hisui', 123: 'scyther-hisui', 190: 'aipom-hisui',
-                424: 'ambipom-hisui', 549: 'lilligant-hisui', 571: 'zoroark-hisui',
-                628: 'braviary-hisui', 713: 'avalugg-hisui', 899: 'wyrdeer',
-                900: 'kleavor', 901: 'ursaluna', 902: 'basculegion',
-                903: 'sneasler', 904: 'overqwil'
-            };
-            if (hisuianNames[baseId]) {
-                return `${POKEMONDB_IMAGE_URL}${hisuianNames[baseId]}.jpg`;
-            }
+            const paddedId = String(baseId).padStart(3, '0');
+            if (baseId === 571) return `${PROJECT_EKISHO_URL}571-Hisui.png`;
+            return `${PROJECT_EKISHO_URL}${paddedId}-Hisuian.png`;
         }
         
-        if (formKey === 'paldean') {
-            const paldeanNames = { 194: 'wooper-paldea', 128: 'tauros-paldea-combat', 980: 'clodsire' };
-            if (paldeanNames[baseId]) {
-                return `${POKEMONDB_IMAGE_URL}${paldeanNames[baseId]}.jpg`;
-            }
+        // Für Ash-Greninja
+        if (formKey === 'bond' && baseId === 658) {
+            return `${PROJECT_EKISHO_URL}658-Ash-Greninja.png`;
         }
         
         // Fallback: Standard Artwork
-        return `${POKEAPI_ARTWORK_URL}${basePokemonId}.png`;
+        return `${POKEAPI_ARTWORK_URL}${baseId}.png`;
     }
 
     // ========== SPEZIALFORMEN DATEN ==========
@@ -561,6 +534,12 @@
         "531-mega": { types: ["normal","fairy"], ability: "Healer", hp:103, attack:60, defense:126, spAttack:80, spDefense:126, speed:50, dex: "Mega Audino's hearing is sensitive.", apiFormName: "audino-mega", imageFile: "531-Mega.png" },
         "719-mega": { types: ["rock","fairy"], ability: "Clear Body", hp:50, attack:160, defense:110, spAttack:160, spDefense:110, speed:110, dex: "Mega Diancie's body shines like diamond.", apiFormName: "diancie-mega", imageFile: "719-Mega.png" },
         
+        // ===== NEU: Ash-Greninja (Battle Bond) =====
+        "658-bond": { types: ["water","dark"], ability: "Battle Bond", hp:72, attack:145, defense:67, spAttack:153, spDefense:71, speed:132, dex: "Ash-Greninja shares a powerful bond with its trainer. Its water shurikens are incredibly fast and powerful.", apiFormName: "greninja-ash", imageFile: "658-Ash-Greninja.png", isBattleBond: true },
+        
+        // ===== NEU: Mega Greninja =====
+        "658-mega": { types: ["water","dark"], ability: "Protean", hp:72, attack:150, defense:67, spAttack:153, spDefense:71, speed:145, dex: "Mega Greninja's speed and power increase dramatically. It can change its type to match its moves.", apiFormName: "greninja-mega", imageFile: "658-Mega.png", isMega: true },
+        
         // Primal Forms
         "382-primal": { types: ["water"], ability: "Primordial Sea", hp:100, attack:150, defense:90, spAttack:180, spDefense:160, speed:90, dex: "Primal Kyogre floods the world.", apiFormName: "kyogre-primal", imageFile: "382-Primal.png" },
         "383-primal": { types: ["ground","fire"], ability: "Desolate Land", hp:100, attack:180, defense:160, spAttack:150, spDefense:90, speed:90, dex: "Primal Groudon expands continents.", apiFormName: "groudon-primal", imageFile: "383-Primal.png" },
@@ -592,8 +571,13 @@
     let lookupKey = `${basePokemonId}-${formKey}`;
     let formData = specialFormData[lookupKey];
 
+    // Debug-Ausgabe (in der Browser-Konsole sichtbar)
+    console.log("🔍 lookupKey:", lookupKey);
+    console.log("📦 formData:", formData);
+
     // Fallback für nicht gefundene Formen
     if (!formData) {
+        console.warn("⚠️ Keine Daten für Key gefunden:", lookupKey);
         formData = {
             types: ["normal"], ability: "Unknown", hp: 100, attack: 100, defense: 100,
             spAttack: 100, spDefense: 100, speed: 100,
@@ -607,28 +591,54 @@
     
     // ========== BILD-LOGIK ==========
     async function loadImageUrl() {
-        // Priorität 1: Offizielles PokeAPI Artwork (für Mega, Regional, Primal)
+        // Priorität 1: Direkter Bild-URL-Versuch mit Project-EKISHO
+        const directUrl = getImageUrlForForm(basePokemonId, formKey, formData);
+        console.log("🖼️ Versuche Bild-URL:", directUrl);
+        
+        // Wenn wir eine direkte URL haben, versuchen wir die Existenz zu prüfen
+        if (directUrl && !directUrl.includes(POKEAPI_ARTWORK_URL)) {
+            try {
+                // Teste ob das Bild existiert (mit fetch HEAD)
+                const testResponse = await fetch(directUrl, { method: 'HEAD' });
+                if (testResponse.ok) {
+                    console.log("✅ Bild gefunden:", directUrl);
+                    return directUrl;
+                } else {
+                    console.log("❌ Bild nicht gefunden (HTTP", testResponse.status, "):", directUrl);
+                }
+            } catch(e) {
+                console.log("⚠️ Bild-Test fehlgeschlagen:", directUrl, e);
+            }
+        }
+        
+        // Priorität 2: Offizielles PokeAPI Artwork (wenn apiFormName existiert)
         if (formData.apiFormName && !formData.isGmax) {
             const officialArtwork = await getOfficialFormArtwork(formData.apiFormName);
             if (officialArtwork) {
+                console.log("✅ Offizielles Artwork gefunden:", officialArtwork);
                 return officialArtwork;
             }
         }
         
-        // Priorität 2: HybridShivam Repository (für Gigantamax und Fallback)
+        // Priorität 3: HybridShivam Repository (Fallback für Gigantamax)
         if (formData.imageFile) {
             const hybridUrl = HYBRID_IMAGE_BASE_URL + formData.imageFile;
+            console.log("🖼️ Versuche HybridShivam:", hybridUrl);
+            // Wir testen nicht vorab, vertrauen auf onerror
             return hybridUrl;
         }
         
-        // Priorität 3: Generischer Fallback für regionale Formen
+        // Priorität 4: Generischer Fallback für regionale Formen
         if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian') {
             const paddedId = String(basePokemonId).padStart(3, '0');
             const region = formKey.charAt(0).toUpperCase() + formKey.slice(1);
-            return HYBRID_IMAGE_BASE_URL + paddedId + '-' + region + '.png';
+            const genericUrl = HYBRID_IMAGE_BASE_URL + paddedId + '-' + region + '.png';
+            console.log("🖼️ Generischer regionaler Fallback:", genericUrl);
+            return genericUrl;
         }
         
-        // Priorität 4: Standard Artwork
+        // Priorität 5: Standard Artwork
+        console.log("🖼️ Fallback zu Standard-Artwork:", fallbackImageUrl);
         return fallbackImageUrl;
     }
     
@@ -667,6 +677,7 @@
         let badgeText = '⚡ MEGA EVOLUTION';
         if (formKey === 'gmax') { badgeClass = 'type-badge-gmax'; badgeText = '💥 GIGANTAMAX'; }
         else if (formKey === 'primal') { badgeClass = 'type-badge-primal'; badgeText = '🌊 PRIMAL REVERSION'; }
+        else if (formKey === 'bond') { badgeClass = 'type-badge-bond'; badgeText = '🤝 BATTLE BOND'; }
         else if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian') { 
             badgeClass = 'type-badge-regional'; badgeText = '🌍 REGIONAL FORM'; 
         }
@@ -674,6 +685,7 @@
 
         // Bild asynchron laden
         const finalImageUrl = await loadImageUrl();
+        console.log("🎯 Finale Bild-URL:", finalImageUrl);
 
         container.innerHTML = `
             <div class="pokemon-header">
@@ -681,7 +693,7 @@
             </div>
             <div class="pokemon-image-container">
                 <img class="pokemon-image" src="${finalImageUrl}" alt="${formName}" 
-                     onerror="this.onerror=null; this.src='${fallbackImageUrl}'; this.alt='${formName} (Standard Artwork)'">
+                     onerror="this.onerror=null; this.src='${fallbackImageUrl}'; console.log('⚠️ Bild-Error, Fallback verwendet:', '${fallbackImageUrl}');">
             </div>
             <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
             <div class="info-grid">
