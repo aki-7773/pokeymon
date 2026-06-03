@@ -90,6 +90,7 @@
         .special-btn { padding: 8px 20px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 14px; }
         .special-btn.gmax { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; }
         .special-btn.regional { background: linear-gradient(135deg, #2196f3, #1976d2); color: white; }
+        .special-btn.mega { background: linear-gradient(135deg, #9c27b0, #7b1fa2); color: white; }
         .special-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         .action-buttons { display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap; }
         .cry-button, .print-btn { background: #2a75bb; color: white; border: none; padding: 10px 24px; border-radius: 40px; cursor: pointer; font-weight: bold; }
@@ -192,7 +193,7 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== SPEZIALFORMEN für Gen 7-9 ==========
+    // ========== SPEZIALFORMEN für Gen 7-9 (VOLLSTÄNDIG) ==========
     const specialFormsMapGen7Plus = {
         // Gigantamax (Gen 8) - Neue Pokémon aus Gen 8
         809: { gmax: "Gigantamax Melmetal" },
@@ -213,8 +214,10 @@
         869: { gmax: "Gigantamax Alcremie" },
         879: { gmax: "Gigantamax Copperajah" },
         884: { gmax: "Gigantamax Duraludon" },
+        890: { gmax: "Gigantamax Eternatus" },
+        892: { gmax: "Gigantamax Urshifu Single Strike" },
         
-        // Galarian Forms (Gen 8) - Regional Varianten
+        // Galarian Forms (Gen 8)
         79: { galarian: "Galarian Slowpoke" },
         80: { galarian: "Galarian Slowbro" },
         83: { galarian: "Galarian Farfetch'd" },
@@ -223,19 +226,44 @@
         144: { galarian: "Galarian Articuno" },
         145: { galarian: "Galarian Zapdos" },
         146: { galarian: "Galarian Moltres" },
+        263: { galarian: "Galarian Zigzagoon" },
+        264: { galarian: "Galarian Linoone" },
+        554: { galarian: "Galarian Darumaka" },
+        555: { galarian: "Galarian Darmanitan" },
+        562: { galarian: "Galarian Yamask" },
+        618: { galarian: "Galarian Stunfisk" },
         
         // Hisuian Forms (Gen 8 - Legends Arceus)
         549: { hisuian: "Hisuian Lilligant" },
         628: { hisuian: "Hisuian Braviary" },
         713: { hisuian: "Hisuian Avalugg" },
         901: { hisuian: "Hisuian Ursaluna" },
+        899: { hisuian: "Hisuian Wyrdeer" },
+        900: { hisuian: "Hisuian Kleavor" },
+        902: { hisuian: "Hisuian Basculegion" },
+        903: { hisuian: "Hisuian Sneasler" },
+        904: { hisuian: "Hisuian Overqwil" },
         
         // Paldean Forms (Gen 9)
-        128: { paldean: "Paldean Tauros (Combat Breed)" },
-        128: { paldeanFire: "Paldean Tauros (Blaze Breed)" },
-        128: { paldeanWater: "Paldean Tauros (Aqua Breed)" },
-        916: { paldean: "Paldean Wooper" },
-        980: { paldean: "Paldean Clodsire" }
+        194: { paldean: "Paldean Wooper" },
+        980: { paldean: "Paldean Clodsire" },
+        128: { paldean: "Paldean Tauros" },
+        
+        // Paradox Forms (Gen 9)
+        984: { paradox: "Great Tusk" },
+        985: { paradox: "Scream Tail" },
+        986: { paradox: "Brute Bonnet" },
+        987: { paradox: "Flutter Mane" },
+        988: { paradox: "Slither Wing" },
+        989: { paradox: "Sandy Shocks" },
+        1005: { paradox: "Roaring Moon" },
+        1006: { paradox: "Iron Treads" },
+        1007: { paradox: "Iron Bundle" },
+        1008: { paradox: "Iron Hands" },
+        1009: { paradox: "Iron Jugulis" },
+        1010: { paradox: "Iron Moth" },
+        1011: { paradox: "Iron Thorns" },
+        1012: { paradox: "Iron Valiant" }
     };
     
     function toggleDarkMode() {
@@ -248,6 +276,7 @@
     function changeLanguage(lang) {
         localStorage.setItem('language', lang);
         document.getElementById('languageSelect').value = lang;
+        location.reload();
     }
     
     if (localStorage.getItem('darkMode') === 'true') {
@@ -390,6 +419,7 @@
             };
             const totalStats = stats.hp + stats.attack + stats.defense + stats.spAttack + stats.spDefense + stats.speed;
             
+            // ===== SPEZIALFORMEN BUTTONS (ab Zeile ~417) =====
             let specialButtonsHtml = '';
             const specials = specialFormsMapGen7Plus[currentPokemonId];
             if (specials) {
@@ -397,6 +427,8 @@
                 for (let [key, name] of Object.entries(specials)) {
                     let btnClass = 'special-btn';
                     if (key === 'gmax') btnClass += ' gmax';
+                    else if (key === 'mega' || key === 'megaX' || key === 'megaY') btnClass += ' mega';
+                    else if (key === 'paradox') btnClass += ' mega';
                     else btnClass += ' regional';
                     specialButtonsHtml += `<button class="${btnClass}" onclick="goToSpecialForm('${key}', '${name}')">✨ ${name}</button>`;
                 }
