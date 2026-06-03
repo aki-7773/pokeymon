@@ -166,16 +166,6 @@
             margin-left: 10px;
         }
 
-        .type-badge-bond {
-            display: inline-block;
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 25px;
-            font-size: 14px;
-            margin-left: 10px;
-        }
-
         .type-badge-paradox {
             display: inline-block;
             background: linear-gradient(135deg, #e91e63, #c2185b);
@@ -402,18 +392,38 @@
     const HYBRID_IMAGE_BASE_URL = 'https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/images/';
     const POKEMONDB_IMAGE_URL = 'https://img.pokemondb.net/artwork/';
 
-    // ========== BILD-URL FÜR ALLE FORMEN ==========
+    // ========== NEUE FUNKTION: Holt offizielles Artwork von PokeAPI ==========
+    async function getOfficialFormArtwork(apiFormName) {
+        if (!apiFormName) return null;
+        try {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${apiFormName}`);
+            if (!response.ok) return null;
+            const data = await response.json();
+            // Priorität: offizielles Artwork > Front Sprite
+            return data.sprites?.other?.["official-artwork"]?.front_default || data.sprites?.front_default || null;
+        } catch (error) {
+            console.log(`Could not fetch artwork for ${apiFormName}:`, error);
+            return null;
+    // ========== VERBESSERTE BILD-URL FÜR ALLE FORMEN ==========
     function getImageUrlForForm(baseId, formKey, formData) {
-        // Für Gigantamax
+        // Für Gigantamax: Spezielle URL von PokemonDB
         if (formKey === 'gmax') {
             const gmaxNames = {
                 3: 'venusaur-gigantamax', 6: 'charizard-gigantamax', 9: 'blastoise-gigantamax',
                 12: 'butterfree-gigantamax', 25: 'pikachu-gigantamax', 52: 'meowth-gigantamax',
                 68: 'machamp-gigantamax', 94: 'gengar-gigantamax', 99: 'kingler-gigantamax',
-                131: 'lapras-gigantamax', 133: 'eevee-gigantamax', 143: 'snorlax-gigantamax'
+                131: 'lapras-gigantamax', 133: 'eevee-gigantamax', 143: 'snorlax-gigantamax',
+                809: 'melmetal-gigantamax', 812: 'rillaboom-gigantamax', 815: 'cinderace-gigantamax',
+                818: 'inteleon-gigantamax', 823: 'corviknight-gigantamax', 826: 'orbeetle-gigantamax',
+                834: 'drednaw-gigantamax', 839: 'coalossal-gigantamax', 841: 'flapple-gigantamax',
+                842: 'appletun-gigantamax', 844: 'sandaconda-gigantamax', 849: 'toxtricity-gigantamax',
+                851: 'centiskorch-gigantamax', 858: 'hatterene-gigantamax', 861: 'grimmsnarl-gigantamax',
+                869: 'alcremie-gigantamax', 879: 'copperajah-gigantamax', 884: 'duraludon-gigantamax',
+                890: 'eternatus-gigantamax', 892: 'urshifu-gigantamax'
             };
-            if (gmaxNames[baseId]) {
-                return `${POKEMONDB_IMAGE_URL}${gmaxNames[baseId]}.jpg`;
+            const gmaxName = gmaxNames[baseId];
+            if (gmaxName) {
+                return `${POKEMONDB_IMAGE_URL}${gmaxName}.jpg`;
             }
         }
         
@@ -435,7 +445,7 @@
                 380: 'latias-mega', 381: 'latios-mega', 384: 'rayquaza-mega',
                 428: 'lopunny-mega', 445: 'garchomp-mega', 448: 'lucario-mega',
                 460: 'abomasnow-mega', 475: 'gallade-mega', 531: 'audino-mega',
-                658: 'greninja-mega', 719: 'diancie-mega', 26: 'raichu-mega'
+                719: 'diancie-mega'
             };
             let megaName = megaNames[baseId];
             if (formKey === 'megaX') megaName = megaNames[baseId]?.replace('-x', '') + '-x';
@@ -445,46 +455,147 @@
             }
         }
         
-        // Für Ash-Greninja (Battle Bond)
-        if (formKey === 'bond' && baseId === 658) {
-            return `https://img.pokemondb.net/artwork/ash-greninja.jpg`;
-        }
-        
         // Für Primal Forms
         if (formKey === 'primal') {
-            if (baseId === 382) return `${POKEMONDB_IMAGE_URL}kyogre-primal.jpg`;
-            if (baseId === 383) return `${POKEMONDB_IMAGE_URL}groudon-primal.jpg`;
+            const primalNames = { 382: 'kyogre-primal', 383: 'groudon-primal' };
+            if (primalNames[baseId]) {
+                return `${POKEMONDB_IMAGE_URL}${primalNames[baseId]}.jpg`;
+            }
         }
         
-        // Für Alolan Forms (HybridShivam PNGs)
+        // Für Regionale Formen
         if (formKey === 'alolan') {
-            const paddedId = String(baseId).padStart(3, '0');
-            return `${HYBRID_IMAGE_BASE_URL}${paddedId}-Alolan.png`;
+            const alolanNames = {
+                26: 'raichu-alolan', 27: 'sandshrew-alolan', 28: 'sandslash-alolan',
+                37: 'vulpix-alolan', 38: 'ninetales-alolan', 50: 'diglett-alolan',
+                51: 'dugtrio-alolan', 52: 'meowth-alolan', 53: 'persian-alolan',
+                74: 'geodude-alolan', 75: 'graveler-alolan', 76: 'golem-alolan',
+                88: 'grimer-alolan', 89: 'muk-alolan', 103: 'exeggutor-alolan',
+                105: 'marowak-alolan'
+            };
+            if (alolanNames[baseId]) {
+                return `${POKEMONDB_IMAGE_URL}${alolanNames[baseId]}.jpg`;
+            }
         }
         
-        // Für Galarian Forms (HybridShivam PNGs)
         if (formKey === 'galarian') {
-            const paddedId = String(baseId).padStart(3, '0');
-            return `${HYBRID_IMAGE_BASE_URL}${paddedId}-Galarian.png`;
+            const galarianNames = {
+                52: 'meowth-galar', 77: 'ponyta-galar', 78: 'rapidash-galar',
+                79: 'slowpoke-galar', 80: 'slowbro-galar', 83: 'farfetchd-galar',
+                110: 'weezing-galar', 122: 'mrmime-galar', 144: 'articuno-galar',
+                145: 'zapdos-galar', 146: 'moltres-galar', 263: 'zigzagoon-galar',
+                264: 'linoone-galar', 554: 'darumaka-galar', 555: 'darmanitan-galar',
+                562: 'yamask-galar', 618: 'stunfisk-galar'
+            };
+            if (galarianNames[baseId]) {
+                return `${POKEMONDB_IMAGE_URL}${galarianNames[baseId]}.jpg`;
+            }
         }
         
-        // Für Hisuian Forms (HybridShivam PNGs)
         if (formKey === 'hisuian') {
-            const paddedId = String(baseId).padStart(3, '0');
-            if (baseId === 571) return `${HYBRID_IMAGE_BASE_URL}571-Hisui.png`;
-            return `${HYBRID_IMAGE_BASE_URL}${paddedId}-Hisuian.png`;
+            const hisuianNames = {
+                58: 'growlithe-hisui', 59: 'arcanine-hisui', 100: 'voltorb-hisui',
+                101: 'electrode-hisui', 123: 'scyther-hisui', 190: 'aipom-hisui',
+                424: 'ambipom-hisui', 549: 'lilligant-hisui', 571: 'zoroark-hisui',
+                628: 'braviary-hisui', 713: 'avalugg-hisui', 899: 'wyrdeer',
+                900: 'kleavor', 901: 'ursaluna', 902: 'basculegion',
+                903: 'sneasler', 904: 'overqwil'
+            };
+            if (hisuianNames[baseId]) {
+                return `${POKEMONDB_IMAGE_URL}${hisuianNames[baseId]}.jpg`;
+            }
+        }
+        
+        if (formKey === 'paldean') {
+            const paldeanNames = { 194: 'wooper-paldea', 128: 'tauros-paldea-combat', 980: 'clodsire' };
+            if (paldeanNames[baseId]) {
+                return `${POKEMONDB_IMAGE_URL}${paldeanNames[baseId]}.jpg`;
+            }
         }
         
         // Fallback: Standard Artwork
-        return `${POKEAPI_ARTWORK_URL}${baseId}.png`;
+        return `${POKEAPI_ARTWORK_URL}${basePokemonId}.png`;
     }
 
-    // ========== SPEZIALFORMEN DATEN ==========
+    // ========== SPEZIALFORMEN DATEN (mit apiFormName für direkten PokeAPI-Zugriff) ==========
+    // ========== SPEZIALFORMEN DATEN (VOLLSTÄNDIG) ==========
     const specialFormData = {
+        // === ALOLAN FORMS ===
+        "28-alolan": { types: ["ice","steel"], ability: "Slush Rush", hp:75, attack:100, defense:120, spAttack:25, spDefense:65, speed:65, dex: "Alolan Sandslash's back is covered with ice spikes.", apiFormName: "sandslash-alola", imageFile: "028-Alolan.png" },
+        "26-alolan": { types: ["electric","psychic"], ability: "Surge Surfer", hp:60, attack:85, defense:50, spAttack:95, spDefense:85, speed:110, dex: "Alolan Raichu surfs on its tail using psychic power.", apiFormName: "raichu-alola", imageFile: "026-Alolan.png" },
+        "38-alolan": { types: ["ice","fairy"], ability: "Snow Cloak", hp:73, attack:67, defense:75, spAttack:81, spDefense:100, speed:109, dex: "Alolan Ninetales's frozen tail is beautiful.", apiFormName: "ninetales-alola", imageFile: "038-Alolan.png" },
+        "89-alolan": { types: ["poison","dark"], ability: "Poison Touch", hp:105, attack:105, defense:75, spAttack:65, spDefense:100, speed:50, dex: "Alolan Muk's rainbow colors are toxic.", apiFormName: "muk-alola", imageFile: "089-Alolan.png" },
+        "103-alolan": { types: ["grass","dragon"], ability: "Frisk", hp:95, attack:105, defense:85, spAttack:125, spDefense:75, speed:45, dex: "Alolan Exeggutor's tall neck absorbs sunlight.", apiFormName: "exeggutor-alola", imageFile: "103-Alolan.png" },
+        "105-alolan": { types: ["fire","ghost"], ability: "Cursed Body", hp:60, attack:80, defense:110, spAttack:50, spDefense:80, speed:45, dex: "Alolan Marowak uses its bone as a torch.", apiFormName: "marowak-alola", imageFile: "105-Alolan.png" },
+        
+        // === MEGA EVOLUTIONS ===
+        "6-megaX": { types: ["fire","dragon"], ability: "Tough Claws", hp:78, attack:130, defense:111, spAttack:130, spDefense:85, speed:100, dex: "Mega Charizard X's blue flames burn hotter than ever.", apiFormName: "charizard-mega-x", imageFile: "006-Mega-X.png" },
+        "6-megaY": { types: ["fire","flying"], ability: "Drought", hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, dex: "Mega Charizard Y has immense special attack power.", apiFormName: "charizard-mega-y", imageFile: "006-Mega-Y.png" },
+        "3-mega": { types: ["grass","poison"], ability: "Thick Fat", hp:80, attack:100, defense:123, spAttack:122, spDefense:120, speed:80, dex: "Mega Venusaur's flower blooms even larger.", apiFormName: "venusaur-mega", imageFile: "003-Mega.png" },
+        "9-mega": { types: ["water"], ability: "Mega Launcher", hp:79, attack:103, defense:120, spAttack:135, spDefense:115, speed:78, dex: "Mega Blastoise's cannons are enormous.", apiFormName: "blastoise-mega", imageFile: "009-Mega.png" },
+        "150-megaX": { types: ["psychic","fighting"], ability: "Steadfast", hp:106, attack:190, defense:100, spAttack:154, spDefense:100, speed:130, dex: "Mega Mewtwo X focuses on physical combat.", apiFormName: "mewtwo-mega-x", imageFile: "150-Mega-X.png" },
+        "150-megaY": { types: ["psychic"], ability: "Insomnia", hp:106, attack:150, defense:70, spAttack:194, spDefense:120, speed:140, dex: "Mega Mewtwo Y has peak psychic ability.", apiFormName: "mewtwo-mega-y", imageFile: "150-Mega-Y.png" },
+        "94-mega": { types: ["ghost","poison"], ability: "Shadow Tag", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Mega Gengar traps opponents.", apiFormName: "gengar-mega", imageFile: "094-Mega.png" },
+        "130-mega": { types: ["water","dark"], ability: "Mold Breaker", hp:95, attack:155, defense:109, spAttack:70, spDefense:130, speed:81, dex: "Mega Gyarados's rage destroys everything.", apiFormName: "gyarados-mega", imageFile: "130-Mega.png" },
+        "448-mega": { types: ["fighting","steel"], ability: "Adaptability", hp:70, attack:145, defense:88, spAttack:140, spDefense:70, speed:112, dex: "Mega Lucario reads auras perfectly.", apiFormName: "lucario-mega", imageFile: "448-Mega.png" },
+        "257-mega": { types: ["fire","fighting"], ability: "Speed Boost", hp:80, attack:160, defense:80, spAttack:130, spDefense:80, speed:100, dex: "Mega Blaziken's kicks are devastating.", apiFormName: "blaziken-mega", imageFile: "257-Mega.png" },
+        "445-mega": { types: ["dragon","ground"], ability: "Sand Force", hp:108, attack:170, defense:115, spAttack:120, spDefense:95, speed:92, dex: "Mega Garchomp's blades cut steel.", apiFormName: "garchomp-mega", imageFile: "445-Mega.png" },
+        "248-mega": { types: ["rock","dark"], ability: "Sand Stream", hp:100, attack:164, defense:150, spAttack:95, spDefense:120, speed:71, dex: "Mega Tyranitar's armor is impenetrable.", apiFormName: "tyranitar-mega", imageFile: "248-Mega.png" },
+        "282-mega": { types: ["psychic","fairy"], ability: "Pixilate", hp:68, attack:85, defense:65, spAttack:165, spDefense:135, speed:100, dex: "Mega Gardevoir creates black holes.", apiFormName: "gardevoir-mega", imageFile: "282-Mega.png" },
+        "384-mega": { types: ["dragon","flying"], ability: "Delta Stream", hp:105, attack:180, defense:100, spAttack:180, spDefense:100, speed:115, dex: "Mega Rayquaza calms the weather.", apiFormName: "rayquaza-mega", imageFile: "384-Mega.png" },
+        "376-mega": { types: ["steel","psychic"], ability: "Tough Claws", hp:80, attack:145, defense:150, spAttack:105, spDefense:110, speed:110, dex: "Mega Metagross becomes aerodynamic.", apiFormName: "metagross-mega", imageFile: "376-Mega.png" },
+        "373-mega": { types: ["dragon","flying"], ability: "Aerilate", hp:95, attack:145, defense:130, spAttack:120, spDefense:90, speed:120, dex: "Mega Salamence's wings merge.", apiFormName: "salamence-mega", imageFile: "373-Mega.png" },
+        "181-mega": { types: ["electric","dragon"], ability: "Mold Breaker", hp:90, attack:95, defense:105, spAttack:165, spDefense:110, speed:45, dex: "Mega Ampharos gains the Dragon type.", apiFormName: "ampharos-mega", imageFile: "181-Mega.png" },
+        "208-mega": { types: ["steel","ground"], ability: "Sand Force", hp:75, attack:125, defense:230, spAttack:55, spDefense:95, speed:30, dex: "Mega Steelix's body is harder than diamond.", apiFormName: "steelix-mega", imageFile: "208-Mega.png" },
+        "212-mega": { types: ["bug","steel"], ability: "Technician", hp:70, attack:150, defense:140, spAttack:65, spDefense:100, speed:75, dex: "Mega Scizor's pincers cut steel.", apiFormName: "scizor-mega", imageFile: "212-Mega.png" },
+        "214-mega": { types: ["bug","fighting"], ability: "Skill Link", hp:80, attack:185, defense:115, spAttack:40, spDefense:105, speed:75, dex: "Mega Heracross's horn grows massive.", apiFormName: "heracross-mega", imageFile: "214-Mega.png" },
+        "229-mega": { types: ["dark","fire"], ability: "Solar Power", hp:75, attack:90, defense:90, spAttack:140, spDefense:90, speed:115, dex: "Mega Houndoom's flames burn intensely.", apiFormName: "houndoom-mega", imageFile: "229-Mega.png" },
+        "302-mega": { types: ["dark","ghost"], ability: "Magic Bounce", hp:50, attack:85, defense:125, spAttack:85, spDefense:115, speed:20, dex: "Mega Sableye's jewel reflects attacks.", apiFormName: "sableye-mega", imageFile: "302-Mega.png" },
+        "303-mega": { types: ["steel","fairy"], ability: "Huge Power", hp:50, attack:105, defense:125, spAttack:55, spDefense:95, speed:50, dex: "Mega Mawile's jaws crush iron.", apiFormName: "mawile-mega", imageFile: "303-Mega.png" },
+        "306-mega": { types: ["steel"], ability: "Filter", hp:70, attack:140, defense:230, spAttack:60, spDefense:80, speed:50, dex: "Mega Aggron loses its Rock typing.", apiFormName: "aggron-mega", imageFile: "306-Mega.png" },
+        "308-mega": { types: ["fighting","psychic"], ability: "Pure Power", hp:60, attack:100, defense:85, spAttack:80, spDefense:85, speed:100, dex: "Mega Medicham meditates in battle.", apiFormName: "medicham-mega", imageFile: "308-Mega.png" },
+        "310-mega": { types: ["electric"], ability: "Intimidate", hp:70, attack:75, defense:80, spAttack:135, spDefense:80, speed:135, dex: "Mega Manectric's lightning clouds intimidate.", apiFormName: "manectric-mega", imageFile: "310-Mega.png" },
+        "319-mega": { types: ["water","dark"], ability: "Strong Jaw", hp:70, attack:140, defense:70, spAttack:110, spDefense:65, speed:105, dex: "Mega Sharpedo's jaws crush ships.", apiFormName: "sharpedo-mega", imageFile: "319-Mega.png" },
+        "323-mega": { types: ["fire","ground"], ability: "Sheer Force", hp:70, attack:120, defense:100, spAttack:145, spDefense:105, speed:20, dex: "Mega Camerupt's volcano erupts.", apiFormName: "camerupt-mega", imageFile: "323-Mega.png" },
+        "334-mega": { types: ["dragon","fairy"], ability: "Pixilate", hp:75, attack:110, defense:110, spAttack:110, spDefense:105, speed:80, dex: "Mega Altaria's voice becomes melodious.", apiFormName: "altaria-mega", imageFile: "334-Mega.png" },
+        "354-mega": { types: ["ghost"], ability: "Prankster", hp:64, attack:165, defense:75, spAttack:93, spDefense:83, speed:75, dex: "Mega Banette's curse grows stronger.", apiFormName: "banette-mega", imageFile: "354-Mega.png" },
+        "359-mega": { types: ["dark"], ability: "Magic Bounce", hp:65, attack:150, defense:60, spAttack:115, spDefense:60, speed:115, dex: "Mega Absol senses disasters.", apiFormName: "absol-mega", imageFile: "359-Mega.png" },
+        "362-mega": { types: ["ice"], ability: "Refrigerate", hp:80, attack:120, defense:80, spAttack:120, spDefense:80, speed:100, dex: "Mega Glalie's jaw shatters.", apiFormName: "glalie-mega", imageFile: "362-Mega.png" },
+        "428-mega": { types: ["normal","fighting"], ability: "Scrappy", hp:65, attack:136, defense:94, spAttack:54, spDefense:96, speed:135, dex: "Mega Lopunny's kicks bend steel.", apiFormName: "lopunny-mega", imageFile: "428-Mega.png" },
+        "460-mega": { types: ["grass","ice"], ability: "Snow Warning", hp:90, attack:132, defense:105, spAttack:132, spDefense:105, speed:30, dex: "Mega Abomasnow creates blizzards.", apiFormName: "abomasnow-mega", imageFile: "460-Mega.png" },
+        "475-mega": { types: ["psychic","fighting"], ability: "Inner Focus", hp:68, attack:165, defense:95, spAttack:65, spDefense:115, speed:110, dex: "Mega Gallade's blades extend.", apiFormName: "gallade-mega", imageFile: "475-Mega.png" },
+        "531-mega": { types: ["normal","fairy"], ability: "Healer", hp:103, attack:60, defense:126, spAttack:80, spDefense:126, speed:50, dex: "Mega Audino's hearing is sensitive.", apiFormName: "audino-mega", imageFile: "531-Mega.png" },
+        "719-mega": { types: ["rock","fairy"], ability: "Clear Body", hp:50, attack:160, defense:110, spAttack:160, spDefense:110, speed:110, dex: "Mega Diancie's body shines like diamond.", apiFormName: "diancie-mega", imageFile: "719-Mega.png" },
+        
+        // === PRIMAL FORMS ===
+        "382-primal": { types: ["water"], ability: "Primordial Sea", hp:100, attack:150, defense:90, spAttack:180, spDefense:160, speed:90, dex: "Primal Kyogre floods the world.", apiFormName: "kyogre-primal", imageFile: "382-Primal.png" },
+        "383-primal": { types: ["ground","fire"], ability: "Desolate Land", hp:100, attack:180, defense:160, spAttack:150, spDefense:90, speed:90, dex: "Primal Groudon expands continents.", apiFormName: "groudon-primal", imageFile: "383-Primal.png" },
+        
+        // === GALARIAN FORMS ===
+        "77-galarian": { types: ["psychic"], ability: "Pastel Veil", hp:50, attack:85, defense:55, spAttack:65, spDefense:65, speed:90, dex: "Galarian Ponyta's horn heals.", apiFormName: "ponyta-galar", imageFile: "077-Galarian.png" },
+        "78-galarian": { types: ["psychic","fairy"], ability: "Pastel Veil", hp:65, attack:100, defense:70, spAttack:80, spDefense:80, speed:105, dex: "Galarian Rapidash reads emotions.", apiFormName: "rapidash-galar", imageFile: "078-Galarian.png" },
+        
+        // === HISUIAN FORMS ===
+        "58-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:60, attack:75, defense:45, spAttack:65, spDefense:50, speed:55, dex: "Hisuian Growlithe has a rocky horn.", apiFormName: "growlithe-hisui", imageFile: "058-Hisuian.png" },
+        "59-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:90, attack:115, defense:80, spAttack:95, spDefense:80, speed:90, dex: "Hisuian Arcanine's rocky fur protects.", apiFormName: "arcanine-hisui", imageFile: "059-Hisuian.png" },
+        "571-hisuian": { types: ["normal","ghost"], ability: "Illusion", hp:55, attack:100, defense:60, spAttack:125, spDefense:60, speed:110, dex: "Hisuian Zoroark's illusions are powerful.", apiFormName: "zoroark-hisui", imageFile: "571-Hisui.png" },
+        
+        // === GIGANTAMAX FORMS (nur HybridShivam, da PokeAPI kein offizielles Artwork hat) ===
+        "6-gmax": { types: ["fire","flying"], ability: "Blaze", hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, dex: "Gigantamax Charizard's flames never go out.", imageFile: "006-Gigantamax.png", isGmax: true },
+        "3-gmax": { types: ["grass","poison"], ability: "Overgrow", hp:80, attack:82, defense:83, spAttack:100, spDefense:100, speed:80, dex: "Gigantamax Venusaur's flower releases a sweet scent.", imageFile: "003-Gigantamax.png", isGmax: true },
+        "9-gmax": { types: ["water"], ability: "Torrent", hp:79, attack:83, defense:100, spAttack:85, spDefense:105, speed:78, dex: "Gigantamax Blastoise's cannons grow enormous.", imageFile: "009-Gigantamax.png", isGmax: true },
+        "25-gmax": { types: ["electric"], ability: "Static", hp:45, attack:80, defense:50, spAttack:75, spDefense:60, speed:120, dex: "Gigantamax Pikachu's tail grows enormously.", imageFile: "025-Gigantamax.png", isGmax: true },
+        "52-gmax": { types: ["normal"], ability: "Pickup", hp:40, attack:35, defense:35, spAttack:50, spDefense:40, speed:90, dex: "Gigantamax Meowth grows incredibly long.", imageFile: "052-Gigantamax.png", isGmax: true },
+        "68-gmax": { types: ["fighting"], ability: "Guts", hp:90, attack:130, defense:80, spAttack:65, spDefense:85, speed:55, dex: "Gigantamax Machamp's arms are muscular.", imageFile: "068-Gigantamax.png", isGmax: true },
+        "94-gmax": { types: ["ghost","poison"], ability: "Cursed Body", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Gigantamax Gengar's mouth stretches.", imageFile: "094-Gigantamax.png", isGmax: true },
+        "99-gmax": { types: ["water"], ability: "Hyper Cutter", hp:55, attack:130, defense:115, spAttack:50, spDefense:50, speed:75, dex: "Gigantamax Kingler's pincers crush.", imageFile: "099-Gigantamax.png", isGmax: true },
+        "131-gmax": { types: ["water","ice"], ability: "Water Absorb", hp:130, attack:85, defense:80, spAttack:85, spDefense:95, speed:60, dex: "Gigantamax Lapras's shell grows.", imageFile: "131-Gigantamax.png", isGmax: true },
+        "133-gmax": { types: ["normal"], ability: "Run Away", hp:55, attack:55, defense:50, spAttack:45, spDefense:65, speed:55, dex: "Gigantamax Eevee's fur is soft.", imageFile: "133-Gigantamax.png", isGmax: true },
+        "143-gmax": { types: ["normal"], ability: "Gluttony", hp:160, attack:110, defense:65, spAttack:65, spDefense:110, speed:30, dex: "Gigantamax Snorlax's belly grows.", imageFile: "143-Gigantamax.png", isGmax: true }
         // Alolan Forms
         "26-alolan": { types: ["electric","psychic"], ability: "Surge Surfer", hp:60, attack:85, defense:50, spAttack:95, spDefense:85, speed:110, dex: "Alolan Raichu surfs on its tail using psychic power." },
         "28-alolan": { types: ["ice","steel"], ability: "Slush Rush", hp:75, attack:100, defense:120, spAttack:25, spDefense:65, speed:65, dex: "Alolan Sandslash's back is covered with ice spikes." },
-        "38-alolan": { types: ["ice","fairy"], ability: "Snow Warning", hp:73, attack:67, defense:75, spAttack:81, spDefense:100, speed:109, dex: "Alolan Ninetales's frozen tail is beautiful." },
+        "38-alolan": { types: ["ice","fairy"], ability: "Snow Cloak (Hidden: Snow Warning)", hp:73, attack:67, defense:75, spAttack:81, spDefense:100, speed:109, dex: "Alolan Ninetales's frozen tail is beautiful." },
         "89-alolan": { types: ["poison","dark"], ability: "Poison Touch", hp:105, attack:105, defense:75, spAttack:65, spDefense:100, speed:50, dex: "Alolan Muk's rainbow colors are toxic." },
         "103-alolan": { types: ["grass","dragon"], ability: "Frisk", hp:95, attack:105, defense:85, spAttack:125, spDefense:75, speed:45, dex: "Alolan Exeggutor's tall neck absorbs sunlight." },
         "105-alolan": { types: ["fire","ghost"], ability: "Cursed Body", hp:60, attack:80, defense:110, spAttack:50, spDefense:80, speed:45, dex: "Alolan Marowak uses its bone as a torch." },
@@ -529,9 +640,7 @@
         "531-mega": { types: ["normal","fairy"], ability: "Healer", hp:103, attack:60, defense:126, spAttack:80, spDefense:126, speed:50, dex: "Mega Audino's hearing is sensitive." },
         "604-mega": { types: ["electric"], ability: "Levitate", hp:85, attack:145, defense:90, spAttack:125, spDefense:90, speed:70, dex: "Mega Eelektross unleashes devastating electric attacks." },
         "609-mega": { types: ["ghost","fire"], ability: "Shadow Tag", hp:60, attack:75, defense:100, spAttack:165, spDefense:100, speed:100, dex: "Mega Chandelure's flames burn souls." },
-        "658-mega": { types: ["water","dark"], ability: "Protean", hp:72, attack:150, defense:67, spAttack:153, spDefense:71, speed:145, dex: "Mega Greninja's speed and power increase dramatically." },
-        "658-bond": { types: ["water","dark"], ability: "Battle Bond", hp:72, attack:145, defense:67, spAttack:153, spDefense:71, speed:132, dex: "Ash-Greninja shares a powerful bond with its trainer." },
-        "718-mega": { types: ["dragon","ground"], ability: "Power Construct", hp:216, attack:120, defense:121, spAttack:100, spDefense:100, speed:95, dex: "Mega Zygarde's cells form a powerful construct." },
+        "718-mega": { types: ["dragon","ground"], ability: "Aura Break (Hidden: Power Construct)", hp:216, attack:120, defense:121, spAttack:100, spDefense:100, speed:95, dex: "Mega Zygarde's cells form a powerful construct." },
         "719-mega": { types: ["rock","fairy"], ability: "Clear Body", hp:50, attack:160, defense:110, spAttack:160, spDefense:110, speed:110, dex: "Mega Diancie's body shines like diamond." },
         
         // Primal Forms
@@ -551,6 +660,7 @@
         "131-gmax": { types: ["water","ice"], ability: "Water Absorb", hp:130, attack:85, defense:80, spAttack:85, spDefense:95, speed:60, dex: "Gigantamax Lapras's shell grows." },
         "133-gmax": { types: ["normal"], ability: "Run Away", hp:55, attack:55, defense:50, spAttack:45, spDefense:65, speed:55, dex: "Gigantamax Eevee's fur is soft." },
         "143-gmax": { types: ["normal"], ability: "Gluttony", hp:160, attack:110, defense:65, spAttack:65, spDefense:110, speed:30, dex: "Gigantamax Snorlax's belly grows." },
+        "809-gmax": { types: ["steel"], ability: "Iron Fist", hp:135, attack:143, defense:143, spAttack:80, spDefense:65, speed:34, dex: "Gigantamax Melmetal's body becomes liquid metal." },
         
         // Galarian Forms
         "77-galarian": { types: ["psychic"], ability: "Pastel Veil", hp:50, attack:85, defense:55, spAttack:65, spDefense:65, speed:90, dex: "Galarian Ponyta's horn heals." },
@@ -571,10 +681,43 @@
         formData = {
             types: ["normal"], ability: "Unknown", hp: 100, attack: 100, defense: 100,
             spAttack: 100, spDefense: 100, speed: 100,
+            dex: `${formName} is a special form of Pokémon #${basePokemonId}.`,
+            imageFile: null, apiFormName: null, isGmax: false
             dex: `${formName} is a special form of Pokémon #${basePokemonId}.`
         };
     }
 
+    let imageUrl = null;
+    const fallbackImageUrl = POKEAPI_ARTWORK_URL + basePokemonId + '.png';
+    
+    // ========== VERBESSERTE BILD-LOGIK ==========
+    async function loadImageUrl() {
+        // Priorität 1: Offizielles PokeAPI Artwork (für Mega, Regional, Primal)
+        if (formData.apiFormName && !formData.isGmax) {
+            const officialArtwork = await getOfficialFormArtwork(formData.apiFormName);
+            if (officialArtwork) {
+                return officialArtwork;
+            }
+        }
+        
+        // Priorität 2: HybridShivam Repository (für Gigantamax und Fallback)
+        if (formData.imageFile) {
+            const hybridUrl = HYBRID_IMAGE_BASE_URL + formData.imageFile;
+            // Wir testen nicht vorab, sondern vertrauen auf das onerror im img-Tag
+            return hybridUrl;
+        }
+        
+        // Priorität 3: Generischer Fallback für regionale Formen
+        if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian') {
+            const paddedId = String(basePokemonId).padStart(3, '0');
+            const region = formKey.charAt(0).toUpperCase() + formKey.slice(1);
+            return HYBRID_IMAGE_BASE_URL + paddedId + '-' + region + '.png';
+        }
+        
+        // Priorität 4: Standard Artwork
+        return fallbackImageUrl;
+    }
+    
     const cryUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${basePokemonId}.ogg`;
 
     function playCry() {
@@ -601,6 +744,7 @@
     }
     document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 
+    async function loadSpecialForm() {
     function loadSpecialForm() {
         const container = document.getElementById('mainContainer');
         const totalStats = formData.hp + formData.attack + formData.defense + 
@@ -610,21 +754,24 @@
         let badgeText = '⚡ MEGA EVOLUTION';
         if (formKey === 'gmax') { badgeClass = 'type-badge-gmax'; badgeText = '💥 GIGANTAMAX'; }
         else if (formKey === 'primal') { badgeClass = 'type-badge-primal'; badgeText = '🌊 PRIMAL REVERSION'; }
-        else if (formKey === 'bond') { badgeClass = 'type-badge-bond'; badgeText = '🤝 BATTLE BOND'; }
         else if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian') 
+        else if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian' || formKey === 'paldean') 
             { badgeClass = 'type-badge-regional'; badgeText = '🌍 REGIONAL FORM'; }
         else if (formKey === 'paradox') { badgeClass = 'type-badge-paradox'; badgeText = '⏱️ PARADOX FORM'; }
 
+        // Bild asynchron laden
+        const finalImageUrl = await loadImageUrl();
         const imageUrl = getImageUrlForForm(basePokemonId, formKey, formData);
-        const fallbackImageUrl = `${POKEAPI_ARTWORK_URL}${basePokemonId}.png`;
 
         container.innerHTML = `
             <div class="pokemon-header">
                 <h1>${formName} <span class="${badgeClass}">${badgeText}</span></h1>
             </div>
             <div class="pokemon-image-container">
+                <img class="pokemon-image" src="${finalImageUrl}" alt="${formName}" 
+                     onerror="this.onerror=null; this.src='${fallbackImageUrl}'; this.alt='${formName} (Standard Artwork)'">
                 <img class="pokemon-image" src="${imageUrl}" alt="${formName}" 
-                     onerror="this.onerror=null; this.src='${fallbackImageUrl}';">
+                     onerror="this.onerror=null; this.src='${POKEAPI_ARTWORK_URL}${basePokemonId}.png';">
             </div>
             <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
             <div class="info-grid">
@@ -653,6 +800,7 @@
             <div class="dex-entry"><strong>📖 Special Form Pokédex Entry</strong><br>"${formData.dex}"</div>
             <div style="text-align: center;">
                 <a href="javascript:history.back()" class="back-button">← Back to Pokémon</a>
+                <a href="pokemon_list.html" class="back-button" style="margin-left: 15px;">📋 Pokédex</a>
                 <a href="pokemon_list.html" class="back-button" style="margin-left: 15px;">📋 Pokédex Gen 1-6</a>
                 <a href="pokemon_list_gen7plus.html" class="back-button" style="margin-left: 15px;">📋 Pokédex Gen 7-9</a>
             </div>
