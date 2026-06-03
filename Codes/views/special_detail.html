@@ -109,6 +109,13 @@
             background: transparent;
         }
 
+        .image-notice {
+            font-size: 12px;
+            color: #ff9800;
+            text-align: center;
+            margin-top: 5px;
+        }
+
         .cry-button {
             display: block;
             margin: 10px auto;
@@ -400,92 +407,9 @@
     // Basis-URLs für Bilder
     const POKEAPI_ARTWORK_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
     const HYBRID_IMAGE_BASE_URL = 'https://raw.githubusercontent.com/HybridShivam/Pokemon/master/assets/images/';
-    const POKEMONDB_IMAGE_URL = 'https://img.pokemondb.net/artwork/';
     const PROJECT_EKISHO_URL = 'https://raw.githubusercontent.com/Project-EKISHO/pokemon-images/main/images/';
 
-    // ========== NEUE FUNKTION: Holt offizielles Artwork von PokeAPI ==========
-    async function getOfficialFormArtwork(apiFormName) {
-        if (!apiFormName) return null;
-        try {
-            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${apiFormName}`);
-            if (!response.ok) return null;
-            const data = await response.json();
-            return data.sprites?.other?.["official-artwork"]?.front_default || data.sprites?.front_default || null;
-        } catch (error) {
-            console.log(`Could not fetch artwork for ${apiFormName}:`, error);
-            return null;
-        }
-    }
-
-    // ========== BILD-URL FÜR ALLE FORMEN ==========
-    function getImageUrlForForm(baseId, formKey, formData) {
-        // Gigantamax - zuerst versuchen von Project-EKISHO (funktioniert besser)
-        if (formKey === 'gmax') {
-            // Versuche Project-EKISHO zuerst
-            const gmaxEkishoFiles = {
-                3: '003-Gigantamax', 6: '006-Gigantamax', 9: '009-Gigantamax',
-                12: '012-Gigantamax', 25: '025-Gigantamax', 52: '052-Gigantamax',
-                68: '068-Gigantamax', 94: '094-Gigantamax', 99: '099-Gigantamax',
-                131: '131-Gigantamax', 133: '133-Gigantamax', 143: '143-Gigantamax'
-            };
-            if (gmaxEkishoFiles[baseId]) {
-                return `${PROJECT_EKISHO_URL}${gmaxEkishoFiles[baseId]}.png`;
-            }
-        }
-        
-        // Für Mega Evolutions - zuerst versuchen von Project-EKISHO
-        if (formKey === 'mega' || formKey === 'megaX' || formKey === 'megaY') {
-            const paddedId = String(baseId).padStart(3, '0');
-            if (baseId === 6 && formKey === 'megaX') {
-                return `${PROJECT_EKISHO_URL}006-Mega-X.png`;
-            }
-            if (baseId === 6 && formKey === 'megaY') {
-                return `${PROJECT_EKISHO_URL}006-Mega-Y.png`;
-            }
-            if (baseId === 150 && formKey === 'megaX') {
-                return `${PROJECT_EKISHO_URL}150-Mega-X.png`;
-            }
-            if (baseId === 150 && formKey === 'megaY') {
-                return `${PROJECT_EKISHO_URL}150-Mega-Y.png`;
-            }
-            return `${PROJECT_EKISHO_URL}${paddedId}-Mega.png`;
-        }
-        
-        // Für Primal Forms
-        if (formKey === 'primal') {
-            if (baseId === 382) return `${PROJECT_EKISHO_URL}382-Primal.png`;
-            if (baseId === 383) return `${PROJECT_EKISHO_URL}383-Primal.png`;
-        }
-        
-        // Für Alolan Forms
-        if (formKey === 'alolan') {
-            const paddedId = String(baseId).padStart(3, '0');
-            return `${PROJECT_EKISHO_URL}${paddedId}-Alolan.png`;
-        }
-        
-        // Für Galarian Forms
-        if (formKey === 'galarian') {
-            const paddedId = String(baseId).padStart(3, '0');
-            return `${PROJECT_EKISHO_URL}${paddedId}-Galarian.png`;
-        }
-        
-        // Für Hisuian Forms
-        if (formKey === 'hisuian') {
-            const paddedId = String(baseId).padStart(3, '0');
-            if (baseId === 571) return `${PROJECT_EKISHO_URL}571-Hisui.png`;
-            return `${PROJECT_EKISHO_URL}${paddedId}-Hisuian.png`;
-        }
-        
-        // Für Ash-Greninja
-        if (formKey === 'bond' && baseId === 658) {
-            return `${PROJECT_EKISHO_URL}658-Ash-Greninja.png`;
-        }
-        
-        // Fallback: Standard Artwork
-        return `${POKEAPI_ARTWORK_URL}${baseId}.png`;
-    }
-
-    // ========== SPEZIALFORMEN DATEN ==========
+    // ========== SPEZIALFORMEN DATEN (VOLLSTÄNDIG, deine Originaldaten) ==========
     const specialFormData = {
         // Alolan Forms
         "28-alolan": { types: ["ice","steel"], ability: "Slush Rush", hp:75, attack:100, defense:120, spAttack:25, spDefense:65, speed:65, dex: "Alolan Sandslash's back is covered with ice spikes.", apiFormName: "sandslash-alola", imageFile: "028-Alolan.png" },
@@ -534,10 +458,10 @@
         "531-mega": { types: ["normal","fairy"], ability: "Healer", hp:103, attack:60, defense:126, spAttack:80, spDefense:126, speed:50, dex: "Mega Audino's hearing is sensitive.", apiFormName: "audino-mega", imageFile: "531-Mega.png" },
         "719-mega": { types: ["rock","fairy"], ability: "Clear Body", hp:50, attack:160, defense:110, spAttack:160, spDefense:110, speed:110, dex: "Mega Diancie's body shines like diamond.", apiFormName: "diancie-mega", imageFile: "719-Mega.png" },
         
-        // ===== NEU: Ash-Greninja (Battle Bond) =====
+        // Ash-Greninja
         "658-bond": { types: ["water","dark"], ability: "Battle Bond", hp:72, attack:145, defense:67, spAttack:153, spDefense:71, speed:132, dex: "Ash-Greninja shares a powerful bond with its trainer. Its water shurikens are incredibly fast and powerful.", apiFormName: "greninja-ash", imageFile: "658-Ash-Greninja.png", isBattleBond: true },
         
-        // ===== NEU: Mega Greninja =====
+        // Mega Greninja
         "658-mega": { types: ["water","dark"], ability: "Protean", hp:72, attack:150, defense:67, spAttack:153, spDefense:71, speed:145, dex: "Mega Greninja's speed and power increase dramatically. It can change its type to match its moves.", apiFormName: "greninja-mega", imageFile: "658-Mega.png", isMega: true },
         
         // Primal Forms
@@ -553,25 +477,24 @@
         "59-hisuian": { types: ["fire","rock"], ability: "Intimidate", hp:90, attack:115, defense:80, spAttack:95, spDefense:80, speed:90, dex: "Hisuian Arcanine's rocky fur protects.", apiFormName: "arcanine-hisui", imageFile: "059-Hisuian.png" },
         "571-hisuian": { types: ["normal","ghost"], ability: "Illusion", hp:55, attack:100, defense:60, spAttack:125, spDefense:60, speed:110, dex: "Hisuian Zoroark's illusions are powerful.", apiFormName: "zoroark-hisui", imageFile: "571-Hisui.png" },
         
-        // Gigantamax Forms
-        "6-gmax": { types: ["fire","flying"], ability: "Blaze", hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, dex: "Gigantamax Charizard's flames never go out.", imageFile: "006-Gigantamax.png", isGmax: true },
-        "3-gmax": { types: ["grass","poison"], ability: "Overgrow", hp:80, attack:82, defense:83, spAttack:100, spDefense:100, speed:80, dex: "Gigantamax Venusaur's flower releases a sweet scent.", imageFile: "003-Gigantamax.png", isGmax: true },
-        "9-gmax": { types: ["water"], ability: "Torrent", hp:79, attack:83, defense:100, spAttack:85, spDefense:105, speed:78, dex: "Gigantamax Blastoise's cannons grow enormous.", imageFile: "009-Gigantamax.png", isGmax: true },
-        "25-gmax": { types: ["electric"], ability: "Static", hp:45, attack:80, defense:50, spAttack:75, spDefense:60, speed:120, dex: "Gigantamax Pikachu's tail grows enormously.", imageFile: "025-Gigantamax.png", isGmax: true },
-        "52-gmax": { types: ["normal"], ability: "Pickup", hp:40, attack:35, defense:35, spAttack:50, spDefense:40, speed:90, dex: "Gigantamax Meowth grows incredibly long.", imageFile: "052-Gigantamax.png", isGmax: true },
-        "68-gmax": { types: ["fighting"], ability: "Guts", hp:90, attack:130, defense:80, spAttack:65, spDefense:85, speed:55, dex: "Gigantamax Machamp's arms are muscular.", imageFile: "068-Gigantamax.png", isGmax: true },
-        "94-gmax": { types: ["ghost","poison"], ability: "Cursed Body", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Gigantamax Gengar's mouth stretches.", imageFile: "094-Gigantamax.png", isGmax: true },
-        "99-gmax": { types: ["water"], ability: "Hyper Cutter", hp:55, attack:130, defense:115, spAttack:50, spDefense:50, speed:75, dex: "Gigantamax Kingler's pincers crush.", imageFile: "099-Gigantamax.png", isGmax: true },
-        "131-gmax": { types: ["water","ice"], ability: "Water Absorb", hp:130, attack:85, defense:80, spAttack:85, spDefense:95, speed:60, dex: "Gigantamax Lapras's shell grows.", imageFile: "131-Gigantamax.png", isGmax: true },
-        "133-gmax": { types: ["normal"], ability: "Run Away", hp:55, attack:55, defense:50, spAttack:45, spDefense:65, speed:55, dex: "Gigantamax Eevee's fur is soft.", imageFile: "133-Gigantamax.png", isGmax: true },
-        "143-gmax": { types: ["normal"], ability: "Gluttony", hp:160, attack:110, defense:65, spAttack:65, spDefense:110, speed:30, dex: "Gigantamax Snorlax's belly grows.", imageFile: "143-Gigantamax.png", isGmax: true }
+        // Gigantamax Forms (Stats bleiben, Bilder werden durch Fallback ersetzt + Hinweis)
+        "6-gmax": { types: ["fire","flying"], ability: "Blaze", hp:78, attack:104, defense:78, spAttack:159, spDefense:115, speed:100, dex: "Gigantamax Charizard's flames never go out.", isGmax: true },
+        "3-gmax": { types: ["grass","poison"], ability: "Overgrow", hp:80, attack:82, defense:83, spAttack:100, spDefense:100, speed:80, dex: "Gigantamax Venusaur's flower releases a sweet scent.", isGmax: true },
+        "9-gmax": { types: ["water"], ability: "Torrent", hp:79, attack:83, defense:100, spAttack:85, spDefense:105, speed:78, dex: "Gigantamax Blastoise's cannons grow enormous.", isGmax: true },
+        "25-gmax": { types: ["electric"], ability: "Static", hp:45, attack:80, defense:50, spAttack:75, spDefense:60, speed:120, dex: "Gigantamax Pikachu's tail grows enormously.", isGmax: true },
+        "52-gmax": { types: ["normal"], ability: "Pickup", hp:40, attack:35, defense:35, spAttack:50, spDefense:40, speed:90, dex: "Gigantamax Meowth grows incredibly long.", isGmax: true },
+        "68-gmax": { types: ["fighting"], ability: "Guts", hp:90, attack:130, defense:80, spAttack:65, spDefense:85, speed:55, dex: "Gigantamax Machamp's arms are muscular.", isGmax: true },
+        "94-gmax": { types: ["ghost","poison"], ability: "Cursed Body", hp:60, attack:65, defense:80, spAttack:170, spDefense:95, speed:130, dex: "Gigantamax Gengar's mouth stretches.", isGmax: true },
+        "99-gmax": { types: ["water"], ability: "Hyper Cutter", hp:55, attack:130, defense:115, spAttack:50, spDefense:50, speed:75, dex: "Gigantamax Kingler's pincers crush.", isGmax: true },
+        "131-gmax": { types: ["water","ice"], ability: "Water Absorb", hp:130, attack:85, defense:80, spAttack:85, spDefense:95, speed:60, dex: "Gigantamax Lapras's shell grows.", isGmax: true },
+        "133-gmax": { types: ["normal"], ability: "Run Away", hp:55, attack:55, defense:50, spAttack:45, spDefense:65, speed:55, dex: "Gigantamax Eevee's fur is soft.", isGmax: true },
+        "143-gmax": { types: ["normal"], ability: "Gluttony", hp:160, attack:110, defense:65, spAttack:65, spDefense:110, speed:30, dex: "Gigantamax Snorlax's belly grows.", isGmax: true }
     };
 
     // Finde die Daten für die aktuelle Form
     let lookupKey = `${basePokemonId}-${formKey}`;
     let formData = specialFormData[lookupKey];
 
-    // Debug-Ausgabe (in der Browser-Konsole sichtbar)
     console.log("🔍 lookupKey:", lookupKey);
     console.log("📦 formData:", formData);
 
@@ -582,66 +505,43 @@
             types: ["normal"], ability: "Unknown", hp: 100, attack: 100, defense: 100,
             spAttack: 100, spDefense: 100, speed: 100,
             dex: `${formName} is a special form of Pokémon #${basePokemonId}.`,
-            imageFile: null, apiFormName: null, isGmax: false
+            isGmax: false
         };
     }
 
-    let imageUrl = null;
     const fallbackImageUrl = POKEAPI_ARTWORK_URL + basePokemonId + '.png';
     
-    // ========== BILD-LOGIK ==========
-    async function loadImageUrl() {
-        // Priorität 1: Direkter Bild-URL-Versuch mit Project-EKISHO
-        const directUrl = getImageUrlForForm(basePokemonId, formKey, formData);
-        console.log("🖼️ Versuche Bild-URL:", directUrl);
-        
-        // Wenn wir eine direkte URL haben, versuchen wir die Existenz zu prüfen
-        if (directUrl && !directUrl.includes(POKEAPI_ARTWORK_URL)) {
-            try {
-                // Teste ob das Bild existiert (mit fetch HEAD)
-                const testResponse = await fetch(directUrl, { method: 'HEAD' });
-                if (testResponse.ok) {
-                    console.log("✅ Bild gefunden:", directUrl);
-                    return directUrl;
-                } else {
-                    console.log("❌ Bild nicht gefunden (HTTP", testResponse.status, "):", directUrl);
-                }
-            } catch(e) {
-                console.log("⚠️ Bild-Test fehlgeschlagen:", directUrl, e);
-            }
+    // Bild-URL-Logik: Für Gigantamax immer das normale Artwork + Hinweis
+    function getImageUrl() {
+        // Für Gigantamax bewusst das normale Artwork (weil offizielle Gmax-Bilder nicht verlässlich)
+        if (formKey === 'gmax') {
+            return fallbackImageUrl;
         }
-        
-        // Priorität 2: Offizielles PokeAPI Artwork (wenn apiFormName existiert)
-        if (formData.apiFormName && !formData.isGmax) {
-            const officialArtwork = await getOfficialFormArtwork(formData.apiFormName);
-            if (officialArtwork) {
-                console.log("✅ Offizielles Artwork gefunden:", officialArtwork);
-                return officialArtwork;
-            }
+        // Andere Formen wie gehabt
+        const paddedId = String(basePokemonId).padStart(3, '0');
+        if (formKey === 'mega' || formKey === 'megaX' || formKey === 'megaY') {
+            if (basePokemonId === 6 && formKey === 'megaX') return `${PROJECT_EKISHO_URL}006-Mega-X.png`;
+            if (basePokemonId === 6 && formKey === 'megaY') return `${PROJECT_EKISHO_URL}006-Mega-Y.png`;
+            if (basePokemonId === 150 && formKey === 'megaX') return `${PROJECT_EKISHO_URL}150-Mega-X.png`;
+            if (basePokemonId === 150 && formKey === 'megaY') return `${PROJECT_EKISHO_URL}150-Mega-Y.png`;
+            return `${PROJECT_EKISHO_URL}${paddedId}-Mega.png`;
         }
-        
-        // Priorität 3: HybridShivam Repository (Fallback für Gigantamax)
-        if (formData.imageFile) {
-            const hybridUrl = HYBRID_IMAGE_BASE_URL + formData.imageFile;
-            console.log("🖼️ Versuche HybridShivam:", hybridUrl);
-            // Wir testen nicht vorab, vertrauen auf onerror
-            return hybridUrl;
+        if (formKey === 'primal') {
+            if (basePokemonId === 382) return `${PROJECT_EKISHO_URL}382-Primal.png`;
+            if (basePokemonId === 383) return `${PROJECT_EKISHO_URL}383-Primal.png`;
         }
-        
-        // Priorität 4: Generischer Fallback für regionale Formen
-        if (formKey === 'alolan' || formKey === 'galarian' || formKey === 'hisuian') {
-            const paddedId = String(basePokemonId).padStart(3, '0');
-            const region = formKey.charAt(0).toUpperCase() + formKey.slice(1);
-            const genericUrl = HYBRID_IMAGE_BASE_URL + paddedId + '-' + region + '.png';
-            console.log("🖼️ Generischer regionaler Fallback:", genericUrl);
-            return genericUrl;
+        if (formKey === 'alolan') return `${PROJECT_EKISHO_URL}${paddedId}-Alolan.png`;
+        if (formKey === 'galarian') return `${PROJECT_EKISHO_URL}${paddedId}-Galarian.png`;
+        if (formKey === 'hisuian') {
+            if (basePokemonId === 571) return `${PROJECT_EKISHO_URL}571-Hisui.png`;
+            return `${PROJECT_EKISHO_URL}${paddedId}-Hisuian.png`;
         }
-        
-        // Priorität 5: Standard Artwork
-        console.log("🖼️ Fallback zu Standard-Artwork:", fallbackImageUrl);
+        if (formKey === 'bond' && basePokemonId === 658) return `${PROJECT_EKISHO_URL}658-Ash-Greninja.png`;
+        if (formKey === 'mega' && basePokemonId === 658) return `${PROJECT_EKISHO_URL}658-Mega.png`;
         return fallbackImageUrl;
     }
-    
+
+    const imageUrl = getImageUrl();
     const cryUrl = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${basePokemonId}.ogg`;
 
     function playCry() {
@@ -668,7 +568,7 @@
     }
     document.getElementById('languageSelect').value = localStorage.getItem('language') || 'en';
 
-    async function loadSpecialForm() {
+    function loadSpecialForm() {
         const container = document.getElementById('mainContainer');
         const totalStats = formData.hp + formData.attack + formData.defense + 
                           formData.spAttack + formData.spDefense + formData.speed;
@@ -683,17 +583,17 @@
         }
         else if (formKey === 'paradox') { badgeClass = 'type-badge-paradox'; badgeText = '⏱️ PARADOX FORM'; }
 
-        // Bild asynchron laden
-        const finalImageUrl = await loadImageUrl();
-        console.log("🎯 Finale Bild-URL:", finalImageUrl);
+        // Zusätzlicher Hinweis für Gigantamax, dass kein spezielles Bild vorhanden ist
+        const notice = (formKey === 'gmax') ? '<div class="image-notice">⚠️ Gigantamax-Artwork nicht verfügbar – Standardbild wird angezeigt</div>' : '';
 
         container.innerHTML = `
             <div class="pokemon-header">
                 <h1>${formName} <span class="${badgeClass}">${badgeText}</span></h1>
             </div>
             <div class="pokemon-image-container">
-                <img class="pokemon-image" src="${finalImageUrl}" alt="${formName}" 
-                     onerror="this.onerror=null; this.src='${fallbackImageUrl}'; console.log('⚠️ Bild-Error, Fallback verwendet:', '${fallbackImageUrl}');">
+                <img class="pokemon-image" src="${imageUrl}" alt="${formName}" 
+                     onerror="this.onerror=null; this.src='${fallbackImageUrl}';">
+                ${notice}
             </div>
             <button class="cry-button" onclick="playCry()">🔊 Play Cry</button>
             <div class="info-grid">
