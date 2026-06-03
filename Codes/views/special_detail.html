@@ -409,24 +409,16 @@
 
     // ========== BILD-URL FÜR ALLE FORMEN ==========
     function getImageUrlForForm(baseId, formKey, formData) {
-        // Für Gigantamax: Spezielle URL von PokemonDB
+        // ========== GIGANTAMAX - KORRIGIERT: Jetzt PNG von HybridShivam ==========
         if (formKey === 'gmax') {
-            const gmaxNames = {
-                3: 'venusaur-gigantamax', 6: 'charizard-gigantamax', 9: 'blastoise-gigantamax',
-                12: 'butterfree-gigantamax', 25: 'pikachu-gigantamax', 52: 'meowth-gigantamax',
-                68: 'machamp-gigantamax', 94: 'gengar-gigantamax', 99: 'kingler-gigantamax',
-                131: 'lapras-gigantamax', 133: 'eevee-gigantamax', 143: 'snorlax-gigantamax',
-                809: 'melmetal-gigantamax', 812: 'rillaboom-gigantamax', 815: 'cinderace-gigantamax',
-                818: 'inteleon-gigantamax', 823: 'corviknight-gigantamax', 826: 'orbeetle-gigantamax',
-                834: 'drednaw-gigantamax', 839: 'coalossal-gigantamax', 841: 'flapple-gigantamax',
-                842: 'appletun-gigantamax', 844: 'sandaconda-gigantamax', 849: 'toxtricity-gigantamax',
-                851: 'centiskorch-gigantamax', 858: 'hatterene-gigantamax', 861: 'grimmsnarl-gigantamax',
-                869: 'alcremie-gigantamax', 879: 'copperajah-gigantamax', 884: 'duraludon-gigantamax',
-                890: 'eternatus-gigantamax', 892: 'urshifu-gigantamax'
+            const gmaxPngFiles = {
+                3: '003-Gigantamax', 6: '006-Gigantamax', 9: '009-Gigantamax',
+                12: '012-Gigantamax', 25: '025-Gigantamax', 52: '052-Gigantamax',
+                68: '068-Gigantamax', 94: '094-Gigantamax', 99: '099-Gigantamax',
+                131: '131-Gigantamax', 133: '133-Gigantamax', 143: '143-Gigantamax'
             };
-            const gmaxName = gmaxNames[baseId];
-            if (gmaxName) {
-                return `${POKEMONDB_IMAGE_URL}${gmaxName}.jpg`;
+            if (gmaxPngFiles[baseId]) {
+                return `${HYBRID_IMAGE_BASE_URL}${gmaxPngFiles[baseId]}.png`;
             }
         }
         
