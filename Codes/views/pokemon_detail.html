@@ -194,7 +194,7 @@
         dark: "#705746", steel: "#B7B7CE", fairy: "#D685AD"
     };
     
-    // ========== SPEZIALFORMEN für Gen 1-6 ==========
+    // ========== SPEZIALFORMEN für Gen 1-6 (VOLLSTÄNDIG) ==========
     const specialFormsMap = {
         // Kanto Mega Evolutions
         3: { mega: "Mega Venusaur", gmax: "Gigantamax Venusaur" },
@@ -256,6 +256,22 @@
         // Kalos Mega Evolutions
         719: { mega: "Mega Diancie" },
         
+        // ===== Z-A MEGAS (Legends Z-A) =====
+        26: { mega: "Mega Raichu" },          // Mega Raichu
+        101: { mega: "Mega Electrode" },      // Mega Electrode
+        132: { mega: "Mega Ditto" },          // Mega Ditto
+        196: { mega: "Mega Espeon" },         // Mega Espeon
+        197: { mega: "Mega Umbreon" },        // Mega Umbreon
+        470: { mega: "Mega Leafeon" },        // Mega Leafeon
+        471: { mega: "Mega Glaceon" },        // Mega Glaceon
+        479: { mega: "Mega Rotom" },          // Mega Rotom
+        603: { mega: "Mega Eelektrik" },      // Mega Eelektrik
+        604: { mega: "Mega Eelektross" },     // Mega Eelektross (Elektross Mega)
+        609: { mega: "Mega Chandelure" },     // Mega Chandelure
+        619: { mega: "Mega Mienfoo" },        // Mega Mienfoo
+        620: { mega: "Mega Mienshao" },       // Mega Mienshao
+        718: { mega: "Mega Zygarde" },        // Mega Zygarde (mit Hidden Ability)
+        
         // Gigantamax (Gen 8) - aber nur für Gen 1-6 Pokémon
         12: { gmax: "Gigantamax Butterfree" },
         25: { gmax: "Gigantamax Pikachu" },
@@ -268,20 +284,44 @@
         
         // Alolan Forms (Gen 7 - aber für Gen 1-6 Pokémon)
         26: { alolan: "Alolan Raichu" },
+        27: { alolan: "Alolan Sandshrew" },
         28: { alolan: "Alolan Sandslash" },
+        37: { alolan: "Alolan Vulpix" },
         38: { alolan: "Alolan Ninetales" },
+        50: { alolan: "Alolan Diglett" },
+        51: { alolan: "Alolan Dugtrio" },
+        52: { alolan: "Alolan Meowth" },
+        53: { alolan: "Alolan Persian" },
+        74: { alolan: "Alolan Geodude" },
+        75: { alolan: "Alolan Graveler" },
+        76: { alolan: "Alolan Golem" },
+        88: { alolan: "Alolan Grimer" },
         89: { alolan: "Alolan Muk" },
         103: { alolan: "Alolan Exeggutor" },
         105: { alolan: "Alolan Marowak" },
         
         // Galarian Forms (Gen 8)
+        52: { galarian: "Galarian Meowth" },
         77: { galarian: "Galarian Ponyta" },
         78: { galarian: "Galarian Rapidash" },
+        83: { galarian: "Galarian Farfetch'd" },
         110: { galarian: "Galarian Weezing" },
+        122: { galarian: "Galarian Mr. Mime" },
+        263: { galarian: "Galarian Zigzagoon" },
+        264: { galarian: "Galarian Linoone" },
+        554: { galarian: "Galarian Darumaka" },
+        555: { galarian: "Galarian Darmanitan" },
+        562: { galarian: "Galarian Yamask" },
+        618: { galarian: "Galarian Stunfisk" },
         
         // Hisuian Forms
         58: { hisuian: "Hisuian Growlithe" },
         59: { hisuian: "Hisuian Arcanine" },
+        100: { hisuian: "Hisuian Voltorb" },
+        101: { hisuian: "Hisuian Electrode" },
+        123: { hisuian: "Hisuian Scyther" },
+        190: { hisuian: "Hisuian Aipom" },
+        424: { hisuian: "Hisuian Ambipom" },
         571: { hisuian: "Hisuian Zoroark" }
     };
     
@@ -295,6 +335,7 @@
     function changeLanguage(lang) {
         localStorage.setItem('language', lang);
         document.getElementById('languageSelect').value = lang;
+        location.reload();
     }
     
     if (localStorage.getItem('darkMode') === 'true') {
